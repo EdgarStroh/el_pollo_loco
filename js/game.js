@@ -21,7 +21,7 @@ window.addEventListener("keydown", (event) => {
     if (event.keyCode == 40 || event.key == 's') {
         keyboard.DOWN = true;
     }
-    if (event.keyCode == 38 || event.key == 'w') {
+    if (event.keyCode == 38 || event.key == 'w' ) {
         keyboard.UP = true;
     }
     if (event.keyCode == 32) {
