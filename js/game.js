@@ -24,9 +24,15 @@ window.addEventListener("keydown", (event) => {
     if (event.keyCode == 38 || event.key == 'w' ) {
         keyboard.UP = true;
     }
+    if ( event.key == 'b'|| event.key == 'q') {
+        keyboard.B = true;
+    }
     if (event.keyCode == 32) {
         keyboard.SPACE = true;
     }
+    // if (event.keyCode == 81) {
+    //     keyboard.Q = true;
+    // }
 });
 
 window.addEventListener("keyup", (event) => {
@@ -37,12 +43,16 @@ window.addEventListener("keyup", (event) => {
         keyboard.LEFT = false;
     }
     if (event.keyCode == 40 || event.key == 's') {
-        keyboard.DOWN = false;
+        keyboard.DOWN = false;ad
     }
     if (event.keyCode == 38 || event.key == 'w') {
         keyboard.UP = false;
     }
+    if ( event.key == 'b' || event.key == 'q') {
+        keyboard.B = false;
+    }
     if (event.keyCode == 32) {
         keyboard.SPACE = false;
     }
+    
 });
