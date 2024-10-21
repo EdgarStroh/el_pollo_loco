@@ -24,8 +24,9 @@ window.addEventListener("keydown", (event) => {
     if (event.keyCode == 38 || event.key == 'w' ) {
         keyboard.UP = true;
     }
-    if ( event.key == 'b'|| event.key == 'q') {
-        keyboard.B = true;
+    if ((event.key == 'b' || event.key == 'q') && !keyboard.B) {
+        keyboard.B = true;  // Verwende weiterhin keyboard.B als gemeinsames Flag für beide Tasten
+        world.throwBottle();  // Methode zum Flasche werfen direkt aufrufen
     }
     if (event.keyCode == 32) {
         keyboard.SPACE = true;

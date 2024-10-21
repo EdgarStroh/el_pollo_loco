@@ -26,7 +26,7 @@ class World {
         setInterval(() => {
             //Check collision
             this.checkCollisions();
-            this.checkThrowObjects();
+            // this.checkThrowObjects();
         }, 200);
     }
     checkCollisions() {
@@ -38,16 +38,21 @@ class World {
             }
         });
     }
-    checkThrowObjects() {
-        if (this.keyboard.B && !this.bottleThrown) {
-            // Werfe eine Flasche, wenn B gedrückt wurde und noch keine Flasche geworfen wurde
-            let bottle = new ThrowableObject(this.character.x + 45, this.character.y + 125);
-            this.throwableObject.push(bottle);
-            this.bottleThrown = true;  // Setze das Flag auf "Flasche wurde geworfen"
-        }
-        if (!this.keyboard.B) {
-            this.bottleThrown = false;
-        }
+    // checkThrowObjects() {
+    //     if (this.keyboard.B && !this.bottleThrown) {
+    //         // Werfe eine Flasche, wenn B gedrückt wurde und noch keine Flasche geworfen wurde
+    //         let bottle = new ThrowableObject(this.character.x + 45, this.character.y + 125);
+    //         this.throwableObject.push(bottle);
+    //         this.bottleThrown = true;  // Setze das Flag auf "Flasche wurde geworfen"
+    //     }
+    //     if (!this.keyboard.B) {
+    //         this.bottleThrown = false;
+    //     }
+    // }
+
+    throwBottle() {
+        let bottle = new ThrowableObject(this.character.x + 45, this.character.y + 125);
+        this.throwableObject.push(bottle);
     }
 
     draw() {
