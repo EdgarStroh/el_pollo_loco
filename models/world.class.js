@@ -28,7 +28,7 @@ class World {
         setInterval(() => {
             //Check collision
             this.checkCollisions();
-            // this.checkThrowObjects();
+            this.checkCoinCollisions();
 
         }, 200);
     }
@@ -41,6 +41,15 @@ class World {
                 // console.log('characker energy=', this.character.energy);
 
             }
+        });
+    }
+    checkCoinCollisions() {
+        this.level.coins = this.level.coins.filter((coin) => {
+            if (this.character.isColliding(coin)) {
+                this.statusBarCoin.coinAmount++;
+                return false; // Entfernt den Coin aus dem Array
+            }
+            return true; // Behalte den Coin im Array, wenn keine Kollision
         });
     }
 
@@ -71,6 +80,7 @@ class World {
 
         this.addToMap(this.character)
         this.addObjectsToMap(this.level.clouds);
+        this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.throwableObject);
 
