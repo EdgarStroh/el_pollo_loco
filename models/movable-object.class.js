@@ -18,6 +18,7 @@ class MovableObject extends DrawableObject {
         if (this instanceof ThrowableObject) {
             return true;
         } else {
+             
             return this.y < 130;
         }
 
@@ -48,7 +49,12 @@ class MovableObject extends DrawableObject {
         return this.energy == 0;
     }
 
+    resetAnimation() {
+        this.currentImage = 0; // Setzt die aktuelle Bildnummer auf 0 zurück
+    }
+    
     playAnimation(images) {
+        // Stelle sicher, dass die Animation zurückgesetzt wird, bevor sie abgespielt wird
         let i = this.currentImage % images.length;
         let path = images[i];
         this.img = this.imageCache[path];
