@@ -9,7 +9,7 @@ class World {
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
     throwableObject = [];
-    bottleThrown = false;
+    errorSound = new Audio('audio/error.mp3');
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -29,32 +29,31 @@ class World {
             //Check collision
             this.checkCollisions();
             // this.checkThrowObjects();
+
         }, 200);
     }
+
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
                 this.character.hit();
                 this.statusBarHealth.setPercentage(this.character.energy);
                 // console.log('characker energy=', this.character.energy);
+
             }
         });
     }
-    // checkThrowObjects() {
-    //     if (this.keyboard.B && !this.bottleThrown) {
-    //         // Werfe eine Flasche, wenn B gedrückt wurde und noch keine Flasche geworfen wurde
-    //         let bottle = new ThrowableObject(this.character.x + 45, this.character.y + 125);
-    //         this.throwableObject.push(bottle);
-    //         this.bottleThrown = true;  // Setze das Flag auf "Flasche wurde geworfen"
-    //     }
-    //     if (!this.keyboard.B) {
-    //         this.bottleThrown = false;
-    //     }
-    // }
 
     throwBottle() {
-        let bottle = new ThrowableObject(this.character.x + 45, this.character.y + 125);
-        this.throwableObject.push(bottle);
+        this.errorSound.volume = 0.15;
+        if (this.statusBarBottle.bottleAmount > 0) {
+            let bottle = new ThrowableObject(this.character.x + 45, this.character.y + 125);
+            this.throwableObject.push(bottle);
+            this.statusBarBottle.bottleAmount--;  // Flaschenanzahl um 1 reduzieren
+        } else {
+            //error sound abspielen
+            this.errorSound.play();
+        }
     }
 
     draw() {
