@@ -5,10 +5,16 @@ class StatusBarBottle extends DrawableObject {
     constructor() {
         super();
         this.loadImages(this.IMAGEBOTTLE);
-        this.x = 140;
-        this.y = 10;
-        this.width = 200;
-        this.height = 260;
-      
+        this.x = 34;
+        this.y = 55;
+        this.width = 55;
+        this.height = 55;
+        this.img = this.imageCache[this.IMAGEBOTTLE[0]];
     }
+    bottleAmount = 5;
+    draw(ctx) {
+        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        ctx.fillText(this.bottleAmount, this.x + this.width + 0, this.y + 35);
+    }
+   
 }

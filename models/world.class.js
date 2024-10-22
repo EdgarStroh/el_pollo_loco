@@ -66,7 +66,8 @@ class World {
         this.ctx.translate(-this.camera_x, 0);// Back
         //--------Space for fixed Object-----
         this.addToMap(this.statusBarHealth);
-        
+        this.addToMap(this.statusBarBottle);
+        this.addToMap(this.statusBarCoin);
         this.ctx.translate(this.camera_x, 0); // Forwards
 
         this.addToMap(this.character)
