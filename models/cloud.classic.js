@@ -17,7 +17,7 @@ class Cloud extends MovableObject {
         this.x = Cloud.fixedXPositions[index]; // Feste Position basierend auf dem Index
         
         this.animate();
-        this.speed = Math.random() * 0.57;
+        this.speed = 0.05 + Math.random() * 0.27;
     }
 
     animate() {
@@ -27,8 +27,3 @@ class Cloud extends MovableObject {
     }
 }
 
-// Instanziierung der Wolken
-let clouds = [];
-for (let i = 0; i < Cloud.fixedXPositions.length; i++) {
-    clouds.push(new Cloud(i)); // Wolken an festen Positionen erstellen
-}
