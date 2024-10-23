@@ -36,7 +36,6 @@ class Character extends MovableObject {
         'img/2_character_pepe/2_walk/W-25.png',
         'img/2_character_pepe/2_walk/W-26.png'
     ];
-
     IMAGE_JUMPING = [
         'img/2_character_pepe/3_jump/J-31.png',
         'img/2_character_pepe/3_jump/J-32.png',
@@ -48,7 +47,6 @@ class Character extends MovableObject {
         'img/2_character_pepe/3_jump/J-38.png',
         'img/2_character_pepe/3_jump/J-39.png'
     ];
-
     IMAGE_DEAD = [
         'img/2_character_pepe/5_dead/D-51.png',
         'img/2_character_pepe/5_dead/D-52.png',
@@ -58,7 +56,6 @@ class Character extends MovableObject {
         'img/2_character_pepe/5_dead/D-56.png',
         'img/2_character_pepe/5_dead/D-57.png'
     ];
-
     IMAGE_HURT = [
         'img/2_character_pepe/4_hurt/H-41.png',
         'img/2_character_pepe/4_hurt/H-42.png',
