@@ -60,23 +60,15 @@ class World {
             return true; // Behalte den Coin im Array, wenn keine Kollision
         });
     }
- checkBottleCollisions() {
-    this.throwableObject.forEach((bottle, bottleIndex) => {
-        this.level.enemies.forEach((enemy, enemyIndex) => {
-            if (bottle.isColliding(enemy)) {
-                console.log('Bottle collided with enemy:', enemy);  // Debugging log
-
-                // Play animation for the bottle impact
-                bottle.playAnimation(this.IMAGE_BOTTLE_SPLASH);
-                console.log('Bottle splash animation played');  // Debugging log
-
-                // Remove the bottle after collision
-                this.throwableObject.splice(bottleIndex, 1);  // Remove bottle from array
-                console.log('Bottle removed after collision');  // Debugging log
+    checkBottleCollisions() {
+        this.level.bottles = this.level.bottles.filter((bottle) => {
+            if (this.character.isColliding(bottle)) {
+                this.statusBarBottle.bottleAmount++; // Increase the bottle amount
+                return false; // Remove the bottle from the level
             }
+            return true; // Keep the bottle if no collision
         });
-    });
-}
+    }
 
     throwBottle() {
         this.errorSound.volume = 0.15;
@@ -109,6 +101,7 @@ class World {
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.bottles);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.throwableObject);
 

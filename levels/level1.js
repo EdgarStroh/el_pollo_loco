@@ -12,6 +12,12 @@ const level1 = new Level(
         new Coin(),
     ],
     [
+        new Bottle(),
+        new Bottle(),
+        new Bottle(),
+        
+    ],
+    [
         new Cloud(0),
         new Cloud(1),
         new Cloud(2),
