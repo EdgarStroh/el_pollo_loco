@@ -1,6 +1,13 @@
 class ThrowableObject extends MovableObject {
+    IMAGE_BOTTLE_ROTATE= [
+        'img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
+        'img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png',
+        'img/6_salsa_bottle/bottle_rotation/3_bottle_rotation.png',
+        'img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png'
+    ];
     constructor(x, y, otherDirection) {
-        super().loadImage('img/6_salsa_bottle/salsa_bottle.png');
+        super().loadImage('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png');
+        this.loadImages(this.IMAGE_BOTTLE_ROTATE);
         this.x = x;
         this.y = y;
         this.height = 90;
@@ -15,10 +22,12 @@ class ThrowableObject extends MovableObject {
         setInterval(() => {
             // Bewege die Flasche nach links oder rechts basierend auf otherDirection
             if (this.otherDirection) {
-                this.x -= 10; // nach links werfen
+                this.playAnimation(this.IMAGE_BOTTLE_ROTATE);
+                this.x -= 15; // nach links werfen
             } else {
-                this.x += 10; // nach rechts werfen
+                this.playAnimation(this.IMAGE_BOTTLE_ROTATE);
+                this.x += 15; // nach rechts werfen
             }
-        }, 25);
+        }, 55);
     }
 }

@@ -2,7 +2,7 @@ class StatusBarBottle extends DrawableObject {
     IMAGEBOTTLE = [
         'img/6_salsa_bottle/salsa_bottle.png'
     ];
-    bottleAmount = 5;
+    bottleAmount = 95;
     constructor() {
         super();
         this.loadImages(this.IMAGEBOTTLE);
