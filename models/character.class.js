@@ -36,6 +36,17 @@ class Character extends MovableObject {
         'img/2_character_pepe/2_walk/W-25.png',
         'img/2_character_pepe/2_walk/W-26.png'
     ];
+    IMAGE_JUMPING = [
+        'img/2_character_pepe/3_jump/J-31.png',
+        'img/2_character_pepe/3_jump/J-32.png',
+        'img/2_character_pepe/3_jump/J-33.png',
+        'img/2_character_pepe/3_jump/J-34.png',
+        'img/2_character_pepe/3_jump/J-35.png',
+        'img/2_character_pepe/3_jump/J-36.png',
+        'img/2_character_pepe/3_jump/J-37.png',
+        'img/2_character_pepe/3_jump/J-38.png',
+        'img/2_character_pepe/3_jump/J-39.png'
+    ];
     // Neue Sprungphasen-Animationen
     IMAGE_JUMP_START = [
         'img/2_character_pepe/3_jump/J-31.png',
@@ -46,7 +57,7 @@ class Character extends MovableObject {
         'img/2_character_pepe/3_jump/J-34.png'
     ];
     IMAGE_JUMP_DOWN = [
-          'img/2_character_pepe/3_jump/J-35.png',
+        'img/2_character_pepe/3_jump/J-35.png',
         'img/2_character_pepe/3_jump/J-36.png'
     ];
     IMAGE_LANDING = [
@@ -78,6 +89,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGE_IDLE);
         this.loadImages(this.IMAGE_IDLE_LONG);
         this.loadImages(this.IMAGE_WALKING);
+        this.loadImages(this.IMAGE_JUMPING);
         this.loadImages(this.IMAGE_JUMP_START);
         this.loadImages(this.IMAGE_JUMP_UP);
         this.loadImages(this.IMAGE_JUMP_DOWN);
@@ -109,7 +121,7 @@ class Character extends MovableObject {
 
             // Jump
             if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround()) {
-                this.jump();
+                this.jump(); // Sprung mit Zeitmessung aufrufen
             }
 
             this.world.camera_x = -this.x + 100;
@@ -130,9 +142,9 @@ class Character extends MovableObject {
                 newAnimationState = this.IMAGE_HURT;
                 this.idleDuration = 0; // Zeit zurücksetzen
             } else if (this.isAboveGround()) {
-               this.playJumpAnimation();
-               this.idleDuration = 0; // Zeit zurücksetzen
-               return; // Skip the rest since jump animation is being played
+                this.playControlledJumpAnimation();
+                this.idleDuration = 0; // Zeit zurücksetzen
+                return; 
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 newAnimationState = this.IMAGE_WALKING;
                 this.idleDuration = 0; // Zeit zurücksetzen
@@ -171,8 +183,38 @@ class Character extends MovableObject {
         setTimeout(() => {
             this.isJumping = false; // Sprung beendet
         }, 800);
-        
+
         this.resetAnimation(); // Überprüfen, ob diese Methode nötig ist oder nicht
+    }
+
+    playControlledJumpAnimation() {
+        if (this.isJumping) return; // Verhindert die erneute Ausführung, wenn der Sprung läuft
+        this.isJumping = true;
+
+        // Animation: Start der Sprungbewegung
+        this.playAnimation(this.IMAGE_JUMP_START);
+
+        // Bildsequenz für den Beginn des Sprungs
+        setTimeout(() => {
+            this.playAnimation(this.IMAGE_JUMP_UP);
+        }, 50); // Nach 150ms zu IMAGE_JUMP_UP wechseln
+
+        // Bildsequenz für den Abstieg des Sprungs
+        setTimeout(() => {
+            this.playAnimation(this.IMAGE_JUMP_DOWN);
+        }, 330); // Nach 400ms zu IMAGE_JUMP_DOWN wechseln
+
+        // Bildsequenz für die Landung
+        setTimeout(() => {
+            this.playAnimation(this.IMAGE_LANDING);
+        }, 600); // Nach 600ms zu IMAGE_LANDING wechseln
+
+        // Sprungstatus nach der Landung zurücksetzen
+        setTimeout(() => {
+            this.isJumping = false;
+            this.resetAnimation();
+        }, 815); // Nach 815ms den Sprungstatus zurücksetzen
+      
     }
 
     jump() {
