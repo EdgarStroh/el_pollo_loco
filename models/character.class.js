@@ -1,9 +1,9 @@
 class Character extends MovableObject {
     height = 300;
-    //130
     y = 130;
     offsetY = 0;
     speed = 10;
+    isJumping = false;
     IMAGE_IDLE = [
         'img/2_character_pepe/1_idle/idle/I-1.png',
         'img/2_character_pepe/1_idle/idle/I-2.png',
@@ -36,17 +36,25 @@ class Character extends MovableObject {
         'img/2_character_pepe/2_walk/W-25.png',
         'img/2_character_pepe/2_walk/W-26.png'
     ];
-    IMAGE_JUMPING = [
+    // Neue Sprungphasen-Animationen
+    IMAGE_JUMP_START = [
         'img/2_character_pepe/3_jump/J-31.png',
         'img/2_character_pepe/3_jump/J-32.png',
-        'img/2_character_pepe/3_jump/J-33.png',
-        'img/2_character_pepe/3_jump/J-34.png',
-        'img/2_character_pepe/3_jump/J-35.png',
-        'img/2_character_pepe/3_jump/J-36.png',
+        'img/2_character_pepe/3_jump/J-33.png'
+    ];
+    IMAGE_JUMP_UP = [
+        'img/2_character_pepe/3_jump/J-34.png'
+    ];
+    IMAGE_JUMP_DOWN = [
+          'img/2_character_pepe/3_jump/J-35.png',
+        'img/2_character_pepe/3_jump/J-36.png'
+    ];
+    IMAGE_LANDING = [
         'img/2_character_pepe/3_jump/J-37.png',
         'img/2_character_pepe/3_jump/J-38.png',
         'img/2_character_pepe/3_jump/J-39.png'
     ];
+
     IMAGE_DEAD = [
         'img/2_character_pepe/5_dead/D-51.png',
         'img/2_character_pepe/5_dead/D-52.png',
@@ -70,7 +78,10 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGE_IDLE);
         this.loadImages(this.IMAGE_IDLE_LONG);
         this.loadImages(this.IMAGE_WALKING);
-        this.loadImages(this.IMAGE_JUMPING);
+        this.loadImages(this.IMAGE_JUMP_START);
+        this.loadImages(this.IMAGE_JUMP_UP);
+        this.loadImages(this.IMAGE_JUMP_DOWN);
+        this.loadImages(this.IMAGE_LANDING);
         this.loadImages(this.IMAGE_DEAD);
         this.loadImages(this.IMAGE_HURT);
         this.applyGravity();
@@ -81,36 +92,36 @@ class Character extends MovableObject {
         setInterval(() => {
             this.walking_sound.pause();
             this.walking_sound.volume = 0.05;
-    
+
             // Move right
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                 this.moveRight();
                 this.otherDirection = false;
                 this.walking_sound.play();
             }
-    
+
             // Move left
             if (this.world.keyboard.LEFT && this.x > 0) {
                 this.moveLeft();
                 this.otherDirection = true;
                 this.walking_sound.play();
             }
-    
+
             // Jump
             if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround()) {
                 this.jump();
             }
-    
+
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
-    
+
         this.idleDuration = 0; // Zeit in Millisekunden
         this.idleSwitchThreshold = 3000; // Wechsel zu IMAGE_IDLE_LONG nach 3000ms (3 Sekunden)
-    
+
         // In der setInterval Funktion
         setInterval(() => {
             let newAnimationState; // Neuer Animationszustand
-    
+
             // Logik für verschiedene Animationszustände
             if (this.isDead()) {
                 newAnimationState = this.IMAGE_DEAD;
@@ -119,8 +130,9 @@ class Character extends MovableObject {
                 newAnimationState = this.IMAGE_HURT;
                 this.idleDuration = 0; // Zeit zurücksetzen
             } else if (this.isAboveGround()) {
-                newAnimationState = this.IMAGE_JUMPING;
-                this.idleDuration = 0; // Zeit zurücksetzen
+               this.playJumpAnimation();
+               this.idleDuration = 0; // Zeit zurücksetzen
+               return; // Skip the rest since jump animation is being played
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 newAnimationState = this.IMAGE_WALKING;
                 this.idleDuration = 0; // Zeit zurücksetzen
@@ -137,15 +149,30 @@ class Character extends MovableObject {
                     this.idleDuration += 155; // Zeit erhöhen (Intervallzeit)
                 }
             }
-    
+
             // Überprüfe, ob der Animationszustand gewechselt hat
             if (newAnimationState !== this.currentAnimationState) {
                 this.resetAnimation(); // Nur zurücksetzen, wenn der Zustand wechselt
                 this.currentAnimationState = newAnimationState; // Aktuellen Zustand speichern
             }
-    
+
             this.playAnimation(newAnimationState); // Animation abspielen
         }, 155);
+    }
+    playJumpAnimation() {
+        if (this.isJumping) return; // Animation abbrechen, wenn schon im Sprung
+        this.isJumping = true; // Sprungzustand aktivieren
+        // console.log("sprung anfang");
+
+        setTimeout(() => this.playAnimation(this.IMAGE_JUMP_START), 0);
+        setTimeout(() => this.playAnimation(this.IMAGE_JUMP_UP), 35);
+        setTimeout(() => this.playAnimation(this.IMAGE_JUMP_DOWN), 150);
+        setTimeout(() => this.playAnimation(this.IMAGE_LANDING), 320);
+        setTimeout(() => {
+            this.isJumping = false; // Sprung beendet
+        }, 800);
+        
+        this.resetAnimation(); // Überprüfen, ob diese Methode nötig ist oder nicht
     }
 
     jump() {
