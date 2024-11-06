@@ -117,8 +117,9 @@ class Character extends MovableObject {
             }
 
             // Jump
-            if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround()) {
-                this.jump(); // Sprung mit Zeitmessung aufrufen
+            if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround() && !this.isJumping) {
+                this.jump(); // Sprung nur auslösen, wenn der Charakter am Boden ist
+               
             }
 
             this.world.camera_x = -this.x + 100;
@@ -129,7 +130,7 @@ class Character extends MovableObject {
 
         // In der setInterval Funktion
         setInterval(() => {
-            let newAnimationState; // Neuer Animationszustand
+            let newAnimationState; // Neuer Animatio nszustand
 
             // Logik für verschiedene Animationszustände
             if (this.isDead()) {
