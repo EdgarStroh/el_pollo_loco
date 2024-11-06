@@ -48,23 +48,15 @@ class Character extends MovableObject {
         'img/2_character_pepe/3_jump/J-39.png'
     ];
     // Neue Sprungphasen-Animationen
-    IMAGE_JUMP_START = [
-        'img/2_character_pepe/3_jump/J-31.png',
-        'img/2_character_pepe/3_jump/J-32.png',
-        'img/2_character_pepe/3_jump/J-33.png'
-    ];
-    IMAGE_JUMP_UP = [
-        'img/2_character_pepe/3_jump/J-34.png'
-    ];
-    IMAGE_JUMP_DOWN = [
-        'img/2_character_pepe/3_jump/J-35.png',
-        'img/2_character_pepe/3_jump/J-36.png'
-    ];
-    IMAGE_LANDING = [
-        'img/2_character_pepe/3_jump/J-37.png',
-        'img/2_character_pepe/3_jump/J-38.png',
-        'img/2_character_pepe/3_jump/J-39.png'
-    ];
+    IMAGE_JUMP_START_1 = ['img/2_character_pepe/3_jump/J-31.png'];
+    IMAGE_JUMP_START_2 = ['img/2_character_pepe/3_jump/J-32.png'];
+    IMAGE_JUMP_START_3 = ['img/2_character_pepe/3_jump/J-33.png'];
+    IMAGE_JUMP_UP = ['img/2_character_pepe/3_jump/J-34.png'];
+    IMAGE_JUMP_DOWN_1 = ['img/2_character_pepe/3_jump/J-35.png'];
+    IMAGE_JUMP_DOWN_2 = ['img/2_character_pepe/3_jump/J-36.png'];
+    IMAGE_LANDING_1 = ['img/2_character_pepe/3_jump/J-37.png'];
+    IMAGE_LANDING_2 = ['img/2_character_pepe/3_jump/J-38.png'];
+    IMAGE_LANDING_3 = ['img/2_character_pepe/3_jump/J-39.png'];
 
     IMAGE_DEAD = [
         'img/2_character_pepe/5_dead/D-51.png',
@@ -90,10 +82,15 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGE_IDLE_LONG);
         this.loadImages(this.IMAGE_WALKING);
         this.loadImages(this.IMAGE_JUMPING);
-        this.loadImages(this.IMAGE_JUMP_START);
+        this.loadImages(this.IMAGE_JUMP_START_1);
+        this.loadImages(this.IMAGE_JUMP_START_2);
+        this.loadImages(this.IMAGE_JUMP_START_3);
         this.loadImages(this.IMAGE_JUMP_UP);
-        this.loadImages(this.IMAGE_JUMP_DOWN);
-        this.loadImages(this.IMAGE_LANDING);
+        this.loadImages(this.IMAGE_JUMP_DOWN_1);
+        this.loadImages(this.IMAGE_JUMP_DOWN_2);
+        this.loadImages(this.IMAGE_LANDING_1);
+        this.loadImages(this.IMAGE_LANDING_2);
+        this.loadImages(this.IMAGE_LANDING_3);
         this.loadImages(this.IMAGE_DEAD);
         this.loadImages(this.IMAGE_HURT);
         this.applyGravity();
@@ -142,7 +139,7 @@ class Character extends MovableObject {
                 newAnimationState = this.IMAGE_HURT;
                 this.idleDuration = 0; // Zeit zurücksetzen
             } else if (this.isAboveGround()) {
-                this.playControlledJumpAnimation();
+                newAnimationState = this.playJumpAnimation();
                 this.idleDuration = 0; // Zeit zurücksetzen
                 return; 
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
@@ -172,49 +169,48 @@ class Character extends MovableObject {
         }, 155);
     }
     playJumpAnimation() {
-        if (this.isJumping) return; // Animation abbrechen, wenn schon im Sprung
-        this.isJumping = true; // Sprungzustand aktivieren
-        // console.log("sprung anfang");
-
-        setTimeout(() => this.playAnimation(this.IMAGE_JUMP_START), 0);
-        setTimeout(() => this.playAnimation(this.IMAGE_JUMP_UP), 35);
-        setTimeout(() => this.playAnimation(this.IMAGE_JUMP_DOWN), 150);
-        setTimeout(() => this.playAnimation(this.IMAGE_LANDING), 320);
-        setTimeout(() => {
-            this.isJumping = false; // Sprung beendet
-        }, 800);
-
-        this.resetAnimation(); // Überprüfen, ob diese Methode nötig ist oder nicht
-    }
-
-    playControlledJumpAnimation() {
         if (this.isJumping) return; // Verhindert die erneute Ausführung, wenn der Sprung läuft
         this.isJumping = true;
-
+    
         // Animation: Start der Sprungbewegung
-        this.playAnimation(this.IMAGE_JUMP_START);
-
+        this.playAnimation(this.IMAGE_JUMP_START_1);
+        setTimeout(() => {
+            this.playAnimation(this.IMAGE_JUMP_START_2);
+        }, 3); // Anpassen der ms für den Übergang zwischen den Bildern
+        setTimeout(() => {
+            this.playAnimation(this.IMAGE_JUMP_START_3);
+        }, 8);
+    
         // Bildsequenz für den Beginn des Sprungs
         setTimeout(() => {
             this.playAnimation(this.IMAGE_JUMP_UP);
-        }, 50); // Nach 150ms zu IMAGE_JUMP_UP wechseln
-
-        // Bildsequenz für den Abstieg des Sprungs
+        }, 10);
+    
+        // // Bildsequenz für den Abstieg des Sprungs
         setTimeout(() => {
-            this.playAnimation(this.IMAGE_JUMP_DOWN);
-        }, 330); // Nach 400ms zu IMAGE_JUMP_DOWN wechseln
-
+            this.playAnimation(this.IMAGE_JUMP_DOWN_1);
+        }, 240);
+        setTimeout(() => {
+            this.playAnimation(this.IMAGE_JUMP_DOWN_2);
+        }, 420);
+    
         // Bildsequenz für die Landung
         setTimeout(() => {
-            this.playAnimation(this.IMAGE_LANDING);
-        }, 600); // Nach 600ms zu IMAGE_LANDING wechseln
-
+            this.playAnimation(this.IMAGE_LANDING_1);
+        }, 640);
+        setTimeout(() => {
+            this.playAnimation(this.IMAGE_LANDING_2);
+        }, 740);
+        setTimeout(() => {
+            this.playAnimation(this.IMAGE_LANDING_3);
+        }, 750);
+    
         // Sprungstatus nach der Landung zurücksetzen
         setTimeout(() => {
             this.isJumping = false;
             this.resetAnimation();
-        }, 815); // Nach 815ms den Sprungstatus zurücksetzen
-      
+        }, 900);
+        // this.resetAnimation();
     }
 
     jump() {
