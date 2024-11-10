@@ -80,6 +80,7 @@ class World {
                 startX = this.character.x - 45; // Für Linkswurf X-Position anpassen
             }
 
+
             let bottle = new ThrowableObject(startX, startY, this.character.otherDirection);
             this.throwableObject.push(bottle);
             this.statusBarBottle.bottleAmount--;  // Flaschenanzahl um 1 reduzieren

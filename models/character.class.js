@@ -4,6 +4,8 @@ class Character extends MovableObject {
     offsetY = 0;
     speed = 10;
     isJumping = false;
+    noLife = false;
+
     IMAGE_IDLE = [
         'img/2_character_pepe/1_idle/idle/I-1.png',
         'img/2_character_pepe/1_idle/idle/I-2.png',
@@ -67,6 +69,15 @@ class Character extends MovableObject {
         'img/2_character_pepe/5_dead/D-56.png',
         'img/2_character_pepe/5_dead/D-57.png'
     ];
+    // Neue Dead-Animationen
+    IMAGE_DEAD_1 = ['img/2_character_pepe/5_dead/D-51.png'];
+    IMAGE_DEAD_2 = ['img/2_character_pepe/5_dead/D-52.png'];
+    IMAGE_DEAD_3 = ['img/2_character_pepe/5_dead/D-53.png'];
+    IMAGE_DEAD_4 = ['img/2_character_pepe/5_dead/D-54.png'];
+    IMAGE_DEAD_5 = ['img/2_character_pepe/5_dead/D-55.png'];
+    IMAGE_DEAD_6 = ['img/2_character_pepe/5_dead/D-56.png'];
+    IMAGE_DEAD_7 = ['img/2_character_pepe/5_dead/D-57.png'];
+
     IMAGE_HURT = [
         'img/2_character_pepe/4_hurt/H-41.png',
         'img/2_character_pepe/4_hurt/H-42.png',
@@ -92,6 +103,15 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGE_LANDING_2);
         this.loadImages(this.IMAGE_LANDING_3);
         this.loadImages(this.IMAGE_DEAD);
+        // Einzelne Arrays für jedes Bild in IMAGE_DEAD
+        this.loadImages(this.IMAGE_DEAD_1);
+        this.loadImages(this.IMAGE_DEAD_2);
+        this.loadImages(this.IMAGE_DEAD_3);
+        this.loadImages(this.IMAGE_DEAD_4);
+        this.loadImages(this.IMAGE_DEAD_5);
+        this.loadImages(this.IMAGE_DEAD_6);
+        this.loadImages(this.IMAGE_DEAD_7);
+
         this.loadImages(this.IMAGE_HURT);
         this.applyGravity();
         this.animate();
@@ -103,23 +123,27 @@ class Character extends MovableObject {
             this.walking_sound.volume = 0.05;
 
             // Move right
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && this.noLife === false) {
                 this.moveRight();
                 this.otherDirection = false;
                 this.walking_sound.play();
             }
 
             // Move left
-            if (this.world.keyboard.LEFT && this.x > 0) {
+            if (this.world.keyboard.LEFT && this.x > 0 && this.noLife === false) {
                 this.moveLeft();
                 this.otherDirection = true;
                 this.walking_sound.play();
             }
 
             // Jump
-            if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround() && !this.isJumping) {
+            if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround() && !this.isJumping && this.noLife === false) {
                 this.jump(); // Sprung nur auslösen, wenn der Charakter am Boden ist
-               
+
+            }
+
+            if (this.noLife === true) {
+                // this.playDeadAnimation();
             }
 
             this.world.camera_x = -this.x + 100;
@@ -134,15 +158,16 @@ class Character extends MovableObject {
 
             // Logik für verschiedene Animationszustände
             if (this.isDead()) {
-                newAnimationState = this.IMAGE_DEAD;
+                newAnimationState = this.playDeadAnimation();
                 this.idleDuration = 0; // Zeit zurücksetzen
+                return;
             } else if (this.isHurt()) {
                 newAnimationState = this.IMAGE_HURT;
                 this.idleDuration = 0; // Zeit zurücksetzen
             } else if (this.isAboveGround()) {
                 newAnimationState = this.playJumpAnimation();
                 this.idleDuration = 0; // Zeit zurücksetzen
-                return; 
+                return;
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 newAnimationState = this.IMAGE_WALKING;
                 this.idleDuration = 0; // Zeit zurücksetzen
@@ -172,7 +197,7 @@ class Character extends MovableObject {
     playJumpAnimation() {
         if (this.isJumping) return; // Verhindert die erneute Ausführung, wenn der Sprung läuft
         this.isJumping = true;
-    
+
         // Animation: Start der Sprungbewegung
         this.playAnimation(this.IMAGE_JUMP_START_1);
         setTimeout(() => {
@@ -181,12 +206,12 @@ class Character extends MovableObject {
         setTimeout(() => {
             this.playAnimation(this.IMAGE_JUMP_START_3);
         }, 8);
-    
+
         // Bildsequenz für den Beginn des Sprungs
         setTimeout(() => {
             this.playAnimation(this.IMAGE_JUMP_UP);
         }, 10);
-    
+
         // // Bildsequenz für den Abstieg des Sprungs
         setTimeout(() => {
             this.playAnimation(this.IMAGE_JUMP_DOWN_1);
@@ -194,7 +219,7 @@ class Character extends MovableObject {
         setTimeout(() => {
             this.playAnimation(this.IMAGE_JUMP_DOWN_2);
         }, 420);
-    
+
         // Bildsequenz für die Landung
         setTimeout(() => {
             this.playAnimation(this.IMAGE_LANDING_1);
@@ -205,11 +230,41 @@ class Character extends MovableObject {
         setTimeout(() => {
             this.playAnimation(this.IMAGE_LANDING_3);
         }, 750);
-    
+
         // Sprungstatus nach der Landung zurücksetzen
         setTimeout(() => {
             this.isJumping = false;
             this.resetAnimation();
+        }, 900);
+        // this.resetAnimation();
+    }
+
+    playDeadAnimation() {
+        if (this.noLife) return; // Verhindert die erneute Ausführung
+        this.noLife = true;
+
+        this.playAnimation(this.IMAGE_DEAD_1);
+        setTimeout(() => {
+            this.playAnimation(this.IMAGE_DEAD_2);
+        }, 3);
+        setTimeout(() => {
+            this.playAnimation(this.IMAGE_DEAD_3);
+        }, 8);
+        setTimeout(() => {
+            this.playAnimation(this.IMAGE_DEAD_4);
+        }, 10);
+        setTimeout(() => {
+            this.playAnimation(this.IMAGE_DEAD_5);
+        }, 240);
+        setTimeout(() => {
+            this.playAnimation(this.IMAGE_DEAD_6);
+        }, 420);
+        setTimeout(() => {
+            this.playAnimation(this.IMAGE_DEAD_7);
+        }, 640);
+        // Sprungstatus nach der Landung zurücksetzen
+        setTimeout(() => {
+            // this.noLife = true;
         }, 900);
         // this.resetAnimation();
     }
