@@ -72,19 +72,19 @@ class World {
 
     throwBottle() {
         this.errorSound.volume = 0.15;
-        if (this.statusBarBottle.bottleAmount > 0) {
+        if (this.statusBarBottle.bottleAmount > 0 && !this.character.noLife) {
             let startX = this.character.x + 45; // Standard für Rechtswurf
             let startY = this.character.y + 125; // Y bleibt gleich
 
             if (this.character.otherDirection) {
                 startX = this.character.x - 45; // Für Linkswurf X-Position anpassen
             }
-
+            
 
             let bottle = new ThrowableObject(startX, startY, this.character.otherDirection);
             this.throwableObject.push(bottle);
             this.statusBarBottle.bottleAmount--;  // Flaschenanzahl um 1 reduzieren
-        } else {
+        } else if (this.statusBarBottle.bottleAmount === 0) {
             //error sound abspielen
             this.errorSound.play();
         }
