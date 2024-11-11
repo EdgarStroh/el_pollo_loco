@@ -5,6 +5,7 @@ class MovableObject extends DrawableObject {
     acceleration = 2.5;
     energy = 100;
     lastHit = 0;
+    getDamage = false;
 
     applyGravity() {
         setInterval(() => {
@@ -31,17 +32,26 @@ class MovableObject extends DrawableObject {
     }
 
     hit() {
-        this.energy -= 50;
+        this.energy -= 1;
+        this.getDamage = true;
+        // console.log("bekomme schaden " + this.getDamage);
         if (this.energy < 0) {
             this.energy = 0;
         } else {
             this.lastHit = new Date().getTime();
+       
         }
     }
 
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit;
         timepassed = timepassed / 1000;
+    
+        if (timepassed >= 0.5) {
+            this.getDamage = false;
+            // console.log("kein dmg" + this.getDamage);     
+        }
+    
         return timepassed < 0.5;
     }
 
