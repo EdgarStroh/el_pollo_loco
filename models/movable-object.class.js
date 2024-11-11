@@ -19,7 +19,7 @@ class MovableObject extends DrawableObject {
         if (this instanceof ThrowableObject) {
             return true;
         } else {
-             
+
             return this.y < 130;
         }
 
@@ -32,27 +32,29 @@ class MovableObject extends DrawableObject {
     }
 
     hit() {
-        this.energy -= 1;
-        this.getDamage = true;
-        // console.log("bekomme schaden " + this.getDamage);
-        if (this.energy < 0) {
-            this.energy = 0;
-        } else {
+        if (!this.getDamage) {  // Schaden nur anwenden, wenn getDamage false ist
+            this.energy -= 10;
+            this.getDamage = true;
             this.lastHit = new Date().getTime();
-       
+            //  console.log("bekomme Schaden " + this.getDamage);
+            
+            if (this.energy < 0) {
+                this.energy = 0;
+            }
         }
     }
 
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit;
         timepassed = timepassed / 1000;
-    
-        if (timepassed >= 0.5) {
+        console.log(this.energy);
+
+        if (timepassed >= 0.95) {
             this.getDamage = false;
             // console.log("kein dmg" + this.getDamage);     
         }
-    
-        return timepassed < 0.5;
+
+        return timepassed < 0.95;
     }
 
     isDead() {
@@ -62,7 +64,7 @@ class MovableObject extends DrawableObject {
     resetAnimation() {
         this.currentImage = 0; // Setzt die aktuelle Bildnummer auf 0 zurück
     }
-    
+
     playAnimation(images) {
         // Stelle sicher, dass die Animation zurückgesetzt wird, bevor sie abgespielt wird
         let i = this.currentImage % images.length;

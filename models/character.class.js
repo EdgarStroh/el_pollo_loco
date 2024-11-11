@@ -165,6 +165,10 @@ class Character extends MovableObject {
             } else if (this.isHurt()) {
                 newAnimationState = this.IMAGE_HURT;
                 this.idleDuration = 0; // Zeit zurücksetzen
+                if(this.isHurt() && this.isJumping ===true){
+               
+                    
+                }
             } else if (this.isAboveGround()) {
                 newAnimationState = this.playJumpAnimation();
                 this.idleDuration = 0; // Zeit zurücksetzen
@@ -219,26 +223,16 @@ class Character extends MovableObject {
                     this.playAnimation(frame.animation);
                 } else {
                     // Wenn Schaden auftritt, stoppe sofort die Animation und gehe zum 'Hurt'-Zustand
-                    this.resetAnimation();
-                    this.isJumping = false; // Setze den Sprungstatus sofort zurück
-                    this.playAnimation(this.IMAGE_HURT);
-                    
+                  // Setze den Sprungstatus sofort zurück
+                  
                 }
             }, frame.delay);
         });
-    
         // Reset jumping state after the animation
         setTimeout(() => {
             this.isJumping = false;
-            this.resetAnimation();
-        }, 900);
-    
-        // If damage occurs, play hurt animation immediately
-        if (this.getDamage) {
-            this.resetAnimation();
-            this.playAnimation(this.IMAGE_HURT);
-            this.isJumping = false;
-        }
+            // this.resetAnimation();
+        }, 800); 
     }
     
 
