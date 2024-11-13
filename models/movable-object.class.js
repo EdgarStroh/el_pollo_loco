@@ -26,10 +26,20 @@ class MovableObject extends DrawableObject {
     }
 
     isColliding(obj) {
-        return (this.x + this.width) >= obj.x && this.x <= (obj.x + obj.width) &&
-            (this.y + this.offsetY + this.height) >= obj.y &&
-            (this.y + this.offsetY) <= (obj.y + obj.height);
+        return (
+            (this.x + this.offsetX + this.width - this.offsetWidth) >= (obj.x + obj.offsetX) && // Rechtskante von this erreicht oder überschreitet linke Kante von obj
+            (this.x + this.offsetX) <= (obj.x + obj.offsetX + obj.width - obj.offsetWidth) &&   // Linke Kante von this ist vor oder auf der rechten Kante von obj
+            (this.y + this.offsetY + this.height - this.offsetHeight) >= (obj.y + obj.offsetY) && // Unterkante von this erreicht oder überschreitet obere Kante von obj
+            (this.y + this.offsetY) <= (obj.y + obj.offsetY + obj.height - obj.offsetHeight)     // Oberkante von this ist vor oder auf der Unterkante von obj
+        );
     }
+
+    // isColliding(mo){
+    // return  this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
+    //         this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
+    //         this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
+    //         this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom;
+    // }
 
     hit() {
         if (!this.getDamage) {  // Schaden nur anwenden, wenn getDamage false ist
@@ -47,14 +57,11 @@ class MovableObject extends DrawableObject {
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit;
         timepassed = timepassed / 1000;
-        console.log(this.energy);
-
-        if (timepassed >= 0.95) {
+        if (timepassed >=  1.4) {
             this.getDamage = false;
             // console.log("kein dmg" + this.getDamage);     
         }
-
-        return timepassed < 0.95;
+        return timepassed < 1.4;
     }
 
     isDead() {

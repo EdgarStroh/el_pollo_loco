@@ -14,7 +14,7 @@ class StatusBarBottle extends DrawableObject {
     }
  
     draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);      
         ctx.fillText(this.bottleAmount, this.x + this.width + 0, this.y + 35);
     }
    

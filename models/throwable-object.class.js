@@ -9,9 +9,7 @@ class ThrowableObject extends MovableObject {
         super().loadImage('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png');
         this.loadImages(this.IMAGE_BOTTLE_ROTATE);
         this.x = x;
-        this.y = y;
-        this.height = 90;
-        this.width = 90;
+        this.y = y;   
         this.otherDirection = otherDirection;  // speichere die Richtung
         this.throw();
     }

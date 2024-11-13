@@ -9,7 +9,7 @@ class Level {
 
     constructor(enemies, coins, bottles, clouds, backgroundObjects) {
         this.enemies = enemies;
-        this.coins = coins;  // Richtig: jetzt ist es "coins"
+        this.coins = coins;  
         this.bottles = bottles; 
         this.clouds = clouds;
         this.backgroundObjects = backgroundObjects;

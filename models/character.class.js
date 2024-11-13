@@ -1,10 +1,13 @@
 class Character extends MovableObject {
     height = 300;
     y = 130;
-    offsetY = 0;
     speed = 10;
     isJumping = false;
     noLife = false;
+    offsetX = 10;
+    offsetY = 130;
+    offsetWidth = 35;
+    offsetHeight = 140;
 
 
     IMAGE_IDLE = [
@@ -88,6 +91,7 @@ class Character extends MovableObject {
     world;
     walking_sound = new Audio('audio/walk.mp3');
 
+
     constructor() {
         super().loadImage('img/2_character_pepe/1_idle/idle/I-1.png');
         this.loadImages(this.IMAGE_IDLE);
@@ -116,7 +120,17 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGE_HURT);
         this.applyGravity();
         this.animate();
+        // this.drawFrame();
     }
+    // drawFrame(ctx) {
+    //     if (this instanceof Character) {
+    //         ctx.beginPath();
+    //         ctx.lineWidth = "5";
+    //         ctx.strokeStyle = "blue";
+    //         ctx.rect(this.x, this.y, this.width, this.height);
+    //         ctx.stroke();
+    //     }
+    // }
 
     animate() {
         setInterval(() => {
@@ -165,9 +179,9 @@ class Character extends MovableObject {
             } else if (this.isHurt()) {
                 newAnimationState = this.IMAGE_HURT;
                 this.idleDuration = 0; // Zeit zurücksetzen
-                if(this.isHurt() && this.isJumping ===true){
-               
-                    
+                if (this.isHurt() && this.isJumping === true) {
+
+
                 }
             } else if (this.isAboveGround()) {
                 newAnimationState = this.playJumpAnimation();
@@ -203,19 +217,19 @@ class Character extends MovableObject {
     playJumpAnimation() {
         if (this.isJumping) return; // Verhindert die erneute Ausführung, wenn der Sprung läuft
         this.isJumping = true;
-    
+
         const jumpSequence = [
             { animation: this.IMAGE_JUMP_START_1, delay: 0 },
             { animation: this.IMAGE_JUMP_START_2, delay: 3 },
             { animation: this.IMAGE_JUMP_START_3, delay: 8 },
             { animation: this.IMAGE_JUMP_UP, delay: 10 },
-            { animation: this.IMAGE_JUMP_DOWN_1, delay: 240 }, 
+            { animation: this.IMAGE_JUMP_DOWN_1, delay: 240 },
             { animation: this.IMAGE_JUMP_DOWN_2, delay: 420 },
             { animation: this.IMAGE_LANDING_1, delay: 640 },
             { animation: this.IMAGE_LANDING_2, delay: 740 },
             { animation: this.IMAGE_LANDING_3, delay: 750 }
         ];
-    
+
         // Loop through jump sequence and apply the delay for each frame
         jumpSequence.forEach((frame) => {
             setTimeout(() => {
@@ -223,23 +237,23 @@ class Character extends MovableObject {
                     this.playAnimation(frame.animation);
                 } else {
                     // Wenn Schaden auftritt, stoppe sofort die Animation und gehe zum 'Hurt'-Zustand
-                  // Setze den Sprungstatus sofort zurück
-                  
+                    // Setze den Sprungstatus sofort zurück
+                    this.resetAnimation();
                 }
             }, frame.delay);
         });
         // Reset jumping state after the animation
         setTimeout(() => {
             this.isJumping = false;
-            // this.resetAnimation();
-        }, 800); 
+            this.resetAnimation();
+        }, 800);
     }
-    
+
 
     playDeadAnimation() {
         if (this.noLife) return; // Prevent re-execution
         this.noLife = true;
-        
+
         const deadSequence = [
             { animation: this.IMAGE_DEAD_1, delay: 0 },
             { animation: this.IMAGE_DEAD_2, delay: 3 },
@@ -249,13 +263,13 @@ class Character extends MovableObject {
             { animation: this.IMAGE_DEAD_6, delay: 420 },
             { animation: this.IMAGE_DEAD_7, delay: 640 }
         ];
-    
+
         deadSequence.forEach((frame) => {
             setTimeout(() => {
                 this.playAnimation(frame.animation);
             }, frame.delay);
         });
-        
+
         // Reset state after all dead animations are played
         setTimeout(() => {
             // Can add further logic like resetting state or triggering a game over

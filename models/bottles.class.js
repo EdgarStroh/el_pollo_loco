@@ -1,4 +1,8 @@
 class Bottle extends MovableObject {
+    offsetX = 40;
+    offsetY = 20;
+    offsetWidth = 70;
+    offsetHeight = 30;
     IMAGEBOTTLE = [
         'img/6_salsa_bottle/1_salsa_bottle_on_ground.png',
         'img/6_salsa_bottle/2_salsa_bottle_on_ground.png',
@@ -8,7 +12,7 @@ class Bottle extends MovableObject {
         super();
         this.loadImages(this.IMAGEBOTTLE);
         this.x = Math.random() * (3000 - 500) + 200; // Adjust this range as needed
-        this.y = 250 * Math.random(); // Adjust height
+        this.y = 20 + 300  * Math.random(); // Adjust height
         this.width = 110;
         this.height = 110;
         this.img = this.imageCache[this.IMAGEBOTTLE[0]]; // Set initial image

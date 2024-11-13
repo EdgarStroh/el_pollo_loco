@@ -1,5 +1,6 @@
 class World {
     character = new Character();
+    bottleToHit = new ThrowableObject();
     level = level1;
     canvas;
     ctx;
@@ -8,8 +9,8 @@ class World {
     statusBarHealth = new StatusBarHealth();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
-    throwableObject = [];
-    errorSound = new Audio('audio/error.mp3');
+    bottleToThrow = [];
+    bottleEmptySound = new Audio('audio/error.mp3');
     IMAGE_BOTTLE_SPLASH = [
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png',
@@ -35,9 +36,10 @@ class World {
         setInterval(() => {
             //Check collision
             this.checkCollisions();
-            this.checkCoinCollisions();
-            this.checkBottleCollisions();
-        }, 200);
+            this.checkCollisionsBottleOnEnemy();
+            this.checkCoinCollisionsPickUp();
+            this.checkBottleCollisionsPickUp();
+        }, 100);
     }
 
     checkCollisions() {
@@ -50,8 +52,17 @@ class World {
             }
         });
     }
-
-    checkCoinCollisions() {
+    checkCollisionsBottleOnEnemy() {
+        this.bottleToThrow.forEach((bottle) => {
+            this.level.enemies.forEach((enemy) => {
+                if (bottle.isColliding(enemy)) {
+                    console.log("HIT");
+                    // Hier kannst du weitere Logik hinzufügen, z.B. Gegner beschädigen
+                }
+            });
+        });
+    }
+    checkCoinCollisionsPickUp() {
         this.level.coins = this.level.coins.filter((coin) => {
             if (this.character.isColliding(coin)) {
                 this.statusBarCoin.coinAmount++;
@@ -60,7 +71,7 @@ class World {
             return true; // Behalte den Coin im Array, wenn keine Kollision
         });
     }
-    checkBottleCollisions() {
+    checkBottleCollisionsPickUp() {
         this.level.bottles = this.level.bottles.filter((bottle) => {
             if (this.character.isColliding(bottle)) {
                 this.statusBarBottle.bottleAmount++; // Increase the bottle amount
@@ -71,7 +82,7 @@ class World {
     }
 
     throwBottle() {
-        this.errorSound.volume = 0.15;
+        this.bottleEmptySound.volume = 0.15;
         if (this.statusBarBottle.bottleAmount > 0 && !this.character.noLife) {
             let startX = this.character.x + 45; // Standard für Rechtswurf
             let startY = this.character.y + 125; // Y bleibt gleich
@@ -79,14 +90,12 @@ class World {
             if (this.character.otherDirection) {
                 startX = this.character.x - 45; // Für Linkswurf X-Position anpassen
             }
-            
-
             let bottle = new ThrowableObject(startX, startY, this.character.otherDirection);
-            this.throwableObject.push(bottle);
+            this.bottleToThrow.push(bottle);
             this.statusBarBottle.bottleAmount--;  // Flaschenanzahl um 1 reduzieren
         } else if (this.statusBarBottle.bottleAmount === 0) {
             //error sound abspielen
-            this.errorSound.play();
+            this.bottleEmptySound.play();
         }
     }
 
@@ -104,7 +113,7 @@ class World {
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.bottles);
         this.addObjectsToMap(this.level.enemies);
-        this.addObjectsToMap(this.throwableObject);
+        this.addObjectsToMap(this.bottleToThrow);
 
         this.ctx.translate(-this.camera_x, 0); // Reset the translation for fixed objects
 
