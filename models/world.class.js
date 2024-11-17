@@ -1,30 +1,34 @@
 class World {
     character = new Character();
-    bottleToHit = new ThrowableObject();
+    // playAnimationObject = new MovableObject();
+    // loadImagesFromDO = new DrawableObject();
+    // bottleToHit = new ThrowableObject();
+    statusBarHealth = new StatusBarHealth();
+    statusBarCoin = new StatusBarCoin();
+    statusBarBottle = new StatusBarBottle();
+    bottleEmptySound = new Audio('audio/error.mp3');
     level = level1;
     canvas;
     ctx;
     keyboard;
     camera_x = 0;
-    statusBarHealth = new StatusBarHealth();
-    statusBarCoin = new StatusBarCoin();
-    statusBarBottle = new StatusBarBottle();
     bottleToThrow = [];
-    bottleEmptySound = new Audio('audio/error.mp3');
-    IMAGE_BOTTLE_SPLASH = [
-        'img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
-        'img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png',
-        'img/6_salsa_bottle/bottle_rotation/bottle_splash/3_bottle_splash.png',
-        'img/6_salsa_bottle/bottle_rotation/bottle_splash/4_bottle_splash.png',
-        'img/6_salsa_bottle/bottle_rotation/bottle_splash/5_bottle_splash.png',
-        'img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png',
-    ];
+    // IMAGE_BOTTLE_SPLASH = [
+    //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
+    //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png',
+    //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/3_bottle_splash.png',
+    //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/4_bottle_splash.png',
+    //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/5_bottle_splash.png',
+    //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png',
+    // ];
+    // splashImages = [];
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
+        // this.loadImagesFromDO.loadImages(this.IMAGE_BOTTLE_SPLASH);
         this.run();
     }
 
@@ -52,16 +56,18 @@ class World {
             }
         });
     }
+ 
     checkCollisionsBottleOnEnemy() {
         this.bottleToThrow.forEach((bottle) => {
             this.level.enemies.forEach((enemy) => {
                 if (bottle.isColliding(enemy)) {
-                    console.log("HIT");
-                    // Hier kannst du weitere Logik hinzufügen, z.B. Gegner beschädigen
+                    bottle.animateSplash();
                 }
             });
         });
+        this.bottleToThrow = this.bottleToThrow.filter(bottle => !bottle.isDestroyed);
     }
+
     checkCoinCollisionsPickUp() {
         this.level.coins = this.level.coins.filter((coin) => {
             if (this.character.isColliding(coin)) {
@@ -99,6 +105,7 @@ class World {
         }
     }
 
+
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -114,6 +121,8 @@ class World {
         this.addObjectsToMap(this.level.bottles);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.bottleToThrow);
+        // this.addObjectsToMap(this.playAnimationObject);
+        // this.addObjectsToMap(this.splashImages);
 
         this.ctx.translate(-this.camera_x, 0); // Reset the translation for fixed objects
 
@@ -121,6 +130,7 @@ class World {
         this.addToMap(this.statusBarHealth);
         this.addToMap(this.statusBarBottle);
         this.addToMap(this.statusBarCoin);
+
 
         let self = this;
         requestAnimationFrame(function () {

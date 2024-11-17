@@ -9,7 +9,21 @@ class Character extends MovableObject {
     offsetWidth = 35;
     offsetHeight = 140;
 
-
+    
+    IMAGE_HURT = [
+        'img/2_character_pepe/4_hurt/H-41.png',
+        'img/2_character_pepe/4_hurt/H-42.png',
+        'img/2_character_pepe/4_hurt/H-43.png'
+    ];
+    IMAGE_DEAD = [
+        'img/2_character_pepe/5_dead/D-51.png',
+        'img/2_character_pepe/5_dead/D-52.png',
+        'img/2_character_pepe/5_dead/D-53.png',
+        'img/2_character_pepe/5_dead/D-54.png',
+        'img/2_character_pepe/5_dead/D-55.png',
+        'img/2_character_pepe/5_dead/D-56.png',
+        'img/2_character_pepe/5_dead/D-57.png'
+    ];
     IMAGE_IDLE = [
         'img/2_character_pepe/1_idle/idle/I-1.png',
         'img/2_character_pepe/1_idle/idle/I-2.png',
@@ -64,15 +78,7 @@ class Character extends MovableObject {
     IMAGE_LANDING_2 = ['img/2_character_pepe/3_jump/J-38.png'];
     IMAGE_LANDING_3 = ['img/2_character_pepe/3_jump/J-39.png'];
 
-    IMAGE_DEAD = [
-        'img/2_character_pepe/5_dead/D-51.png',
-        'img/2_character_pepe/5_dead/D-52.png',
-        'img/2_character_pepe/5_dead/D-53.png',
-        'img/2_character_pepe/5_dead/D-54.png',
-        'img/2_character_pepe/5_dead/D-55.png',
-        'img/2_character_pepe/5_dead/D-56.png',
-        'img/2_character_pepe/5_dead/D-57.png'
-    ];
+ 
     // Neue Dead-Animationen
     IMAGE_DEAD_1 = ['img/2_character_pepe/5_dead/D-51.png'];
     IMAGE_DEAD_2 = ['img/2_character_pepe/5_dead/D-52.png'];
@@ -82,55 +88,45 @@ class Character extends MovableObject {
     IMAGE_DEAD_6 = ['img/2_character_pepe/5_dead/D-56.png'];
     IMAGE_DEAD_7 = ['img/2_character_pepe/5_dead/D-57.png'];
 
-    IMAGE_HURT = [
-        'img/2_character_pepe/4_hurt/H-41.png',
-        'img/2_character_pepe/4_hurt/H-42.png',
-        'img/2_character_pepe/4_hurt/H-43.png'
-    ];
+
     currentAnimationState = null;
     world;
     walking_sound = new Audio('audio/walk.mp3');
 
+ loadAllImages() {
+        setInterval(() => {
+            this.loadImages(this.IMAGE_IDLE);
+            this.loadImages(this.IMAGE_IDLE_LONG);
+            this.loadImages(this.IMAGE_WALKING);
+            this.loadImages(this.IMAGE_JUMPING);
+            this.loadImages(this.IMAGE_JUMP_START_1);
+            this.loadImages(this.IMAGE_JUMP_START_2);
+            this.loadImages(this.IMAGE_JUMP_START_3);
+            this.loadImages(this.IMAGE_JUMP_UP);
+            this.loadImages(this.IMAGE_JUMP_DOWN_1);
+            this.loadImages(this.IMAGE_JUMP_DOWN_2);
+            this.loadImages(this.IMAGE_LANDING_1);
+            this.loadImages(this.IMAGE_LANDING_2);
+            this.loadImages(this.IMAGE_LANDING_3);
+            this.loadImages(this.IMAGE_DEAD);
+            this.loadImages(this.IMAGE_DEAD_1);
+            this.loadImages(this.IMAGE_DEAD_2);
+            this.loadImages(this.IMAGE_DEAD_3);
+            this.loadImages(this.IMAGE_DEAD_4);
+            this.loadImages(this.IMAGE_DEAD_5);
+            this.loadImages(this.IMAGE_DEAD_6);
+            this.loadImages(this.IMAGE_DEAD_7);
+    
+            this.loadImages(this.IMAGE_HURT);
+        }, 100);
+    }
 
     constructor() {
         super().loadImage('img/2_character_pepe/1_idle/idle/I-1.png');
-        this.loadImages(this.IMAGE_IDLE);
-        this.loadImages(this.IMAGE_IDLE_LONG);
-        this.loadImages(this.IMAGE_WALKING);
-        this.loadImages(this.IMAGE_JUMPING);
-        this.loadImages(this.IMAGE_JUMP_START_1);
-        this.loadImages(this.IMAGE_JUMP_START_2);
-        this.loadImages(this.IMAGE_JUMP_START_3);
-        this.loadImages(this.IMAGE_JUMP_UP);
-        this.loadImages(this.IMAGE_JUMP_DOWN_1);
-        this.loadImages(this.IMAGE_JUMP_DOWN_2);
-        this.loadImages(this.IMAGE_LANDING_1);
-        this.loadImages(this.IMAGE_LANDING_2);
-        this.loadImages(this.IMAGE_LANDING_3);
-        this.loadImages(this.IMAGE_DEAD);
-        // Einzelne Arrays für jedes Bild in IMAGE_DEAD
-        this.loadImages(this.IMAGE_DEAD_1);
-        this.loadImages(this.IMAGE_DEAD_2);
-        this.loadImages(this.IMAGE_DEAD_3);
-        this.loadImages(this.IMAGE_DEAD_4);
-        this.loadImages(this.IMAGE_DEAD_5);
-        this.loadImages(this.IMAGE_DEAD_6);
-        this.loadImages(this.IMAGE_DEAD_7);
-
-        this.loadImages(this.IMAGE_HURT);
+        this.loadAllImages();
         this.applyGravity();
         this.animate();
-        // this.drawFrame();
     }
-    // drawFrame(ctx) {
-    //     if (this instanceof Character) {
-    //         ctx.beginPath();
-    //         ctx.lineWidth = "5";
-    //         ctx.strokeStyle = "blue";
-    //         ctx.rect(this.x, this.y, this.width, this.height);
-    //         ctx.stroke();
-    //     }
-    // }
 
     animate() {
         setInterval(() => {

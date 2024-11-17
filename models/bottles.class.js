@@ -12,7 +12,7 @@ class Bottle extends MovableObject {
         super();
         this.loadImages(this.IMAGEBOTTLE);
         this.x = Math.random() * (3000 - 500) + 200; // Adjust this range as needed
-        this.y = 20 + 300  * Math.random(); // Adjust height
+        this.y = 25 + 300  * Math.random(); // Adjust height
         this.width = 110;
         this.height = 110;
         this.img = this.imageCache[this.IMAGEBOTTLE[0]]; // Set initial image
