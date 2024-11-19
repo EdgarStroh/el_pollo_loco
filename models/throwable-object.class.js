@@ -3,7 +3,7 @@ class ThrowableObject extends MovableObject {
     offsetY = 20;
     offsetWidth = 25;
     offsetHeight = 25;
-    IMAGE_BOTTLE_ROTATE= [
+    IMAGE_BOTTLE_ROTATE = [
         'img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
         'img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png',
         'img/6_salsa_bottle/bottle_rotation/3_bottle_rotation.png',
@@ -23,7 +23,7 @@ class ThrowableObject extends MovableObject {
         this.loadImages(this.IMAGE_BOTTLE_ROTATE);
         this.loadImages(this.IMAGES_SPLASH);
         this.x = x;
-        this.y = y;   
+        this.y = y;
         this.otherDirection = otherDirection;  // speichere die Richtung
         this.throw();
     }
@@ -31,21 +31,39 @@ class ThrowableObject extends MovableObject {
     throw() {
         this.speedY = 30;
         this.applyGravity();
-        setInterval(() => {
+        // Intervall für die Bewegung speichern
+        this.movementInterval = setInterval(() => {
             // Bewege die Flasche nach links oder rechts basierend auf otherDirection
             if (this.otherDirection) {
-                this.playAnimation(this.IMAGE_BOTTLE_ROTATE);
-                this.x -= 15; // nach links werfen
+                this.throwLeft();
             } else {
-                this.playAnimation(this.IMAGE_BOTTLE_ROTATE);
-                this.x += 15; // nach rechts werfen
+                this.throwRight();
             }
         }, 55);
     }
 
+    throwLeft() {
+        this.playAnimation(this.IMAGE_BOTTLE_ROTATE);
+        this.x -= 15; // nach links werfen
+    }
+    throwRight() {
+        this.playAnimation(this.IMAGE_BOTTLE_ROTATE);
+        this.x += 15; // nach rechts werfen
+    }
+
     animateSplash() {
-        this.speedY = 0;
-        clearInterval(this.throw);
+        this.stopMovement();
+        // Splash-Animation abspielen
+        // this.resetAnimation(); // Index zurücksetzen, falls verwendet
         this.playAnimation(this.IMAGES_SPLASH);
     }
+
+
+    stopMovement() {
+        if (this.movementInterval) {
+            clearInterval(this.movementInterval);
+            this.movementInterval = null; // Intervall-Referenz zurücksetzen
+        }
+    }
+
 }

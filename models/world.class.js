@@ -3,6 +3,7 @@ class World {
     // playAnimationObject = new MovableObject();
     // loadImagesFromDO = new DrawableObject();
     // bottleToHit = new ThrowableObject();
+    mo = new MovableObject();
     statusBarHealth = new StatusBarHealth();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
@@ -56,17 +57,28 @@ class World {
             }
         });
     }
- 
+
     checkCollisionsBottleOnEnemy() {
         this.bottleToThrow.forEach((bottle) => {
             this.level.enemies.forEach((enemy) => {
+                // this.mo.resetAnimation();
                 if (bottle.isColliding(enemy)) {
+                    bottle.speedX = 1;  // Stoppe die Bewegung
+                    bottle.speedY = 1;  // Stoppe die Bewegung nach untenn
+                    
+                    
+                   
                     bottle.animateSplash();
+                    setInterval(() => {
+                        bottle.isDestroyed = true;
+                    }, 330);
                 }
             });
         });
+        // Entferne zerstörte Flaschen aus dem Array
         this.bottleToThrow = this.bottleToThrow.filter(bottle => !bottle.isDestroyed);
     }
+
 
     checkCoinCollisionsPickUp() {
         this.level.coins = this.level.coins.filter((coin) => {
