@@ -65,13 +65,10 @@ class World {
                 if (bottle.isColliding(enemy)) {
                     bottle.speedX = 1;  // Stoppe die Bewegung
                     bottle.speedY = 1;  // Stoppe die Bewegung nach untenn
-                    
-                    
-                   
                     bottle.animateSplash();
                     setInterval(() => {
                         bottle.isDestroyed = true;
-                    }, 330);
+                    }, 500);
                 }
             });
         });

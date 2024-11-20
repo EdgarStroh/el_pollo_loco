@@ -43,10 +43,12 @@ class MovableObject extends DrawableObject {
 
     hit() {
         if (!this.getDamage) {  // Schaden nur anwenden, wenn getDamage false ist
-            this.energy -= 10;
+            this.energy -= 20;
+            console.log("soviel energy hast du noch, " + this.energy);
+            
             this.getDamage = true;
             this.lastHit = new Date().getTime();
-            //  console.log("bekomme Schaden " + this.getDamage);
+            //   console.log("bekomme Schaden " + this.getDamage);
             
             if (this.energy < 0) {
                 this.energy = 0;

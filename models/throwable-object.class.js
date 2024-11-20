@@ -26,6 +26,8 @@ class ThrowableObject extends MovableObject {
         this.y = y;
         this.otherDirection = otherDirection;  // speichere die Richtung
         this.throw();
+        this.hasResetAnimation = false; // Standardmäßig nicht zurückgesetzt
+
     }
 
     throw() {
@@ -53,8 +55,10 @@ class ThrowableObject extends MovableObject {
 
     animateSplash() {
         this.stopMovement();
-        // Splash-Animation abspielen
-        // this.resetAnimation(); // Index zurücksetzen, falls verwendet
+        if (!this.hasResetAnimation) {
+            this.resetAnimation(); // Index zurücksetzen
+            this.hasResetAnimation = true; // Markieren, dass die Animation zurückgesetzt wurde
+        }
         this.playAnimation(this.IMAGES_SPLASH);
     }
 

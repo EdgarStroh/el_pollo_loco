@@ -148,7 +148,7 @@ class Character extends MovableObject {
             }
 
             // Jump
-            if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround() && !this.isJumping && this.noLife === false) {
+            if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround() && !this.isHurt() && !this.isJumping && this.noLife === false) {
                 this.jump(); // Sprung nur auslösen, wenn der Charakter am Boden ist
 
             }
@@ -231,18 +231,28 @@ class Character extends MovableObject {
             setTimeout(() => {
                 if (!this.getDamage) {
                     this.playAnimation(frame.animation);
-                } else {
-                    // Wenn Schaden auftritt, stoppe sofort die Animation und gehe zum 'Hurt'-Zustand
-                    // Setze den Sprungstatus sofort zurück
-                    this.resetAnimation();
-                }
+                } 
+                // if (this.isHurt() && this.isJumping) {
+                //     this.stopMovement();
+                //     this.playAnimation(this.IMAGE_HURT);
+                //     this.isJumping = false;
+                //     return;
+                // }
             }, frame.delay);
         });
         // Reset jumping state after the animation
         setTimeout(() => {
             this.isJumping = false;
-            this.resetAnimation();
+            // this.resetAnimation();
         }, 800);
+    }
+
+
+    stopMovement() {
+        if (this.movementInterval) {
+            clearInterval(this.movementInterval);
+            this.movementInterval = null; // Intervall-Referenz zurücksetzen
+        }
     }
 
 
