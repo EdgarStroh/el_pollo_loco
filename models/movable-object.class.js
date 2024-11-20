@@ -25,6 +25,10 @@ class MovableObject extends DrawableObject {
 
     }
 
+    theGround (){
+        return this.y >310;
+    }
+
     isColliding(obj) {
         return (
             (this.x + this.offsetX + this.width - this.offsetWidth) >= (obj.x + obj.offsetX) && // Rechtskante von this erreicht oder überschreitet linke Kante von obj

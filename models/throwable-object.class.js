@@ -62,6 +62,15 @@ class ThrowableObject extends MovableObject {
         this.playAnimation(this.IMAGES_SPLASH);
     }
 
+    // animateSplashGround() {
+    //     this.stopMovement();
+    //     if (!this.hasResetAnimation) {
+    //         this.resetAnimation(); // Index zurücksetzen
+    //         this.hasResetAnimation = true; // Markieren, dass die Animation zurückgesetzt wurde
+    //     }
+    //     this.playAnimation(this.IMAGES_SPLASH);
+    // }
+
 
     stopMovement() {
         if (this.movementInterval) {

@@ -8,6 +8,7 @@ class Endboss extends MovableObject {
     offsetWidth =70;
     offsetHeight = 100;
 
+
     IMAGE_WALKING = [
         'img/4_enemie_boss_chicken/2_alert/G5.png',
         'img/4_enemie_boss_chicken/2_alert/G6.png',
@@ -29,5 +30,19 @@ class Endboss extends MovableObject {
         setInterval(() => {
             this.playAnimation(this.IMAGE_WALKING);
         }, 200);
+    }
+    hit() {
+        if (!this.getDamage) {  // Schaden nur anwenden, wenn getDamage false ist
+            this.energy -= 40;
+            console.log("soviel energy hast du noch, " + this.energy);
+            
+            this.getDamage = true;
+            this.lastHit = new Date().getTime();
+            //   console.log("bekomme Schaden " + this.getDamage);
+            
+            if (this.energy < 0) {
+                this.energy = 0;
+            }
+        }
     }
 }

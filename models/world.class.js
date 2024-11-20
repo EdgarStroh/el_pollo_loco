@@ -60,18 +60,34 @@ class World {
 
     checkCollisionsBottleOnEnemy() {
         this.bottleToThrow.forEach((bottle) => {
+            let hasCollided = false; // Kollision-Flag, um Mehrfachkollision zu verhindern
+    
+            // Prüfe Kollision mit Gegnern
             this.level.enemies.forEach((enemy) => {
-                // this.mo.resetAnimation();
-                if (bottle.isColliding(enemy)) {
-                    bottle.speedX = 1;  // Stoppe die Bewegung
-                    bottle.speedY = 1;  // Stoppe die Bewegung nach untenn
-                    bottle.animateSplash();
-                    setInterval(() => {
+                if (!hasCollided && bottle.isColliding(enemy)) {
+                    // console.log('Collided with enemy:', enemy);
+                    bottle.speedX = 0;
+                    bottle.speedY = 0;
+                    bottle.animateSplash(); // Animation für Gegner-Treffer
+                    hasCollided = true; // Gegner-Kollision markiert
+                    setTimeout(() => {
                         bottle.isDestroyed = true;
                     }, 500);
                 }
             });
+    
+            // Prüfe Bodenkontakt nur, wenn keine Gegner-Kollision erkannt wurde
+            if (!hasCollided && bottle.theGround()) {
+                // console.log('Collided with ground');
+                bottle.speedX = 0;
+                bottle.speedY = 0;
+                bottle.animateSplash(); // Animation für Bodenkontakt
+                setTimeout(() => {
+                    bottle.isDestroyed = true;
+                }, 500);
+            }
         });
+    
         // Entferne zerstörte Flaschen aus dem Array
         this.bottleToThrow = this.bottleToThrow.filter(bottle => !bottle.isDestroyed);
     }
