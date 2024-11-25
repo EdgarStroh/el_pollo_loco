@@ -51,7 +51,7 @@ class World {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
                 this.character.hit();
-                this.statusBarHealth.setPercentage(this.character.energy);
+                this.statusBarHealth.setPercentage(this.character.myHealth);
                 // console.log('characker energy=', this.character.energy);
 
             }
@@ -66,6 +66,10 @@ class World {
             this.level.enemies.forEach((enemy) => {
                 if (!hasCollided && bottle.isColliding(enemy)) {
                     // console.log('Collided with enemy:', enemy);
+                    // this.mo.energy = -1;
+                    // console.log('enemy energy: ' + this.mo.energy);
+                    
+
                     bottle.speedX = 0;
                     bottle.speedY = 0;
                     bottle.animateSplash(); // Animation für Gegner-Treffer

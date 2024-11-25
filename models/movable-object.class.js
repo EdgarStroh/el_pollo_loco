@@ -3,7 +3,7 @@ class MovableObject extends DrawableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
-    energy = 100;
+    myHealth = 100;
     lastHit = 0;
     getDamage = false;
 
@@ -47,15 +47,16 @@ class MovableObject extends DrawableObject {
 
     hit() {
         if (!this.getDamage) {  // Schaden nur anwenden, wenn getDamage false ist
-            this.energy -= 20;
-            console.log("soviel energy hast du noch, " + this.energy);
+            this.myHealth -= 20;
+            console.log("soviel myHealth hast du noch, " + this.myHealth);
+
             
             this.getDamage = true;
             this.lastHit = new Date().getTime();
             //   console.log("bekomme Schaden " + this.getDamage);
             
-            if (this.energy < 0) {
-                this.energy = 0;
+            if (this.myHealth < 0) {
+                this.myHealth = 0;
             }
         }
     }
@@ -71,7 +72,7 @@ class MovableObject extends DrawableObject {
     }
 
     isDead() {
-        return this.energy == 0;
+        return this.myHealth == 0;
     }
 
     resetAnimation() {
