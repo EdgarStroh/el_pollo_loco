@@ -3,11 +3,13 @@ class World {
     // playAnimationObject = new MovableObject();
     // loadImagesFromDO = new DrawableObject();
     // bottleToHit = new ThrowableObject();
-    mo = new MovableObject();
+    MO = new MovableObject();
+    TO = new ThrowableObject();
     statusBarHealth = new StatusBarHealth();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
     bottleEmptySound = new Audio('audio/error.mp3');
+    DamageWithBottle = -5;
     level = level1;
     canvas;
     ctx;
@@ -35,6 +37,24 @@ class World {
 
     setWorld() {
         this.character.world = this;
+    }
+    applyDamageWithBottle(enemy) {
+        // Reduziert die Gesundheit des Gegners basierend auf seiner Klasse
+        if (enemy instanceof Endboss) {
+            enemy.endbossHealth += this.DamageWithBottle; // Schaden am Endboss
+            console.log(`Endboss hit! Remaining health: ${enemy.endbossHealth}`);
+            if (enemy.endbossHealth <= 0) {
+                enemy.isDead = true; // Endboss als besiegt markieren
+                console.log('Endboss defeated!');
+            }
+        } else {
+            enemy.enemyHealth += this.DamageWithBottle; // Schaden an normalen Gegnern
+            console.log(`Enemy hit! Remaining health: ${enemy.enemyHealth}`);
+            if (enemy.enemyHealth <= 0) {
+                enemy.isDead = true; // Gegner als besiegt markieren
+                console.log('Enemy defeated!');
+            }
+        }
     }
 
     run() {
@@ -68,11 +88,10 @@ class World {
                     // console.log('Collided with enemy:', enemy);
                     // this.mo.energy = -1;
                     // console.log('enemy energy: ' + this.mo.energy);
-                    
-
                     bottle.speedX = 0;
                     bottle.speedY = 0;
                     bottle.animateSplash(); // Animation für Gegner-Treffer
+                    this.applyDamageWithBottle(enemy);
                     hasCollided = true; // Gegner-Kollision markiert
                     setTimeout(() => {
                         bottle.isDestroyed = true;

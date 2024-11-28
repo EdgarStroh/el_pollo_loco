@@ -4,10 +4,11 @@ class MovableObject extends DrawableObject {
     speedY = 0;
     acceleration = 2.5;
     myHealth = 100;
+    enemyHealth = 0;
     lastHit = 0;
     getDamage = false;
 
-    applyGravity() {
+    applyGravity() { 
         setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0)
                 this.y -= this.speedY;

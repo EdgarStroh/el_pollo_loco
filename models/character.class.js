@@ -8,7 +8,7 @@ class Character extends MovableObject {
     offsetY = 130;
     offsetWidth = 35;
     offsetHeight = 140;
-
+    
     
     IMAGE_HURT = [
         'img/2_character_pepe/4_hurt/H-41.png',

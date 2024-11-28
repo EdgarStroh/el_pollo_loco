@@ -6,8 +6,9 @@ class Endboss extends MovableObject {
     offsetX = 20;
     offsetY = 80;
     offsetWidth =70;
+    enemyHealth = 25;
     offsetHeight = 100;
-    // energy = 10;
+    endbossHealth = 40;
 
     IMAGE_WALKING = [
         'img/4_enemie_boss_chicken/2_alert/G5.png',
