@@ -9,13 +9,14 @@ class World {
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
     bottleEmptySound = new Audio('audio/error.mp3');
+    bottleToThrow = [];
     DamageWithBottle = -5;
     level = level1;
     canvas;
     ctx;
     keyboard;
     camera_x = 0;
-    bottleToThrow = [];
+
     // IMAGE_BOTTLE_SPLASH = [
     //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
     //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png',
@@ -33,6 +34,7 @@ class World {
         this.setWorld();
         // this.loadImagesFromDO.loadImages(this.IMAGE_BOTTLE_SPLASH);
         this.run();
+        this.hasDealtDamage = false; // Neues Flag
     }
 
     setWorld() {
@@ -41,10 +43,22 @@ class World {
     applyDamageWithBottle(enemy) {
         // Reduziert die Gesundheit des Gegners basierend auf seiner Klasse
         if (enemy instanceof Endboss) {
-            enemy.endbossHealth += this.DamageWithBottle; // Schaden am Endboss
+            if (!enemy.isDead) {
+                enemy.endbossHealth += this.DamageWithBottle; // Schaden am Endboss
+                enemy.isWalking = false;
+                enemy.isAlert = true;
+                enemy.isHurt = true;
+            }
+
+            if (enemy.isHurt) {
+                enemy.endbossHurt();
+            }
+
             console.log(`Endboss hit! Remaining health: ${enemy.endbossHealth}`);
             if (enemy.endbossHealth <= 0) {
-                enemy.isDead = true; // Endboss als besiegt markieren
+                enemy.isDead = true;
+                enemy.endbossDead();
+                // Endboss als besiegt markieren
                 console.log('Endboss defeated!');
             }
         } else {
@@ -80,38 +94,36 @@ class World {
 
     checkCollisionsBottleOnEnemy() {
         this.bottleToThrow.forEach((bottle) => {
-            let hasCollided = false; // Kollision-Flag, um Mehrfachkollision zu verhindern
-    
-            // Prüfe Kollision mit Gegnern
+            let hasCollided = false;
+
             this.level.enemies.forEach((enemy) => {
                 if (!hasCollided && bottle.isColliding(enemy)) {
-                    // console.log('Collided with enemy:', enemy);
-                    // this.mo.energy = -1;
-                    // console.log('enemy energy: ' + this.mo.energy);
                     bottle.speedX = 0;
                     bottle.speedY = 0;
-                    bottle.animateSplash(); // Animation für Gegner-Treffer
-                    this.applyDamageWithBottle(enemy);
-                    hasCollided = true; // Gegner-Kollision markiert
+                    bottle.animateSplash(); // Animation immer starten
+                    if (!bottle.hasDealtDamage) {
+                        this.applyDamageWithBottle(enemy); // Schaden nur einmal anwenden
+                        bottle.hasDealtDamage = true;
+                    }
+                    hasCollided = true;
                     setTimeout(() => {
+                        clearInterval(bottle.animationInterval); // Stoppe Animation
                         bottle.isDestroyed = true;
                     }, 500);
                 }
             });
-    
-            // Prüfe Bodenkontakt nur, wenn keine Gegner-Kollision erkannt wurde
+
             if (!hasCollided && bottle.theGround()) {
-                // console.log('Collided with ground');
                 bottle.speedX = 0;
                 bottle.speedY = 0;
-                bottle.animateSplash(); // Animation für Bodenkontakt
+                bottle.animateSplash(); // Animation immer starten
                 setTimeout(() => {
+                    clearInterval(bottle.animationInterval); // Stoppe Animation
                     bottle.isDestroyed = true;
                 }, 500);
             }
         });
-    
-        // Entferne zerstörte Flaschen aus dem Array
+
         this.bottleToThrow = this.bottleToThrow.filter(bottle => !bottle.isDestroyed);
     }
 

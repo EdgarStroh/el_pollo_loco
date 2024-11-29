@@ -49,9 +49,7 @@ class MovableObject extends DrawableObject {
     hit() {
         if (!this.getDamage) {  // Schaden nur anwenden, wenn getDamage false ist
             this.myHealth -= 20;
-            console.log("soviel myHealth hast du noch, " + this.myHealth);
-
-            
+            // console.log("soviel myHealth hast du noch, " + this.myHealth);
             this.getDamage = true;
             this.lastHit = new Date().getTime();
             //   console.log("bekomme Schaden " + this.getDamage);

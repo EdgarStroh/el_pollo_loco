@@ -28,7 +28,7 @@ class ThrowableObject extends MovableObject {
         this.otherDirection = otherDirection;  // speichere die Richtung
         this.throw();
         this.hasResetAnimation = false; // Standardmäßig nicht zurückgesetzt
-
+        
     }
 
     throw() {
