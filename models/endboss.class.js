@@ -9,12 +9,13 @@ class Endboss extends MovableObject {
     offsetWidth = 70;
     // enemyHealth = 25;
     offsetHeight = 100;
-    endbossHealth = 11;
+    endbossHealth = 15;
     isWalking = true;
     isAlert = false;
     isAttack = false;
     isHurt = false;
     isDead = false;
+    reallyDead = false;
     IMAGE_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -80,8 +81,9 @@ class Endboss extends MovableObject {
         setInterval(() => {
             if (this.isDead) {
                 this.endbossDead();
-                this.currentImage = 2;
-             
+                // this.currentImage = 2;
+                // this.playAnimation(this.IMAGE_DEAD);
+
             } else if (this.isAlert) {
                 this.playAnimation(this.IMAGE_ALERT); // Alarm-Animation
                 this.otherDirection = false; // Nach links
@@ -92,7 +94,7 @@ class Endboss extends MovableObject {
             } else if (this.isAttack) {
                 this.playAnimation(this.IMAGE_ATTACK); // Angriff-Animation
                 this.otherDirection = false; // Nach links
-            } 
+            }
         }, 200);
 
     }
@@ -115,14 +117,25 @@ class Endboss extends MovableObject {
             }, 400);
         }
     }
+
     endbossDead() {
-        if (this.isDead) {
-            this.otherDirection = false; // Nach links
-            this.isWalking = false;
-            this.isAlert = false;
-            this.isAttack = false;
-            this.isHurt = false;
-            this.playAnimation(this.IMAGE_DEAD); // Spiele die "Hurt"-Animation
+        // Verhindert mehrfaches Abspielen der Animation
+                this.otherDirection = false;
+                this.isWalking = false;
+                this.isAlert = false;
+                this.isAttack = false;
+                this.isHurt = false;
+                this.isPlayingDeathAnimation = true; // Starte die Todesanimation
+                this.playAnimation(this.IMAGE_DEAD);
+                // Warte, bis die gesamte Animation abgespielt wurde
+                setTimeout(() => {
+                    this.reallyDead = true; // Endboss ist "wirklich" tot
+                }, this.IMAGE_DEAD.length * 25); // Zeit basiert auf der Anzahl der Bilder in der Animation
+            
+        
+        // Wenn der Endboss wirklich tot ist, bleibt er bei Bild 3 (Index 2) stehen
+        if (this.reallyDead) {
+             this.currentImage = 2; // Endbild der Animation
         }
     }
 
