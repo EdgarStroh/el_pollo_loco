@@ -5,7 +5,7 @@ class Chicken extends MovableObject {
     offsetY = 0;
     offsetWidth = 0;
     offsetHeight = 0;
-    chickenHealth = 10;
+    chickenHealth = 5;
     isDead = false;
     IMAGE_WALKING = [
         'img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
@@ -52,7 +52,7 @@ class Chicken extends MovableObject {
         this.isDead = true;
         this.moveStop(); // Stoppt die Bewegung
         this.playAnimation(this.IMAGE_DEAD); // Spielt die Dead-Animation ab
-        setTimeout(() => this.removeChicken(), 50); // Entfernt das Huhn nach 5 Sekunden
+        setTimeout(() => this.removeChicken(), 500); // Entfernt das Huhn nach 5 Sekunden
     }
 
     /**
