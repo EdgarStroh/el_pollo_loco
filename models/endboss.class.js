@@ -81,9 +81,7 @@ class Endboss extends MovableObject {
         setInterval(() => {
             if (this.isDead) {
                 this.endbossDead();
-                // this.currentImage = 2;
-                // this.playAnimation(this.IMAGE_DEAD);
-
+                return;
             } else if (this.isAlert) {
                 this.playAnimation(this.IMAGE_ALERT); // Alarm-Animation
                 this.otherDirection = false; // Nach links
@@ -106,7 +104,7 @@ class Endboss extends MovableObject {
 
     endbossHurt() {
         //HIER muss im allgeminen noch das timeout resetet werden falls endboss im hurt animation ist 
-        if (this.isHurt) {
+        if (!this.isDead) {
             this.otherDirection = false; // Nach links
             this.isAlert = false;
             this.playAnimation(this.IMAGE_HURT); // Spiele die "Hurt"-Animation
@@ -120,24 +118,28 @@ class Endboss extends MovableObject {
 
     endbossDead() {
         // Verhindert mehrfaches Abspielen der Animation
-                this.otherDirection = false;
-                this.isWalking = false;
-                this.isAlert = false;
-                this.isAttack = false;
-                this.isHurt = false;
-                this.isPlayingDeathAnimation = true; // Starte die Todesanimation
-                this.playAnimation(this.IMAGE_DEAD);
-                // Warte, bis die gesamte Animation abgespielt wurde
-                setTimeout(() => {
-                    this.reallyDead = true; // Endboss ist "wirklich" tot
-                }, this.IMAGE_DEAD.length * 25); // Zeit basiert auf der Anzahl der Bilder in der Animation
-            
-        
-        // Wenn der Endboss wirklich tot ist, bleibt er bei Bild 3 (Index 2) stehen
-        if (this.reallyDead) {
-             this.currentImage = 2; // Endbild der Animation
+        this.otherDirection = false;
+        this.isWalking = false;
+        this.isAlert = false;
+        this.isAttack = false;
+        this.isHurt = false;
+    
+        // Setze die Animation zurück, aber nur einmal
+        if (!this.hasResetAnimation) {
+            this.resetAnimation();  // Index zurücksetzen
+            this.hasResetAnimation = true;  // Markiere, dass die Animation zurückgesetzt wurde
         }
+    
+        // Starte die Todesanimation
+        this.playAnimation(this.IMAGE_DEAD);
+    
+        // Warte, bis die gesamte Animation abgespielt wurde (Zeit basierend auf der Anzahl der Bilder)
+        setTimeout(() => {
+            this.reallyDead = true;  // Endboss ist "wirklich" tot
+            this.currentImage = 2;   // Setze das Endbild der Animation (Index 2)
+        }, this.IMAGE_DEAD.length * 80); // Zeit basierend auf der Anzahl der Bilder (bei 100ms pro Bild)
     }
+    
 
     randomMovement() {
         const randomDirection = Math.random() < 0.5 ? -1 : 1; // Zufällig -1 (links) oder 1 (rechts)

@@ -54,7 +54,7 @@ class World {
             console.log(`Endboss hit! Remaining health: ${enemy.endbossHealth}`);
             if (enemy.endbossHealth <= 0) {
                 enemy.isDead = true;
-                enemy.endbossDead();
+                // enemy.endbossDead();
                 console.log('Endboss defeated!');
             }
         } else {
