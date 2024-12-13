@@ -96,5 +96,9 @@ class MovableObject extends DrawableObject {
         // this.otherDirection = true;
     }
 
+    moveStop(){
+        this.speed = 0;
+    }
+
 
 }

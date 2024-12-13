@@ -32,7 +32,6 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
-        // this.loadImagesFromDO.loadImages(this.IMAGE_BOTTLE_SPLASH);
         this.run();
         this.hasDealtDamage = false; // Neues Flag
     }
@@ -40,32 +39,29 @@ class World {
     setWorld() {
         this.character.world = this;
     }
+
     applyDamageWithBottle(enemy) {
-        // Reduziert die Gesundheit des Gegners basierend auf seiner Klasse
         if (enemy instanceof Endboss) {
             if (!enemy.isDead) {
-                enemy.endbossHealth += this.DamageWithBottle; // Schaden am Endboss
+                enemy.endbossHealth += this.DamageWithBottle;
                 enemy.isWalking = false;
                 enemy.isAlert = true;
                 enemy.isHurt = true;
             }
-
             if (enemy.isHurt) {
                 enemy.endbossHurt();
             }
-
             console.log(`Endboss hit! Remaining health: ${enemy.endbossHealth}`);
             if (enemy.endbossHealth <= 0) {
                 enemy.isDead = true;
                 enemy.endbossDead();
-                // Endboss als besiegt markieren
                 console.log('Endboss defeated!');
             }
         } else {
-            enemy.enemyHealth += this.DamageWithBottle; // Schaden an normalen Gegnern
-            console.log(`Enemy hit! Remaining health: ${enemy.enemyHealth}`);
-            if (enemy.enemyHealth <= 0) {
-                enemy.isDead = true; // Gegner als besiegt markieren
+            enemy.chickenHealth += this.DamageWithBottle;
+            console.log(`Enemy hit! Remaining health: ${enemy.chickenHealth}`);
+            if (enemy.chickenHealth <= 0) {
+                enemy.die(); // <-- Hier rufen wir die `die()` Methode auf
                 console.log('Enemy defeated!');
             }
         }
