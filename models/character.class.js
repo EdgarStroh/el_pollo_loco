@@ -88,12 +88,7 @@ class Character extends MovableObject {
     IMAGE_DEAD_6 = ['img/2_character_pepe/5_dead/D-56.png'];
     IMAGE_DEAD_7 = ['img/2_character_pepe/5_dead/D-57.png'];
 
-
-    currentAnimationState = null;
-    world;
-    walking_sound = new Audio('audio/walk.mp3');
-
- loadAllImages() {
+    loadAllImages() {
         setInterval(() => {
             this.loadImages(this.IMAGE_IDLE);
             this.loadImages(this.IMAGE_IDLE_LONG);
@@ -121,6 +116,11 @@ class Character extends MovableObject {
         }, 100);
     }
 
+    currentAnimationState = null;
+    world;
+    walking_sound = new Audio('audio/walk.mp3');
+    jump_sound= new Audio('audio/jump.mp3');
+
     constructor() {
         super().loadImage('img/2_character_pepe/1_idle/idle/I-1.png');
         this.loadAllImages();
@@ -132,83 +132,84 @@ class Character extends MovableObject {
         setInterval(() => {
             this.walking_sound.pause();
             this.walking_sound.volume = 0.05;
-
+            this.jump_sound.volume = 0.03;
+    
             // Move right
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && this.noLife === false) {
                 this.moveRight();
                 this.otherDirection = false;
-                this.walking_sound.play();
+    
+                // Nur abspielen, wenn der Charakter nicht springt und nicht über dem Boden ist
+                if (!this.isAboveGround() && !this.isJumping) {
+                    this.walking_sound.play();
+                }
             }
-
+    
             // Move left
             if (this.world.keyboard.LEFT && this.x > 0 && this.noLife === false) {
                 this.moveLeft();
                 this.otherDirection = true;
-                this.walking_sound.play();
+    
+                // Nur abspielen, wenn der Charakter nicht springt und nicht über dem Boden ist
+                if (!this.isAboveGround() && !this.isJumping) {
+                    this.walking_sound.play();
+                }
             }
-
+    
             // Jump
             if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround() && !this.isHurt() && !this.isJumping && this.noLife === false) {
-                this.jump(); // Sprung nur auslösen, wenn der Charakter am Boden ist
-
+                this.jump(); 
+                this.jump_sound.play();
             }
-
+    
             if (this.noLife === true) {
                 // this.playDeadAnimation();
             }
-
+    
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
-
-        this.idleDuration = 0; // Zeit in Millisekunden
-        this.idleSwitchThreshold = 3000; // Wechsel zu IMAGE_IDLE_LONG nach 3000ms (3 Sekunden)
-
-        // In der setInterval Funktion
+    
+        this.idleDuration = 0; 
+        this.idleSwitchThreshold = 6000;
+    
         setInterval(() => {
-            let newAnimationState; // Neuer Animatio nszustand
-
-            // Logik für verschiedene Animationszustände
+            let newAnimationState;
+    
             if (this.isDead()) {
                 newAnimationState = this.playDeadAnimation();
-                this.idleDuration = 0; // Zeit zurücksetzen
+                this.idleDuration = 0; 
                 return;
             } else if (this.isHurt()) {
                 newAnimationState = this.IMAGE_HURT;
-                this.idleDuration = 0; // Zeit zurücksetzen
-                if (this.isHurt() && this.isJumping === true) {
-
-
-                }
+                this.idleDuration = 0; 
             } else if (this.isAboveGround()) {
                 newAnimationState = this.playJumpAnimation();
-                this.idleDuration = 0; // Zeit zurücksetzen
+                this.idleDuration = 0; 
                 return;
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 newAnimationState = this.IMAGE_WALKING;
-                this.idleDuration = 0; // Zeit zurücksetzen
+                this.idleDuration = 0; 
             } else if (this.world.keyboard.Q || this.world.keyboard.B) {
-                // Wenn Q oder B gedrückt wird, spiele die normale Idle-Animation
                 newAnimationState = this.IMAGE_IDLE;
-                this.idleDuration = 0; // Zeit zurücksetzen
+                this.idleDuration = 0; 
             } else {
-                // Wenn der Charakter nicht bewegt wird
                 if (this.idleDuration >= this.idleSwitchThreshold) {
-                    newAnimationState = this.IMAGE_IDLE_LONG; // Wechsel zu langer Idle-Animation
+                    newAnimationState = this.IMAGE_IDLE_LONG; 
                 } else {
-                    newAnimationState = this.IMAGE_IDLE; // Normale Idle-Animation
-                    this.idleDuration += 155; // Zeit erhöhen (Intervallzeit)
+                    newAnimationState = this.IMAGE_IDLE; 
+                    this.idleDuration += 155; 
                 }
             }
-
-            // Überprüfe, ob der Animationszustand gewechselt hat
+    
             if (newAnimationState !== this.currentAnimationState) {
-                this.resetAnimation(); // Nur zurücksetzen, wenn der Zustand wechselt
-                this.currentAnimationState = newAnimationState; // Aktuellen Zustand speichern
+                this.resetAnimation(); 
+                this.currentAnimationState = newAnimationState; 
             }
-
-            this.playAnimation(newAnimationState); // Animation abspielen
+    
+            this.playAnimation(newAnimationState); 
         }, 155);
     }
+    
 
     playJumpAnimation() {
         if (this.isJumping) return; // Verhindert die erneute Ausführung, wenn der Sprung läuft
@@ -247,14 +248,12 @@ class Character extends MovableObject {
         }, 800);
     }
 
-
     stopMovement() {
         if (this.movementInterval) {
             clearInterval(this.movementInterval);
             this.movementInterval = null; // Intervall-Referenz zurücksetzen
         }
     }
-
 
     playDeadAnimation() {
         if (this.noLife) return; // Prevent re-execution

@@ -3,7 +3,7 @@ class ThrowableObject extends MovableObject {
     offsetY = 20;
     offsetWidth = 25;
     offsetHeight = 25;
-   
+    // bottleSound;
     IMAGE_BOTTLE_ROTATE = [
         'img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
         'img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png',
@@ -28,6 +28,9 @@ class ThrowableObject extends MovableObject {
         this.otherDirection = otherDirection;  // speichere die Richtung
         this.throw();
         this.hasResetAnimation = false; // Standardmäßig nicht zurückgesetzt
+        // this.bottleSound = new Audio('audio/bottleThrow.mp3');  // path to your sound file
+
+        // Start the sound for this specific bottle when thrown
         
     }
 
@@ -53,7 +56,12 @@ class ThrowableObject extends MovableObject {
         this.playAnimation(this.IMAGE_BOTTLE_ROTATE);
         this.x += 15; // nach rechts werfen
     }
-
+    // stopThrowingSound() {
+    //     if (this.bottleSound) {
+    //         this.bottleSound.pause(); 
+    //         this.bottleSound.currentTime = 0;
+    //     }
+    // }
     animateSplash() {
         this.stopMovement();
         if (!this.hasResetAnimation) {
