@@ -7,6 +7,8 @@ class MovableObject extends DrawableObject {
     enemyHealth = 0;
     lastHit = 0;
     getDamage = false;
+    hurt_sound = new Audio('audio/hurt.mp3');
+    pepeDead_sound = new Audio('audio/dead.mp3');
 
     applyGravity() { 
         setInterval(() => {
@@ -47,17 +49,23 @@ class MovableObject extends DrawableObject {
     // }
 
     hit() {
-        if (!this.getDamage) {  // Schaden nur anwenden, wenn getDamage false ist
+        this.hurt_sound.volume = 0.05;
+        if (!this.getDamage) {
             this.myHealth -= 20;
-            // console.log("soviel myHealth hast du noch, " + this.myHealth);
             this.getDamage = true;
+            this.hurt_sound.play();
             this.lastHit = new Date().getTime();
-            //   console.log("bekomme Schaden " + this.getDamage);
-            
-            if (this.myHealth < 0) {
+    
+            if (this.myHealth <= 0) {
                 this.myHealth = 0;
+                this.playDeathSound();  // Play the death sound when health reaches 0
             }
         }
+    }
+
+    playDeathSound() {
+        this.pepeDead_sound.volume = 0.08;
+        this.pepeDead_sound.play(); // Play the death sound
     }
 
     isHurt() {
@@ -73,6 +81,7 @@ class MovableObject extends DrawableObject {
     isDead() {
         return this.myHealth == 0;
     }
+    
 
     resetAnimation() {
         this.currentImage = 0; // Setzt die aktuelle Bildnummer auf 0 zurück
