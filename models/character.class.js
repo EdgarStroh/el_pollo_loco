@@ -133,7 +133,7 @@ class Character extends MovableObject {
             this.walking_sound.pause();
             this.walking_sound.volume = 0.05;
             this.jump_sound.volume = 0.03;
-            this.pepeSnoring_sound.volume = 0.09;
+            this.pepeSnoring_sound.volume = 0.00; //0.09
 
             // Move right
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && this.noLife === false) {
