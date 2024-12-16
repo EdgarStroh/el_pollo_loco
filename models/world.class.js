@@ -20,7 +20,9 @@ class World {
     coin_sound = new Audio('audio/coin.mp3');
     bottlePickUp_sound = new Audio('audio/pickUpBottle.mp3');
     bottleThrow_sound = new Audio('audio/bottleThrow.mp3');
-    
+    bottleBreak1_sound = new Audio('audio/bottleBreak1.mp3');
+    bottleBreak2_sound = new Audio('audio/bottleBreak2.mp3');
+    bottleBreak3_sound = new Audio('audio/bottleBreak3.mp3');
   
     // IMAGE_BOTTLE_SPLASH = [
     //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
@@ -174,7 +176,7 @@ class World {
     }
 
     throwBottle() {
-        this.bottleEmpty_sound.volume = 0.2;
+        this.bottleEmpty_sound.volume = 0.09;
         if (this.statusBarBottle.bottleAmount > 0 && !this.character.noLife) {
             let startX = this.character.x + 45; 
             let startY = this.character.y + 125; 

@@ -8,7 +8,7 @@ class Character extends MovableObject {
     offsetY = 130;
     offsetWidth = 35;
     offsetHeight = 140;
-    
+    pepeSnoring_sound = new Audio('audio/snoringPepe.mp3');
     
     IMAGE_HURT = [
         'img/2_character_pepe/4_hurt/H-41.png',
@@ -133,7 +133,8 @@ class Character extends MovableObject {
             this.walking_sound.pause();
             this.walking_sound.volume = 0.05;
             this.jump_sound.volume = 0.03;
-    
+            this.pepeSnoring_sound.volume = 0.09;
+
             // Move right
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && this.noLife === false) {
                 this.moveRight();
@@ -182,6 +183,7 @@ class Character extends MovableObject {
             } else if (this.isHurt()) {
                 newAnimationState = this.IMAGE_HURT;
                 this.idleDuration = 0; 
+                this.pepeSnoring_sound.pause();
             } else if (this.isAboveGround()) {
                 newAnimationState = this.playJumpAnimation();
                 this.idleDuration = 0; 
@@ -194,10 +196,12 @@ class Character extends MovableObject {
                 this.idleDuration = 0; 
             } else {
                 if (this.idleDuration >= this.idleSwitchThreshold) {
-                    newAnimationState = this.IMAGE_IDLE_LONG; 
+                    newAnimationState = this.IMAGE_IDLE_LONG;
+                    this.pepeSnoring_sound.play();
                 } else {
                     newAnimationState = this.IMAGE_IDLE; 
                     this.idleDuration += 155; 
+                    this.pepeSnoring_sound.pause();
                 }
             }
     
