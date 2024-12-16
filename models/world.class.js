@@ -5,10 +5,10 @@ class World {
     // bottleToHit = new ThrowableObject();
     MO = new MovableObject();
     TO = new ThrowableObject();
-    statusBarHealth = new StatusBarHealth();d
+    statusBarHealth = new StatusBarHealth(); d
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
-    
+
     bottleToThrow = [];
     DamageWithBottle = -5;
     level = level1;
@@ -23,7 +23,7 @@ class World {
     bottleBreak1_sound = new Audio('audio/bottleBreak1.mp3');
     bottleBreak2_sound = new Audio('audio/bottleBreak2.mp3');
     bottleBreak3_sound = new Audio('audio/bottleBreak3.mp3');
-  
+
     // IMAGE_BOTTLE_SPLASH = [
     //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
     //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png',
@@ -87,13 +87,13 @@ class World {
     }
 
     checkCollisions() {
-        
+
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
                 this.character.hit();
                 this.statusBarHealth.setPercentage(this.character.myHealth);
                 // console.log('characker energy=', this.character.energy);
-           
+
             }
         });
     }
@@ -108,45 +108,58 @@ class World {
                     bottle.speedY = 0;
                     bottle.animateSplash(); // Always start the splash animation
     
+                    if (!bottle.hasPlayedBreakSound) {
+                        let breakSound = new Audio('audio/bottleBreak1.mp3'); 
+                        breakSound.volume = 0.5;
+                        breakSound.play();
+                        bottle.hasPlayedBreakSound = true;
+                    }
+    
                     if (!bottle.hasDealtDamage) {
-                        this.applyDamageWithBottle(enemy); // Apply damage only once
+                        this.applyDamageWithBottle(enemy);
                         bottle.hasDealtDamage = true;
-                        // Stop the bottle throw sound upon collision
                         if (bottle.sound) {
-                            bottle.sound.pause();  // Stop the sound
-                            bottle.sound.currentTime = 0;  // Reset sound to start from the beginning if played again
+                            bottle.sound.pause();  
+                            bottle.sound.currentTime = 0;  
                         }
                     }
                     hasCollided = true;
     
                     setTimeout(() => {
-                        clearInterval(bottle.animationInterval);  // Stop animation
+                        clearInterval(bottle.animationInterval); 
                         bottle.isDestroyed = true;
                     }, 500);
                 }
             });
     
-            // Check if the bottle hits the ground
             if (!hasCollided && bottle.theGround()) {
                 bottle.speedX = 0;
                 bottle.speedY = 0;
-                // Stop the sound when the bottle hits the ground
+    
                 if (bottle.sound) {
-                    bottle.sound.pause();  // Stop the sound
-                    bottle.sound.currentTime = 0;  // Reset sound to start from the beginning if played again
+                    bottle.sound.pause();  
+                    bottle.sound.currentTime = 0;  
                 }
-                bottle.animateSplash();  // Start the splash animation
+    
+                bottle.animateSplash(); 
+    
+                if (!bottle.hasPlayedBreakSound) {
+                    let breakSound = new Audio('audio/bottleBreak1.mp3'); 
+                    breakSound.volume = 0.5;
+                    breakSound.play();
+                    bottle.hasPlayedBreakSound = true;
+                }
+    
                 setTimeout(() => {
-                    clearInterval(bottle.animationInterval);  // Stop animation
+                    clearInterval(bottle.animationInterval);
                     bottle.isDestroyed = true;
                 }, 500);
             }
         });
     
-        // Clean up destroyed bottles
         this.bottleToThrow = this.bottleToThrow.filter(bottle => !bottle.isDestroyed);
     }
-    
+
     checkCoinCollisionsPickUp() {
         this.coin_sound.volume = 0.03;
         this.level.coins = this.level.coins.filter((coin) => {
@@ -160,15 +173,15 @@ class World {
             return true; // Behalte den Coin im Array, wenn keine Kollision
         });
     }
-  
+
     checkBottleCollisionsPickUp() {
         this.bottlePickUp_sound.volume = 0.03;
-    
+
         this.level.bottles = this.level.bottles.filter((bottle) => {
             if (this.character.isColliding(bottle)) {
                 this.playBottlePickUpSound();
                 this.statusBarBottle.bottleAmount++;
-                
+
                 return false; // Entferne die Flasche aus dem Level
             }
             return true; // Flasche bleibt, wenn keine Kollision
@@ -178,41 +191,41 @@ class World {
     throwBottle() {
         this.bottleEmpty_sound.volume = 0.09;
         if (this.statusBarBottle.bottleAmount > 0 && !this.character.noLife) {
-            let startX = this.character.x + 45; 
-            let startY = this.character.y + 125; 
+            let startX = this.character.x + 45;
+            let startY = this.character.y + 125;
             if (this.character.otherDirection) {
-                startX = this.character.x - 45; 
+                startX = this.character.x - 45;
             }
-    
+
             // Create a new ThrowableObject for the bottle
-            let bottle = new ThrowableObject(startX, startY, this.character.otherDirection);  
-    
+            let bottle = new ThrowableObject(startX, startY, this.character.otherDirection);
+
             // Push the bottle into the bottleToThrow array
             this.bottleToThrow.push(bottle);
-    
+
             // Create a new sound object for the thrown bottle
             let bottleThrow_sound = new Audio('audio/bottleThrow.mp3'); // Updated variable name
             bottleThrow_sound.volume = 0.01;  // Set volume
             bottleThrow_sound.loop = true;  // Enable looping
             bottleThrow_sound.currentTime = 0;  // Reset the sound
-    
+
             // Assign the sound to the bottle
             bottle.sound = bottleThrow_sound;
-    
+
             // Start the bottle throw sound in a loop for this bottle
             bottleThrow_sound.play();
-    
+
             // Decrement bottle amount
-            this.statusBarBottle.bottleAmount--;  
-    
+            this.statusBarBottle.bottleAmount--;
+
         } else if (!this.character.noLife) {
             // Only play error sound if character is not dead and no bottles are left
-            
+
             this.bottleEmpty_sound.play();
         }
     }
 
-    playBottlePickUpSound(){
+    playBottlePickUpSound() {
         this.bottlePickUp_sound.pause(); // Sound stoppen
         this.bottlePickUp_sound.currentTime = 0; // Zurück zum Anfang des Sounds
         this.bottlePickUp_sound.play(); // Neu abspielen
