@@ -5,10 +5,9 @@ class World {
     // bottleToHit = new ThrowableObject();
     MO = new MovableObject();
     TO = new ThrowableObject();
-    statusBarHealth = new StatusBarHealth(); d
+    statusBarHealth = new StatusBarHealth(); 
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
-
     bottleToThrow = [];
     DamageWithBottle = -5;
     level = level1;
@@ -87,13 +86,10 @@ class World {
     }
 
     checkCollisions() {
-
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy)) {
+            if (!enemy.isDead && this.character.isColliding(enemy)) {
                 this.character.hit();
                 this.statusBarHealth.setPercentage(this.character.myHealth);
-                // console.log('characker energy=', this.character.energy);
-
             }
         });
     }

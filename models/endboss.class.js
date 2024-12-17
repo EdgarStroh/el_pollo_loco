@@ -16,6 +16,8 @@ class Endboss extends MovableObject {
     isHurt = false;
     isDead = false;
     reallyDead = false;
+    endbossHurt_sound = new Audio('audio/endbossHurt.mp3');
+    endbossDead_sound = new Audio('audio/endbossDead.mp3');
     IMAGE_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -69,6 +71,7 @@ class Endboss extends MovableObject {
     }
 
     animate() {
+        this.endbossHurt_sound.volume = 0.3;
         setInterval(() => {
             if (this.isWalking) {
                 this.randomMovement(); // Zufällige Richtung bestimmen
@@ -88,7 +91,7 @@ class Endboss extends MovableObject {
 
             } else if (this.isHurt) {
                 this.endbossHurt();
-
+                this.endbossHurt_sound.play();
             } else if (this.isAttack) {
                 this.playAnimation(this.IMAGE_ATTACK); // Angriff-Animation
                 this.otherDirection = false; // Nach links
@@ -117,29 +120,32 @@ class Endboss extends MovableObject {
     }
 
     endbossDead() {
-        // Verhindert mehrfaches Abspielen der Animation
+        this.endbossDead_sound.volume = 0.3;
         this.otherDirection = false;
         this.isWalking = false;
         this.isAlert = false;
         this.isAttack = false;
         this.isHurt = false;
     
-        // Setze die Animation zurück, aber nur einmal
         if (!this.hasResetAnimation) {
-            this.resetAnimation();  // Index zurücksetzen
-            this.hasResetAnimation = true;  // Markiere, dass die Animation zurückgesetzt wurde
+            this.resetAnimation(); 
+            this.hasResetAnimation = true;
         }
     
-        // Starte die Todesanimation
         this.playAnimation(this.IMAGE_DEAD);
     
-        // Warte, bis die gesamte Animation abgespielt wurde (Zeit basierend auf der Anzahl der Bilder)
+        if (!this.hasPlayedDeathSound) {
+            this.endbossDead_sound.play();
+            this.hasPlayedDeathSound = true; 
+        }
+    
         setTimeout(() => {
-            this.reallyDead = true;  // Endboss ist "wirklich" tot
-            this.currentImage = 2;   // Setze das Endbild der Animation (Index 2)
-        }, this.IMAGE_DEAD.length * 80); // Zeit basierend auf der Anzahl der Bilder (bei 100ms pro Bild)
+            this.reallyDead = true;
+            this.currentImage = 2;
+        }, this.IMAGE_DEAD.length * 80);
     }
     
+
 
     randomMovement() {
         const randomDirection = Math.random() < 0.5 ? -1 : 1; // Zufällig -1 (links) oder 1 (rechts)
