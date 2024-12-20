@@ -19,19 +19,20 @@ window.addEventListener("keydown", (event) => {
     if (event.keyCode == 40 || event.key == 's') {
         keyboard.DOWN = true;
     }
-    if (event.keyCode == 38 || event.key == 'w' ) {
+    if (event.keyCode == 38 || event.key == 'w') {
         keyboard.UP = true;
     }
     if ((event.key == 'b' || event.key == 'q') && !keyboard.B) {
-        keyboard.B = true;  // Verwende weiterhin keyboard.B als gemeinsames Flag für beide Tasten
-        world.throwBottle();  // Methode zum Flasche werfen direkt aufrufen
+        keyboard.B = true;  
+        world.throwBottle(); 
     }
     if (event.keyCode == 32) {
         keyboard.SPACE = true;
     }
-    // if (event.keyCode == 81) {
-    //     keyboard.Q = true;
-    // }
+    if (event.key == 'Escape') {
+        keyboard.ESC = true; // Escape-Taste gedrückt
+        stopGame();
+    }
 });
 
 window.addEventListener("keyup", (event) => {
@@ -47,11 +48,13 @@ window.addEventListener("keyup", (event) => {
     if (event.keyCode == 38 || event.key == 'w') {
         keyboard.UP = false;
     }
-    if ( event.key == 'b' || event.key == 'q') {
+    if (event.key == 'b' || event.key == 'q') {
         keyboard.B = false;
     }
     if (event.keyCode == 32) {
         keyboard.SPACE = false;
     }
-    
+    if (event.key == 'Escape') {
+        keyboard.ESC = false; // Escape-Taste losgelassen
+    }
 });
