@@ -34,16 +34,12 @@ window.addEventListener("keydown", (event) => {
     if (event.key == 'Escape') {
         keyboard.ESC = true; // Escape-Taste gedrückt
         if (!world.gamePaused) {
-            // console.log(world.gamePaused);
             world.clearAllIntervals();
             world.gamePaused = true;
-            // console.log(world.gamePaused);
         } else {
-            // world.resumeAllIntervals();
             world.gamePaused = false;
             console.log(world.gamePaused);
         }
-        // console.log("escape");
     }
     if (event.key == 'l') { // Taste L gedrückt
         keyboard.L = true;
