@@ -31,6 +31,11 @@ canvas {
     display: block;
     /* justify-content: center; */
 }
+button{
+    /* width: 200px;
+    height: 200px; */
+    color: red;
+}
 
 @media only screen and (max-width:720px) {
     canvas {

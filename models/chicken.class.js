@@ -62,7 +62,7 @@ class Chicken extends MovableObject {
         const index = level1.enemies.indexOf(this); // Sucht das Huhn im Array der Gegner
         if (index > -1) {
             level1.enemies.splice(index, 1); // Entfernt das Huhn aus der Gegnerliste
-            console.log('Chicken removed from the game');
+            // console.log('Chicken removed from the game');
         }
     }
 }

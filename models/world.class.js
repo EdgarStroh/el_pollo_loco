@@ -5,7 +5,7 @@ class World {
     // bottleToHit = new ThrowableObject();
     MO = new MovableObject();
     TO = new ThrowableObject();
-    statusBarHealth = new StatusBarHealth(); 
+    statusBarHealth = new StatusBarHealth();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
     bottleToThrow = [];
@@ -16,13 +16,14 @@ class World {
     keyboard;
     camera_x = 0;
     intervalIds = [];
+    gamePaused= false;
     bottleEmpty_sound = new Audio('audio/error.mp3');
     coin_sound = new Audio('audio/coin.mp3');
     bottlePickUp_sound = new Audio('audio/pickUpBottle.mp3');
     bottleThrow_sound = new Audio('audio/bottleThrow.mp3');
     bottleBreak1_sound = new Audio('audio/bottleBreak1.mp3');
-    bottleBreak2_sound = new Audio('audio/bottleBreak2.mp3');
-    bottleBreak3_sound = new Audio('audio/bottleBreak3.mp3');
+    // bottleBreak2_sound = new Audio('audio/bottleBreak2.mp3');
+    // bottleBreak3_sound = new Audio('audio/bottleBreak3.mp3');
 
     // IMAGE_BOTTLE_SPLASH = [
     //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
@@ -44,24 +45,43 @@ class World {
         this.bottleThrow_sound.loop = true; // Loop für den Flaschensound aktiviert
 
     }
-    setStoppableInterval(fn, time) {
-        let id = setInterval(fn, time);
-        this.intervalIds.push(id);
-        // console.log(id);
-    }
-
-    stoppAllInterval() {
-        for (let i = 0; i < this.intervalIds.length; i++) {
-            let id = this.intervalIds[i];
-            console.log(id);
-
-            clearInterval(id)
-            console.log('gelöschte Intervale');
+   clearAllIntervals() {
+        for (let i = 1; i < 10000; i++) {
+             clearInterval(i);
         }
-        this.intervalIds.forEach(clearInterval);
-        this.intervalIds = [];
-        console.log('Anzahl nach dem löschen Intervale', this.intervalIds);
     }
+
+    resumeAllIntervals() {
+        for (let id in this.intervals) {
+            const { callback, interval } = this.intervals[id];
+            const intervalId = setInterval(callback, interval);
+            this.intervals[id].intervalId = intervalId; // Speichere die neue ID
+        }
+    }
+    // pushIntervall(interval) {
+    //     this.intervalIds.push(interval);
+    //     console.log('gepushte Intervale', this.intervalIds);
+    // }
+
+    // stoppAllInterval() {
+    //     for (let i = 0; i < this.intervalIds.length; i++) {
+    //         let id = this.intervalIds[i];
+    //         console.log(id);
+
+    //         clearInterval(id)
+    //         console.log('gelöschte Intervale');
+    //     }
+    //     this.intervalIds.forEach(clearInterval);
+    //     this.intervalIds = [];
+    //     console.log('Anzahl nach dem löschen Intervale', this.intervalIds);
+    // }
+ 
+
+    clearAllTimeouts(){
+        for(let i = 1; i < 10000; i++) {
+          clearTimeout(i);
+        }
+      }
 
     setWorld() {
         this.character.world = this;
@@ -116,62 +136,62 @@ class World {
     checkCollisionsBottleOnEnemy() {
         this.bottleToThrow.forEach((bottle) => {
             let hasCollided = false;
-    
+
             this.level.enemies.forEach((enemy) => {
                 if (!hasCollided && bottle.isColliding(enemy)) {
                     bottle.speedX = 0;
                     bottle.speedY = 0;
                     bottle.animateSplash(); // Always start the splash animation
-    
+
                     if (!bottle.hasPlayedBreakSound) {
-                        let breakSound = new Audio('audio/bottleBreak1.mp3'); 
+                        let breakSound = new Audio('audio/bottleBreak1.mp3');
                         breakSound.volume = 0.5;
                         breakSound.play();
                         bottle.hasPlayedBreakSound = true;
                     }
-    
+
                     if (!bottle.hasDealtDamage) {
                         this.applyDamageWithBottle(enemy);
                         bottle.hasDealtDamage = true;
                         if (bottle.sound) {
-                            bottle.sound.pause();  
-                            bottle.sound.currentTime = 0;  
+                            bottle.sound.pause();
+                            bottle.sound.currentTime = 0;
                         }
                     }
                     hasCollided = true;
-    
+
                     setTimeout(() => {
-                        clearInterval(bottle.animationInterval); 
+                        clearInterval(bottle.animationInterval);
                         bottle.isDestroyed = true;
                     }, 500);
                 }
             });
-    
+
             if (!hasCollided && bottle.theGround()) {
                 bottle.speedX = 0;
                 bottle.speedY = 0;
-    
+
                 if (bottle.sound) {
-                    bottle.sound.pause();  
-                    bottle.sound.currentTime = 0;  
+                    bottle.sound.pause();
+                    bottle.sound.currentTime = 0;
                 }
-    
-                bottle.animateSplash(); 
-    
+
+                bottle.animateSplash();
+
                 if (!bottle.hasPlayedBreakSound) {
-                    let breakSound = new Audio('audio/bottleBreak1.mp3'); 
+                    let breakSound = new Audio('audio/bottleBreak1.mp3');
                     breakSound.volume = 0.5;
                     breakSound.play();
                     bottle.hasPlayedBreakSound = true;
                 }
-    
+
                 setTimeout(() => {
                     clearInterval(bottle.animationInterval);
                     bottle.isDestroyed = true;
                 }, 500);
             }
         });
-    
+
         this.bottleToThrow = this.bottleToThrow.filter(bottle => !bottle.isDestroyed);
     }
 

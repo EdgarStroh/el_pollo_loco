@@ -1,5 +1,6 @@
 let canvas;
 let world;
+// world = null;
 let keyboard = new Keyboard();
 MO = new MovableObject();
 
@@ -24,17 +25,29 @@ window.addEventListener("keydown", (event) => {
         keyboard.UP = true;
     }
     if ((event.key == 'b' || event.key == 'q') && !keyboard.B) {
-        keyboard.B = true;  
-        world.throwBottle(); 
+        keyboard.B = true;
+        world.throwBottle();
     }
     if (event.keyCode == 32) {
         keyboard.SPACE = true;
     }
     if (event.key == 'Escape') {
         keyboard.ESC = true; // Escape-Taste gedrückt
-        world.stoppAllInterval();
+        if (!world.gamePaused) {
+            // console.log(world.gamePaused);
+            world.clearAllIntervals();
+            world.gamePaused = true;
+            // console.log(world.gamePaused);
+        } else {
+            // world.resumeAllIntervals();
+            world.gamePaused = false;
+            console.log(world.gamePaused);
+        }
         // console.log("escape");
-        
+    }
+    if (event.key == 'l') { // Taste L gedrückt
+        keyboard.L = true;
+
     }
 });
 
@@ -59,5 +72,8 @@ window.addEventListener("keyup", (event) => {
     }
     if (event.key == 'Escape') {
         keyboard.ESC = false; // Escape-Taste losgelassen
+    }
+    if (event.key == 'l') { // Taste L losgelassen
+        keyboard.L = false;
     }
 });
