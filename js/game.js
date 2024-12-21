@@ -1,6 +1,7 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+MO = new MovableObject();
 
 function init() {
     canvas = document.getElementById("canvas");
@@ -31,7 +32,9 @@ window.addEventListener("keydown", (event) => {
     }
     if (event.key == 'Escape') {
         keyboard.ESC = true; // Escape-Taste gedrückt
-        stopGame();
+        world.stoppAllInterval();
+        // console.log("escape");
+        
     }
 });
 

@@ -9,8 +9,15 @@ class MovableObject extends DrawableObject {
     getDamage = false;
     hurt_sound = new Audio('audio/hurt.mp3');
     pepeDead_sound = new Audio('audio/dead.mp3');
+    
+    
 
-    applyGravity() { 
+    // sayHello() {
+    //     console.log('Hallo');
+
+    // }
+
+    applyGravity() {
         setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0)
                 this.y -= this.speedY;
@@ -28,8 +35,8 @@ class MovableObject extends DrawableObject {
 
     }
 
-    theGround (){
-        return this.y >310;
+    theGround() {
+        return this.y > 310;
     }
 
     isColliding(obj) {
@@ -55,7 +62,7 @@ class MovableObject extends DrawableObject {
             this.getDamage = true;
             this.hurt_sound.play();
             this.lastHit = new Date().getTime();
-    
+
             if (this.myHealth <= 0) {
                 this.myHealth = 0;
                 this.playDeathSound();  // Play the death sound when health reaches 0
@@ -71,7 +78,7 @@ class MovableObject extends DrawableObject {
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit;
         timepassed = timepassed / 1000;
-        if (timepassed >=  1.4) {
+        if (timepassed >= 1.4) {
             this.getDamage = false;
             // console.log("kein dmg" + this.getDamage);     
         }
@@ -81,7 +88,7 @@ class MovableObject extends DrawableObject {
     isDead() {
         return this.myHealth == 0;
     }
-    
+
 
     resetAnimation() {
         this.currentImage = 0; // Setzt die aktuelle Bildnummer auf 0 zurück
@@ -105,7 +112,7 @@ class MovableObject extends DrawableObject {
         // this.otherDirection = true;
     }
 
-    moveStop(){
+    moveStop() {
         this.speed = 0;
     }
 

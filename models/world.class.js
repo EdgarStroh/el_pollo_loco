@@ -15,6 +15,7 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
+    intervalIds = [];
     bottleEmpty_sound = new Audio('audio/error.mp3');
     coin_sound = new Audio('audio/coin.mp3');
     bottlePickUp_sound = new Audio('audio/pickUpBottle.mp3');
@@ -43,6 +44,24 @@ class World {
         this.bottleThrow_sound.loop = true; // Loop für den Flaschensound aktiviert
 
     }
+    setStoppableInterval(fn, time) {
+        let id = setInterval(fn, time);
+        this.intervalIds.push(id);
+        // console.log(id);
+    }
+
+    stoppAllInterval() {
+        for (let i = 0; i < this.intervalIds.length; i++) {
+            let id = this.intervalIds[i];
+            console.log(id);
+
+            clearInterval(id)
+            console.log('gelöschte Intervale');
+        }
+        this.intervalIds.forEach(clearInterval);
+        this.intervalIds = [];
+        console.log('Anzahl nach dem löschen Intervale', this.intervalIds);
+    }
 
     setWorld() {
         this.character.world = this;
@@ -59,18 +78,18 @@ class World {
             if (enemy.isHurt) {
                 enemy.endbossHurt();
             }
-            console.log(`Endboss hit! Remaining health: ${enemy.endbossHealth}`);
+            // console.log(`Endboss hit! Remaining health: ${enemy.endbossHealth}`);
             if (enemy.endbossHealth <= 0) {
                 enemy.isDead = true;
                 // enemy.endbossDead();
-                console.log('Endboss defeated!');
+                // console.log('Endboss defeated!');
             }
         } else {
             enemy.chickenHealth += this.DamageWithBottle;
-            console.log(`Enemy hit! Remaining health: ${enemy.chickenHealth}`);
+            // console.log(`Enemy hit! Remaining health: ${enemy.chickenHealth}`);
             if (enemy.chickenHealth <= 0) {
                 enemy.die(); // <-- Hier rufen wir die `die()` Methode auf
-                console.log('Enemy defeated!');
+                // console.log('Enemy defeated!');
             }
         }
     }
