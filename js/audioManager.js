@@ -34,15 +34,23 @@ function toggleSounds() {
     // Wechsle zwischen gemutet und ungemutet
     isMuted = !isMuted;
 
-    // Setze den mute-Status für jeden Audio-Sound
-    for (let key in AudioManager) {
-        if (AudioManager.hasOwnProperty(key) && AudioManager[key] instanceof Audio) {
-            AudioManager[key].muted = isMuted;
-        }
-    }
+    // Setze den mute-Status für alle Audio-Objekte in AudioManager
+    muteOrUnmuteAudio(isMuted);
 
     // Ändere das Bild im Button je nach Zustand
-    const buttonImage = isMuted ? 'icons/mute.png' : 'icons/unmute.png';
+    updateButtonImage(isMuted);
+}
+
+function muteOrUnmuteAudio(muteStatus) {
+    for (let key in AudioManager) {
+        if (AudioManager.hasOwnProperty(key) && AudioManager[key] instanceof Audio) {
+            AudioManager[key].muted = muteStatus;
+        }
+    }
+}
+
+function updateButtonImage(muteStatus) {
+    const buttonImage = muteStatus ? 'icons/mute.png' : 'icons/unmute.png';
     document.querySelector('.sound-btn img').src = buttonImage;
 }
 
