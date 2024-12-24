@@ -7,8 +7,8 @@ class MovableObject extends DrawableObject {
     enemyHealth = 0;
     lastHit = 0;
     getDamage = false;
-    hurt_sound = new Audio('audio/hurt.mp3');
-    pepeDead_sound = new Audio('audio/dead.mp3');
+    hurt_sound = AudioManager.hurt_sound;
+    
     
     
 
@@ -56,7 +56,7 @@ class MovableObject extends DrawableObject {
     // }
 
     hit() {
-        this.hurt_sound.volume = 0.05;
+        // this.hurt_sound.volume = 0.05;
         if (!this.getDamage) {
             this.myHealth -= 20;
             this.getDamage = true;
@@ -65,15 +65,15 @@ class MovableObject extends DrawableObject {
 
             if (this.myHealth <= 0) {
                 this.myHealth = 0;
-                this.playDeathSound();  // Play the death sound when health reaches 0
+                // this.playDeathSound();  // Play the death sound when health reaches 0
             }
         }
     }
 
-    playDeathSound() {
-        this.pepeDead_sound.volume = 0.08;
-        this.pepeDead_sound.play(); // Play the death sound
-    }
+    // playDeathSound() {
+    //     this.pepeDead_sound.volume = 0.08;
+    //     this.pepeDead_sound.play(); // Play the death sound
+    // }
 
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit;

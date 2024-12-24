@@ -16,8 +16,8 @@ class Endboss extends MovableObject {
     isHurt = false;
     isDead = false;
     reallyDead = false;
-    endbossHurt_sound = new Audio('audio/endbossHurt.mp3');
-    endbossDead_sound = new Audio('audio/endbossDead.mp3');
+    endbossHurt_sound = AudioManager.endbossHurt;
+    endbossDead_sound = AudioManager.endbossDead;
     IMAGE_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -55,6 +55,13 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/5_dead/G26.png',
     ];
 
+    muteAllSounds() {
+        // Alle audio-Elemente auf der Seite finden und stummschalten
+        document.querySelectorAll('audio').forEach(audio => {
+            audio.muted = true;
+        });
+    }
+
     loadAllImages() {
         this.loadImages(this.IMAGE_ALERT);
         this.loadImages(this.IMAGE_WALKING);
@@ -71,7 +78,6 @@ class Endboss extends MovableObject {
     }
 
     animate() {
-        this.endbossHurt_sound.volume = 0.3;
         setInterval(() => {
             if (this.isWalking) {
                 this.randomMovement(); // Zufällige Richtung bestimmen
@@ -120,7 +126,6 @@ class Endboss extends MovableObject {
     }
 
     endbossDead() {
-        this.endbossDead_sound.volume = 0.3;
         this.otherDirection = false;
         this.isWalking = false;
         this.isAlert = false;

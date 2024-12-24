@@ -7,6 +7,7 @@ class Chicken extends MovableObject {
     offsetHeight = 0;
     chickenHealth = 5;
     isDead = false;
+    walking_sound = new Audio('audio/chicken.mp3');
     // world = new World;
 
     IMAGE_WALKING = [
@@ -23,7 +24,7 @@ class Chicken extends MovableObject {
         this.loadImages(this.IMAGE_DEAD);
     }
 
-    walking_sound = new Audio('audio/chicken.mp3');
+   
 
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png')

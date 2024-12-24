@@ -17,11 +17,11 @@ class World {
     camera_x = 0;
     intervalIds = [];
     gamePaused = false;
-    bottleEmpty_sound = new Audio('audio/error.mp3');
-    coin_sound = new Audio('audio/coin.mp3');
-    bottlePickUp_sound = new Audio('audio/pickUpBottle.mp3');
-    bottleThrow_sound = new Audio('audio/bottleThrow.mp3');
-    bottleBreak1_sound = new Audio('audio/bottleBreak1.mp3');
+    bottleEmpty_sound = AudioManager.bottleEmpty_sound;
+    coin_sound = AudioManager.coin_sound;
+    bottlePickUp_sound = AudioManager.bottlePickUp_sound;
+    bottleThrow_sound = AudioManager.bottleThrow_sound;
+    bottleBreak_sound = AudioManager.bottleBreak_sound;
     // bottleBreak2_sound = new Audio('audio/bottleBreak2.mp3');
     // bottleBreak3_sound = new Audio('audio/bottleBreak3.mp3');
 
@@ -181,7 +181,7 @@ class World {
                     bottle.animateSplash(); // Always start the splash animation
 
                     if (!bottle.hasPlayedBreakSound) {
-                        let breakSound = new Audio('audio/bottleBreak1.mp3');
+                        let breakSound = new Audio('audio/bottleBreak.mp3');
                         breakSound.volume = 0.5;
                         breakSound.play();
                         bottle.hasPlayedBreakSound = true;
@@ -216,8 +216,8 @@ class World {
                 bottle.animateSplash();
 
                 if (!bottle.hasPlayedBreakSound) {
-                    let breakSound = new Audio('audio/bottleBreak1.mp3');
-                    breakSound.volume = 0.5;
+                    let breakSound = new Audio('audio/bottleBreak.mp3');
+                     breakSound.volume = 0.5;
                     breakSound.play();
                     bottle.hasPlayedBreakSound = true;
                 }
@@ -233,7 +233,7 @@ class World {
     }
 
     checkCoinCollisionsPickUp() {
-        this.coin_sound.volume = 0.03;
+        // this.coin_sound.volume = 0.03;
         this.level.coins = this.level.coins.filter((coin) => {
             if (this.character.isColliding(coin)) {
                 this.coin_sound.pause();
@@ -247,7 +247,7 @@ class World {
     }
 
     checkBottleCollisionsPickUp() {
-        this.bottlePickUp_sound.volume = 0.03;
+        // this.bottlePickUp_sound.volume = 0.03;
 
         this.level.bottles = this.level.bottles.filter((bottle) => {
             if (this.character.isColliding(bottle)) {
@@ -265,7 +265,7 @@ class World {
             return; // Keine Aktion, wenn das Spiel pausiert ist oder der Charakter tot ist
         }
     
-        this.bottleEmpty_sound.volume = 0.09;
+        // this.bottleEmpty_sound.volume = 0.09;
         if (this.statusBarBottle.bottleAmount > 0) {
             let startX = this.character.x + 45;
             let startY = this.character.y + 125;

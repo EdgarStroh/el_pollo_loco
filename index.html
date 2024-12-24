@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <title>El pollo loco</title>
     <link rel="icon" type="image/vnd.icon" href="img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png">
-    
+
     <script src="/models/drawable-object.class.js"></script>
     <script src="/models/movable-object.class.js"></script>
     <script src="/models/chicken.class.js"></script>
@@ -23,11 +23,12 @@
     <script src="/models/level.class.js"></script>
     <script src="/models/throwable-object.class.js"></script>
     <script src="/models/endboss.class.js"></script>
+    <script src="/js/audioManager.js"></script>
     <script src="/models/world.class.js"></script>
     <script src="/levels/level1.js"></script>
-    <script src="/js/stopGame.js"></script>
     <script src="/js/game.js"></script>
     <script src="/js/fullscreen.js"></script>
+  
 </head>
 
 <body onload="init()">
@@ -39,7 +40,7 @@
             <img src="icons/fullscreenOpen.png" alt="fullscreen">
         </button>
 
-        <button class="sound-btn" onclick="">
+        <button class="sound-btn" onclick="toggleSounds()">
             <img src="icons/unmute.png" alt="toggle sound">
         </button>
 

@@ -8,7 +8,10 @@ class Character extends MovableObject {
     offsetY = 130;
     offsetWidth = 35;
     offsetHeight = 140;
-    pepeSnoring_sound = new Audio('audio/snoringPepe.mp3');
+    pepeSnoring_sound = AudioManager.pepeSnoring_sound;
+    walking_sound = AudioManager.walking_sound;
+    jump_sound= AudioManager.jump_sound;
+    pepeDead_sound = AudioManager.pepeDead_sound;
     
     IMAGE_HURT = [
         'img/2_character_pepe/4_hurt/H-41.png',
@@ -118,8 +121,7 @@ class Character extends MovableObject {
 
     currentAnimationState = null;
     world;
-    walking_sound = new Audio('audio/walk.mp3');
-    jump_sound= new Audio('audio/jump.mp3');
+  
 
     constructor() {
         super().loadImage('img/2_character_pepe/1_idle/idle/I-1.png');
@@ -131,10 +133,6 @@ class Character extends MovableObject {
     animate() {
         setInterval(() => {
             this.walking_sound.pause();
-            this.walking_sound.volume = 0.05;
-            this.jump_sound.volume = 0.03;
-            this.pepeSnoring_sound.volume = 0.00; //0.09
-
             // Move right
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && this.noLife === false) {
                 this.moveRight();
@@ -171,7 +169,7 @@ class Character extends MovableObject {
         }, 1000 / 60);
     
         this.idleDuration = 0; 
-        this.idleSwitchThreshold = 6000;
+        this.idleSwitchThreshold = 10000;
     
         setInterval(() => {
             let newAnimationState;
@@ -262,6 +260,7 @@ class Character extends MovableObject {
     playDeadAnimation() {
         if (this.noLife) return; // Prevent re-execution
         this.noLife = true;
+        this.pepeDead_sound.play();
 
         const deadSequence = [
             { animation: this.IMAGE_DEAD_1, delay: 0 },
