@@ -32,15 +32,20 @@ window.addEventListener("keydown", (event) => {
         keyboard.SPACE = true;
     }
     if (event.key == 'Escape') {
-        keyboard.ESC = true; // Escape-Taste gedrückt
-        if (!world.gamePaused) {
-            world.clearAllIntervals();
-            world.gamePaused = true;
-        } else {
-            world.gamePaused = false;
-            console.log(world.gamePaused);
+        keyboard.ESC = true;
+        if (event.key === "Escape") {
+            if (!world.gamePaused) {
+                // world.pauseGame(); // Spiel pausieren
+                world.gamePaused = true;
+                world.clearAllIntervals();
+                world.pauseAllSounds();
+            } else {
+                // world.gamePaused = false;
+                world.resumeGame(); // Spiel fortsetzen
+            }
         }
     }
+
     if (event.key == 'l') { // Taste L gedrückt
         keyboard.L = true;
 

@@ -7,6 +7,8 @@ class Chicken extends MovableObject {
     offsetHeight = 0;
     chickenHealth = 5;
     isDead = false;
+    // world = new World;
+
     IMAGE_WALKING = [
         'img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
         'img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
@@ -38,7 +40,7 @@ class Chicken extends MovableObject {
             this.otherDirection = false;
         }, 1000 / 60);
 
-        setInterval(() => {
+        let chickenWalkInterval = setInterval(() => {
             if (this.isDead) return; // Wenn das Huhn tot ist, nichts mehr tun
             this.playAnimation(this.IMAGE_WALKING);
         }, 220);

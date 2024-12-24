@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <title>El pollo loco</title>
     <link rel="icon" type="image/vnd.icon" href="img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png">
-    <script src="/models/world.class.js"></script>
+    
     <script src="/models/drawable-object.class.js"></script>
     <script src="/models/movable-object.class.js"></script>
     <script src="/models/chicken.class.js"></script>
@@ -23,16 +23,19 @@
     <script src="/models/level.class.js"></script>
     <script src="/models/throwable-object.class.js"></script>
     <script src="/models/endboss.class.js"></script>
+    <script src="/models/world.class.js"></script>
     <script src="/levels/level1.js"></script>
     <script src="/js/stopGame.js"></script>
     <script src="/js/game.js"></script>
+    <script src="/js/fullscreen.js"></script>
 </head>
 
 <body onload="init()">
 
     <h1>El pollo loco</h1>
-    <canvas id="canvas" width="720" height="480">
-    </canvas>
+    <div id="fullscreen">
+        <canvas id="canvas" width="720" height="480"></canvas>
+    </div>
 
 </body>
 

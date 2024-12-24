@@ -1,5 +1,6 @@
 class World {
     character = new Character();
+    level = level1;
     // playAnimationObject = new MovableObject();
     // loadImagesFromDO = new DrawableObject();
     // bottleToHit = new ThrowableObject();
@@ -10,13 +11,12 @@ class World {
     statusBarBottle = new StatusBarBottle();
     bottleToThrow = [];
     DamageWithBottle = -5;
-    level = level1;
     canvas;
     ctx;
     keyboard;
     camera_x = 0;
     intervalIds = [];
-    gamePaused= false;
+    gamePaused = false;
     bottleEmpty_sound = new Audio('audio/error.mp3');
     coin_sound = new Audio('audio/coin.mp3');
     bottlePickUp_sound = new Audio('audio/pickUpBottle.mp3');
@@ -35,6 +35,7 @@ class World {
     // ];
     // splashImages = [];
     constructor(canvas, keyboard) {
+        this.intervals = []; // Liste der aktiven Intervalle
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
@@ -45,19 +46,33 @@ class World {
         this.bottleThrow_sound.loop = true; // Loop für den Flaschensound aktiviert
 
     }
-   clearAllIntervals() {
-        for (let i = 1; i < 10000; i++) {
-             clearInterval(i);
-        }
-    }
+    // setInterval(fn, time) {
+    //     const intervalId = setInterval(fn, time);
+    //     this.intervals.push(intervalId); // Speichere die ID
+    //     console.log("Interval gestartet:", intervalId); // Logge die ID
+    //     return intervalId;
+    // }
 
-    resumeAllIntervals() {
-        for (let id in this.intervals) {
-            const { callback, interval } = this.intervals[id];
-            const intervalId = setInterval(callback, interval);
-            this.intervals[id].intervalId = intervalId; // Speichere die neue ID
-        }
-    }
+    // clearAllIntervals() {
+    //     console.log("Aktive Intervalle vor dem Stoppen:", this.intervals);
+
+    //     // Stoppe alle allgemeinen Intervalle
+    //     this.intervals.forEach(intervalId => clearInterval(intervalId));
+    //     this.intervals = [];
+
+    //     // Stoppe alle Cloud-Intervalle
+    //     Cloud.cloudIntervals.forEach(intervalId => clearInterval(intervalId));
+    //     Cloud.cloudIntervals = []; // Liste zurücksetzen
+    //     console.log("Alle Intervalle gestoppt.");
+    // }
+
+    // resumeAllIntervals() {
+    //     for (let id in this.intervals) {
+    //         const { callback, interval } = this.intervals[id];
+    //         const intervalId = setInterval(callback, interval);
+    //         this.intervals[id].intervalId = intervalId; // Speichere die neue ID
+    //     }
+    // }
     // pushIntervall(interval) {
     //     this.intervalIds.push(interval);
     //     console.log('gepushte Intervale', this.intervalIds);
@@ -75,13 +90,16 @@ class World {
     //     this.intervalIds = [];
     //     console.log('Anzahl nach dem löschen Intervale', this.intervalIds);
     // }
- 
-
-    clearAllTimeouts(){
-        for(let i = 1; i < 10000; i++) {
-          clearTimeout(i);
-        }
+    clearAllIntervals() {
+        for (let i = 1; i < 9999; i++) window.clearInterval(i);
       }
+
+
+    clearAllTimeouts() {
+        for (let i = 1; i < 10000; i++) {
+            clearTimeout(i);
+        }
+    }
 
     setWorld() {
         this.character.world = this;
@@ -116,12 +134,31 @@ class World {
 
     run() {
         setInterval(() => {
-            //Check collision
-            this.checkCollisions();
-            this.checkCollisionsBottleOnEnemy();
-            this.checkCoinCollisionsPickUp();
-            this.checkBottleCollisionsPickUp();
+            if (!this.gamePaused) {
+                this.checkCollisions();
+                this.checkCollisionsBottleOnEnemy();
+                this.checkCoinCollisionsPickUp();
+                this.checkBottleCollisionsPickUp();
+            }
         }, 100);
+ 
+    }
+
+    pauseGame() {
+        this.gamePaused = true;
+        // this.clearAllIntervals(); // Stoppe alle Intervalle, einschließlich der Wolken
+        // Cloud.stopAnimation(); // Stoppe Wolken-Animationen
+        clearAllIntervals();
+        console.log("Spiel pausiert.");
+    }
+
+    resumeGame() {
+        this.gamePaused = false;
+        console.log("Spiel wird fortgesetzt.");
+        //  this.run(); // Starte die Haupt-Intervalle erneut
+
+        // Starte die Wolkenanimationen erneut
+        // Cloud.startAnimation();
     }
 
     checkCollisions() {
@@ -224,41 +261,50 @@ class World {
     }
 
     throwBottle() {
+        if (this.gamePaused || this.character.noLife) {
+            return; // Keine Aktion, wenn das Spiel pausiert ist oder der Charakter tot ist
+        }
+    
         this.bottleEmpty_sound.volume = 0.09;
-        if (this.statusBarBottle.bottleAmount > 0 && !this.character.noLife) {
+        if (this.statusBarBottle.bottleAmount > 0) {
             let startX = this.character.x + 45;
             let startY = this.character.y + 125;
             if (this.character.otherDirection) {
                 startX = this.character.x - 45;
             }
-
-            // Create a new ThrowableObject for the bottle
+    
             let bottle = new ThrowableObject(startX, startY, this.character.otherDirection);
-
-            // Push the bottle into the bottleToThrow array
             this.bottleToThrow.push(bottle);
-
-            // Create a new sound object for the thrown bottle
-            let bottleThrow_sound = new Audio('audio/bottleThrow.mp3'); // Updated variable name
-            bottleThrow_sound.volume = 0.01;  // Set volume
-            bottleThrow_sound.loop = true;  // Enable looping
-            bottleThrow_sound.currentTime = 0;  // Reset the sound
-
-            // Assign the sound to the bottle
+    
+            let bottleThrow_sound = new Audio('audio/bottleThrow.mp3');
+            bottleThrow_sound.volume = 0.01;
+            bottleThrow_sound.loop = true;
+            bottleThrow_sound.currentTime = 0;
             bottle.sound = bottleThrow_sound;
-
-            // Start the bottle throw sound in a loop for this bottle
             bottleThrow_sound.play();
-
-            // Decrement bottle amount
+    
             this.statusBarBottle.bottleAmount--;
-
-        } else if (!this.character.noLife) {
-            // Only play error sound if character is not dead and no bottles are left
-
+        } else {
             this.bottleEmpty_sound.play();
         }
     }
+    pauseAllSounds() {
+        this.bottleToThrow.forEach(bottle => {
+            if (bottle.sound) {
+                bottle.sound.pause();
+            }
+        });
+    }
+
+    // Methode zum Wiederaufnehmen aller pausierten Sounds
+    resumeAllSounds() {
+        this.bottleToThrow.forEach(bottle => {
+            if (bottle.sound) {
+                bottle.sound.play();
+            }
+        });
+    }
+    
 
     playBottlePickUpSound() {
         this.bottlePickUp_sound.pause(); // Sound stoppen
