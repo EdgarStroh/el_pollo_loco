@@ -40,11 +40,16 @@ class MovableObject extends DrawableObject {
     }
 
     isColliding(obj) {
+        // Anpassung der Hitbox bei Blickrichtung
+        const offsetX = this.otherDirection ? this.offsetX - 20 : this.offsetX;
+        const width = this.otherDirection ? this.width + 25 : this.width;
+    
+        // Kollisionserkennung
         return (
-            (this.x + this.offsetX + this.width - this.offsetWidth) >= (obj.x + obj.offsetX) && // Rechtskante von this erreicht oder überschreitet linke Kante von obj
-            (this.x + this.offsetX) <= (obj.x + obj.offsetX + obj.width - obj.offsetWidth) &&   // Linke Kante von this ist vor oder auf der rechten Kante von obj
-            (this.y + this.offsetY + this.height - this.offsetHeight) >= (obj.y + obj.offsetY) && // Unterkante von this erreicht oder überschreitet obere Kante von obj
-            (this.y + this.offsetY) <= (obj.y + obj.offsetY + obj.height - obj.offsetHeight)     // Oberkante von this ist vor oder auf der Unterkante von obj
+            this.x + offsetX + width - this.offsetWidth >= obj.x + obj.offsetX && // Rechte Kante von this
+            this.x + offsetX <= obj.x + obj.offsetX + obj.width - obj.offsetWidth && // Linke Kante von this
+            this.y + this.offsetY + this.height - this.offsetHeight >= obj.y + obj.offsetY && // Unterkante von this
+            this.y + this.offsetY <= obj.y + obj.offsetY + obj.height - obj.offsetHeight // Oberkante von this
         );
     }
 

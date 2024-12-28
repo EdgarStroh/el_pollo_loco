@@ -10,7 +10,7 @@ class World {
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
     bottleToThrow = [];
-    DamageWithBottle = -5;
+    damage = -5;
     canvas;
     ctx;
     keyboard;
@@ -22,6 +22,7 @@ class World {
     bottlePickUp_sound = AudioManager.bottlePickUp_sound;
     bottleThrow_sound = AudioManager.bottleThrow_sound;
     bottleBreak_sound = AudioManager.bottleBreak_sound;
+    jumpOnEnemy_sound = AudioManager.jumpOnEnemy_sound;
     // bottleBreak2_sound = new Audio('audio/bottleBreak2.mp3');
     // bottleBreak3_sound = new Audio('audio/bottleBreak3.mp3');
 
@@ -104,11 +105,31 @@ class World {
     setWorld() {
         this.character.world = this;
     }
+    checkCollisionJumpOnEnemy() {
+        // Überprüfe, ob der Charakter in der Luft ist
+        if (!this.character.isJumping) {
+            return; // Wenn der Charakter nicht springt, keine Kollision
+        }
+
+        // Durchlaufe alle Gegner im Level
+        this.level.enemies.forEach((enemy) => {
+            if (!enemy.isDead) {
+                // Überprüfe, ob der Charakter mit dem Gegner kollidiert
+                if (this.character.isColliding(enemy)) {
+                    // Prüfe, ob der Charakter von oben auf den Gegner springt
+                    if (this.character.y + this.character.height <= enemy.y) {
+                        // Der Charakter landet auf dem Gegner, Schaden anrichten
+                        this.applyDamageOnEnemy(enemy);
+                    }
+                }
+            }
+        });
+    }
 
     applyDamageWithBottle(enemy) {
         if (enemy instanceof Endboss) {
             if (!enemy.isDead) {
-                enemy.endbossHealth += this.DamageWithBottle;
+                enemy.endbossHealth += this.damage;
                 enemy.isWalking = false;
                 enemy.isAlert = true;
                 enemy.isHurt = true;
@@ -123,7 +144,7 @@ class World {
                 // console.log('Endboss defeated!');
             }
         } else {
-            enemy.chickenHealth += this.DamageWithBottle;
+            enemy.chickenHealth += this.damage;
             // console.log(`Enemy hit! Remaining health: ${enemy.chickenHealth}`);
             if (enemy.chickenHealth <= 0) {
                 enemy.die(); // <-- Hier rufen wir die `die()` Methode auf
@@ -161,14 +182,46 @@ class World {
         // Cloud.startAnimation();
     }
 
-    checkCollisions() {
-        this.level.enemies.forEach((enemy) => {
-            if (!enemy.isDead && this.character.isColliding(enemy)) {
-                this.character.hit();
-                this.statusBarHealth.setPercentage(this.character.myHealth);
-            }
-        });
+    // Refaktorisierte Methode für die Springen- und Gegner-Kollisionslogik
+handleJumpingCollisionWithEnemy(enemy) {
+    // Wenn der Charakter springt und unter ihm mit einem Gegner kollidiert
+    if (this.character.isJumping && this.isCollisionBelowCharacter(enemy)) {
+        // Gegner bekommt Schaden
+        this.jumpOnEnemy_sound.play();
+        enemy.chickenHealth += this.damage;
+        if (enemy.chickenHealth <= 0) {
+            enemy.die();  // Gegner stirbt
+        }
+        return true; // Kollisions- und Schadenbehandlung abgeschlossen
     }
+    return false; // Keine Kollision mit dem Gegner
+}
+
+// Refaktorisierte checkCollisions Methode
+checkCollisions() {
+    this.level.enemies.forEach((enemy) => {
+        if (!enemy.isDead && this.character.isColliding(enemy)) {
+            // Springt der Charakter und kollidiert mit einem Gegner?
+            if (this.handleJumpingCollisionWithEnemy(enemy)) {
+                return; // Kein Schaden am Charakter, wenn der Gegner getroffen wurde
+            }
+
+            // Andernfalls bekommt der Charakter Schaden
+            this.character.hit();
+            this.statusBarHealth.setPercentage(this.character.myHealth);
+        }
+    });
+}
+
+    // Überprüft, ob die Kollision unter dem Charakter stattfindet (z.B. beim Landen auf einem Gegner)
+    isCollisionBelowCharacter(enemy) {
+        const characterBottom = this.character.y + this.character.height - this.character.offsetHeight;
+        const enemyTop = enemy.y + enemy.offsetY;
+    
+        // Wenn die untere Kante des Charakters über der oberen Kante des Gegners ist, bedeutet dies, dass der Charakter auf dem Gegner landet
+        return characterBottom <= enemyTop;
+    }
+    
 
     checkCollisionsBottleOnEnemy() {
         this.bottleToThrow.forEach((bottle) => {

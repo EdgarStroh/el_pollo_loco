@@ -12,6 +12,7 @@ window.AudioManager = {
     bottlePickUp_sound: new Audio('audio/pickUpBottle.mp3'),
     bottleThrow_sound: new Audio('audio/bottleThrow.mp3'),
     bottleBreak_sound: new Audio('audio/bottleBreak.mp3'),
+    jumpOnEnemy_sound: new Audio('audio/jumpOnEnemy.mp3'),
 
     init() {
         this.endbossHurt_sound.volume = 0.15;
@@ -24,8 +25,9 @@ window.AudioManager = {
         this.bottleEmpty_sound.volume = 0.09;
         this.coin_sound.volume = 0.06;
         this.bottlePickUp_sound.volume = 0.06;
-        this.bottleThrow_sound.volume = 0.05;
-        this.bottleBreak_sound.volume = 0.1;
+        this.bottleThrow_sound.volume = 0.03;
+        this.bottleBreak_sound.volume = 0.25;
+        this.jumpOnEnemy_sound.volume = 0.25;
     },
 };
 let isMuted = false; // Zustand, ob die Sounds stummgeschaltet sind oder nicht
