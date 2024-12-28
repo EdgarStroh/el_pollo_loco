@@ -92,7 +92,7 @@ class World {
     // }
     clearAllIntervals() {
         for (let i = 1; i < 9999; i++) window.clearInterval(i);
-      }
+    }
 
 
     clearAllTimeouts() {
@@ -141,7 +141,7 @@ class World {
                 this.checkBottleCollisionsPickUp();
             }
         }, 100);
- 
+
     }
 
     pauseGame() {
@@ -181,8 +181,9 @@ class World {
                     bottle.animateSplash(); // Always start the splash animation
 
                     if (!bottle.hasPlayedBreakSound) {
-                        let breakSound = new Audio('audio/bottleBreak.mp3');
-                        breakSound.volume = 0.5;
+                        let breakSound = AudioManager.bottleBreak_sound.cloneNode();
+                        breakSound.volume = AudioManager.bottleBreak_sound.volume; // Lautstärke übernehmen
+                        breakSound.muted = isMuted; // Mute-Status übernehmen
                         breakSound.play();
                         bottle.hasPlayedBreakSound = true;
                     }
@@ -216,8 +217,9 @@ class World {
                 bottle.animateSplash();
 
                 if (!bottle.hasPlayedBreakSound) {
-                    let breakSound = new Audio('audio/bottleBreak.mp3');
-                     breakSound.volume = 0.5;
+                    let breakSound = AudioManager.bottleBreak_sound.cloneNode();
+                    breakSound.volume = AudioManager.bottleBreak_sound.volume; // Lautstärke übernehmen
+                    breakSound.muted = isMuted; // Mute-Status übernehmen
                     breakSound.play();
                     bottle.hasPlayedBreakSound = true;
                 }
@@ -264,47 +266,49 @@ class World {
         if (this.gamePaused || this.character.noLife) {
             return; // Keine Aktion, wenn das Spiel pausiert ist oder der Charakter tot ist
         }
-    
-        // this.bottleEmpty_sound.volume = 0.09;
+
         if (this.statusBarBottle.bottleAmount > 0) {
             let startX = this.character.x + 45;
             let startY = this.character.y + 125;
             if (this.character.otherDirection) {
                 startX = this.character.x - 45;
             }
-    
+
             let bottle = new ThrowableObject(startX, startY, this.character.otherDirection);
             this.bottleToThrow.push(bottle);
-    
-            let bottleThrow_sound = new Audio('audio/bottleThrow.mp3');
-            bottleThrow_sound.volume = 0.01;
-            bottleThrow_sound.loop = true;
+
+            // Erstelle eine Kopie des Sounds
+            let bottleThrow_sound = AudioManager.bottleThrow_sound.cloneNode();
+            bottleThrow_sound.volume = AudioManager.bottleThrow_sound.volume; // Lautstärke übernehmen
+            bottleThrow_sound.muted = isMuted; // Mute-Status übernehmen
             bottleThrow_sound.currentTime = 0;
             bottle.sound = bottleThrow_sound;
+
             bottleThrow_sound.play();
-    
             this.statusBarBottle.bottleAmount--;
         } else {
-            this.bottleEmpty_sound.play();
+            AudioManager.bottleEmpty_sound.play(); // Leere Flasche-Sound
         }
     }
-    pauseAllSounds() {
-        this.bottleToThrow.forEach(bottle => {
-            if (bottle.sound) {
-                bottle.sound.pause();
-            }
-        });
-    }
 
-    // Methode zum Wiederaufnehmen aller pausierten Sounds
-    resumeAllSounds() {
-        this.bottleToThrow.forEach(bottle => {
-            if (bottle.sound) {
-                bottle.sound.play();
-            }
-        });
-    }
-    
+
+    // pauseAllSounds() {
+    //     this.bottleToThrow.forEach(bottle => {
+    //         if (bottle.sound) {
+    //             bottle.sound.pause();
+    //         }
+    //     });
+    // }
+
+    // // Methode zum Wiederaufnehmen aller pausierten Sounds
+    // resumeAllSounds() {
+    //     this.bottleToThrow.forEach(bottle => {
+    //         if (bottle.sound) {
+    //             bottle.sound.play();
+    //         }
+    //     });
+    // }
+
 
     playBottlePickUpSound() {
         this.bottlePickUp_sound.pause(); // Sound stoppen

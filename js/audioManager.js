@@ -1,7 +1,7 @@
 // AudioManager als globales Objekt definieren
 window.AudioManager = {
-    endbossHurt: new Audio('audio/endbossHurt.mp3'),
-    endbossDead: new Audio('audio/endbossDead.mp3'),
+    endbossHurt_sound: new Audio('audio/endbossHurt.mp3'),
+    endbossDead_sound: new Audio('audio/endbossDead.mp3'),
     pepeSnoring_sound: new Audio('audio/snoringPepe.mp3'),
     walking_sound: new Audio('audio/walk.mp3'),
     jump_sound: new Audio('audio/jump.mp3'),
@@ -11,11 +11,11 @@ window.AudioManager = {
     coin_sound: new Audio('audio/coin.mp3'),
     bottlePickUp_sound: new Audio('audio/pickUpBottle.mp3'),
     bottleThrow_sound: new Audio('audio/bottleThrow.mp3'),
-    // bottleBreak_sound: new Audio('audio/bottleBreak.mp3'),
+    bottleBreak_sound: new Audio('audio/bottleBreak.mp3'),
 
     init() {
-        this.endbossHurt.volume = 0.15;
-        this.endbossDead.volume = 0.15;
+        this.endbossHurt_sound.volume = 0.15;
+        this.endbossDead_sound.volume = 0.15;
         this.pepeSnoring_sound.volume = 0.0;      // 0.1
         this.walking_sound.volume = 0.05;
         this.jump_sound.volume = 0.05;
@@ -25,7 +25,7 @@ window.AudioManager = {
         this.coin_sound.volume = 0.06;
         this.bottlePickUp_sound.volume = 0.06;
         this.bottleThrow_sound.volume = 0.05;
-        // this.bottleBreak_sound.volume = 0.1;
+        this.bottleBreak_sound.volume = 0.1;
     },
 };
 let isMuted = false; // Zustand, ob die Sounds stummgeschaltet sind oder nicht
@@ -47,6 +47,13 @@ function muteOrUnmuteAudio(muteStatus) {
             AudioManager[key].muted = muteStatus;
         }
     }
+
+    // Sounds für geworfene Flaschen aktualisieren
+    world.bottleToThrow.forEach(bottle => {
+        if (bottle.sound) {
+            bottle.sound.muted = muteStatus;
+        }
+    });
 }
 
 function updateButtonImage(muteStatus) {

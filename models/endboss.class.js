@@ -16,8 +16,8 @@ class Endboss extends MovableObject {
     isHurt = false;
     isDead = false;
     reallyDead = false;
-    endbossHurt_sound = AudioManager.endbossHurt;
-    endbossDead_sound = AudioManager.endbossDead;
+    endbossHurt_sound = AudioManager.endbossHurt_sound;
+    endbossDead_sound = AudioManager.endbossDead_sound;
     IMAGE_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/4_enemie_boss_chicken/1_walk/G2.png',
