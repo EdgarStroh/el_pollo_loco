@@ -33,22 +33,27 @@ window.addEventListener("keydown", (event) => {
     }
     if (event.key == 'Escape') {
         keyboard.ESC = true;
-        if (event.key === "Escape") {
-            if (!world.gamePaused) {
-                // world.pauseGame(); // Spiel pausieren
-                world.gamePaused = true;
-                world.clearAllIntervals();
-                world.pauseAllSounds();
-            } else {
-                // world.gamePaused = false;
-                world.resumeGame(); // Spiel fortsetzen
-            }
+        if (!world.gamePaused) {
+            world.gamePaused = true;
+            world.clearAllIntervals();
+            world.pauseBottleSounds();
+        } else {
+            world.resumeGame();
         }
     }
-
-    if (event.key == 'l') { // Taste L gedrückt
+    if (event.key == 'l') {
         keyboard.L = true;
+    }
+    if (event.key === 'p') {
+        world.gamePaused = !world.gamePaused;
 
+        if (world.gamePaused) {
+            console.log("Game paused");
+            AnimationManager.pauseAll(); // Alle Animationen pausieren
+        } else {
+            console.log("Game resumed");
+            AnimationManager.resumeAll(); // Alle Animationen fortsetzen
+        }
     }
 });
 
@@ -72,9 +77,12 @@ window.addEventListener("keyup", (event) => {
         keyboard.SPACE = false;
     }
     if (event.key == 'Escape') {
-        keyboard.ESC = false; // Escape-Taste losgelassen
+        keyboard.ESC = false;
     }
-    if (event.key == 'l') { // Taste L losgelassen
+    if (event.key == 'l') {
         keyboard.L = false;
+    }
+    if (event.key == 'p') { // Taste P losgelassen
+        keyboard.P = false;
     }
 });

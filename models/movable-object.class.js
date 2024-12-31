@@ -8,8 +8,8 @@ class MovableObject extends DrawableObject {
     lastHit = 0;
     getDamage = false;
     hurt_sound = AudioManager.hurt_sound;
-    
-    
+    intervals = [];
+    // AnimationManager.register(this);
     
 
     // sayHello() {
@@ -18,11 +18,12 @@ class MovableObject extends DrawableObject {
     // }
 
     applyGravity() {
-        setInterval(() => {
+        const gravityInterval = setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0)
                 this.y -= this.speedY;
             this.speedY -= this.acceleration;
         }, 1000 / 25);
+         this.intervals.push(gravityInterval); // Speichere das Intervall
     }
 
     isAboveGround() {

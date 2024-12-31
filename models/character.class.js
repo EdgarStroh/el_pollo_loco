@@ -12,7 +12,9 @@ class Character extends MovableObject {
     walking_sound = AudioManager.walking_sound;
     jump_sound= AudioManager.jump_sound;
     pepeDead_sound = AudioManager.pepeDead_sound;
-    
+    intervals = [];
+    timeoutIds = []; // Array zum Speichern von Timeout-IDs
+    savedState = {}; // Speichert den Zustand für Pause/Resume
     IMAGE_HURT = [
         'img/2_character_pepe/4_hurt/H-41.png',
         'img/2_character_pepe/4_hurt/H-42.png',
@@ -128,50 +130,54 @@ class Character extends MovableObject {
         this.loadAllImages();
         this.applyGravity();
         this.animate();
+
+        AnimationManager.register(this);
     }
 
     animate() {
-        setInterval(() => {
+        const moveInterval = setInterval(() => {
             this.walking_sound.pause();
+
             // Move right
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && this.noLife === false) {
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && !this.noLife) {
                 this.moveRight();
                 this.otherDirection = false;
-    
+
                 // Nur abspielen, wenn der Charakter nicht springt und nicht über dem Boden ist
                 if (!this.isAboveGround() && !this.isJumping) {
                     this.walking_sound.play();
                 }
             }
-    
+
             // Move left
-            if (this.world.keyboard.LEFT && this.x > 0 && this.noLife === false) {
+            if (this.world.keyboard.LEFT && this.x > 0 && !this.noLife) {
                 this.moveLeft();
                 this.otherDirection = true;
-    
+
                 // Nur abspielen, wenn der Charakter nicht springt und nicht über dem Boden ist
                 if (!this.isAboveGround() && !this.isJumping) {
                     this.walking_sound.play();
                 }
             }
-    
+
             // Jump
-            if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround() && !this.isHurt() && !this.isJumping && this.noLife === false) {
+            if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround() && !this.isHurt() && !this.isJumping && !this.noLife) {
                 this.jump(); 
                 this.jump_sound.play();
             }
-    
+
             if (this.noLife === true) {
                 // this.playDeadAnimation();
             }
-    
+
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
-    
+        this.intervals.push(moveInterval);
+        // AnimationManager.addInterval(this, moveInterval); // Intervall im Manager speichern
         this.idleDuration = 0; 
         this.idleSwitchThreshold = 10000;
     
-        setInterval(() => {
+        const animationInterval = setInterval(() => {
             let newAnimationState;
     
             if (this.isDead()) {
@@ -210,13 +216,14 @@ class Character extends MovableObject {
     
             this.playAnimation(newAnimationState); 
         }, 155);
+        this.intervals.push(animationInterval);
     }
     
 
     playJumpAnimation() {
         if (this.isJumping) return; // Verhindert die erneute Ausführung, wenn der Sprung läuft
         this.isJumping = true;
-
+    
         const jumpSequence = [
             { animation: this.IMAGE_JUMP_START_1, delay: 0 },
             { animation: this.IMAGE_JUMP_START_2, delay: 3 },
@@ -228,23 +235,18 @@ class Character extends MovableObject {
             { animation: this.IMAGE_LANDING_2, delay: 740 },
             { animation: this.IMAGE_LANDING_3, delay: 750 }
         ];
-
+    
         // Loop through jump sequence and apply the delay for each frame
         jumpSequence.forEach((frame) => {
-            setTimeout(() => {
+            this.setManagedTimeout(() => {
                 if (!this.getDamage) {
                     this.playAnimation(frame.animation);
-                } 
-                // if (this.isHurt() && this.isJumping) {
-                //     this.stopMovement();
-                //     this.playAnimation(this.IMAGE_HURT);
-                //     this.isJumping = false;
-                //     return;
-                // }
+                }
             }, frame.delay);
         });
+    
         // Reset jumping state after the animation
-        setTimeout(() => {
+        this.setManagedTimeout(() => {
             this.isJumping = false;
             // this.resetAnimation();
         }, 800);
@@ -287,4 +289,42 @@ class Character extends MovableObject {
     jump() {
         this.speedY = 25;
     }
+
+    pause() {
+        this.intervals.forEach(clearInterval);
+        this.intervals = [];
+        this.timeoutIds.forEach(clearTimeout);
+        this.timeoutIds = [];
+    }
+
+    resume() {
+        this.animate();
+        this.isJumping = false;
+        // if (this.isJumping) {
+        //     this.playJumpAnimation(); // Sprunganimation fortsetzen
+          
+        // }
+
+    }
+
+    setManagedTimeout(callback, delay) {
+        const timeoutId = setTimeout(() => {
+            callback();
+            this.timeoutIds = this.timeoutIds.filter(id => id !== timeoutId);
+        }, delay);
+        this.timeoutIds.push(timeoutId);
+    }
+
+    clearAllTimeouts() {
+        this.timeoutIds.forEach(clearTimeout);
+        this.timeoutIds = [];
+    }
+
+    // pauseTimeOut() {
+    //     // Alle Timeouts stoppen
+    //     this.timeoutIds.forEach(clearTimeout);
+    //     this.timeoutIds = []; // Array zurücksetzen
+    // }
+
+    
 }

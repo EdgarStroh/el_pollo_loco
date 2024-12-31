@@ -18,6 +18,7 @@ class Endboss extends MovableObject {
     reallyDead = false;
     endbossHurt_sound = AudioManager.endbossHurt_sound;
     endbossDead_sound = AudioManager.endbossDead_sound;
+    intervals = [];
     IMAGE_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -75,19 +76,21 @@ class Endboss extends MovableObject {
         this.loadAllImages();
         this.animate();
         this.endbossStatus();
+
+        AnimationManager.register(this);
     }
 
     animate() {
-        setInterval(() => {
+        const walkingInterval = setInterval(() => {
             if (this.isWalking) {
                 this.randomMovement(); // Zufällige Richtung bestimmen
                 this.playAnimation(this.IMAGE_WALKING);
             }
         }, 500); // Alle 1 Sekunde entscheidet der Endboss, wohin er geht
+        this.intervals.push(walkingInterval);
 
 
-
-        setInterval(() => {
+        const hurtInterval = setInterval(() => {
             if (this.isDead) {
                 this.endbossDead();
                 return;
@@ -103,7 +106,7 @@ class Endboss extends MovableObject {
                 this.otherDirection = false; // Nach links
             }
         }, 200);
-
+        this.intervals.push(hurtInterval);
     }
 
 
@@ -131,25 +134,25 @@ class Endboss extends MovableObject {
         this.isAlert = false;
         this.isAttack = false;
         this.isHurt = false;
-    
+
         if (!this.hasResetAnimation) {
-            this.resetAnimation(); 
+            this.resetAnimation();
             this.hasResetAnimation = true;
         }
-    
+
         this.playAnimation(this.IMAGE_DEAD);
-    
+
         if (!this.hasPlayedDeathSound) {
             this.endbossDead_sound.play();
-            this.hasPlayedDeathSound = true; 
+            this.hasPlayedDeathSound = true;
         }
-    
+
         setTimeout(() => {
             this.reallyDead = true;
             this.currentImage = 2;
         }, this.IMAGE_DEAD.length * 80);
     }
-    
+
 
 
     randomMovement() {
@@ -166,5 +169,14 @@ class Endboss extends MovableObject {
         } else {
             this.otherDirection = false; // Nach links
         }
+    }
+
+    pause() {
+        this.intervals.forEach(clearInterval);
+        this.intervals = [];
+    }
+
+    resume() {
+        this.animate();
     }
 }

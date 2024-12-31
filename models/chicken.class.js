@@ -7,7 +7,7 @@ class Chicken extends MovableObject {
     offsetHeight = 0;
     chickenHealth = 5;
     isDead = false;
-    walking_sound = new Audio('audio/chicken.mp3');
+    // walking_sound = new Audio('audio/chicken.mp3');
     // world = new World;
 
     IMAGE_WALKING = [
@@ -23,7 +23,7 @@ class Chicken extends MovableObject {
         this.loadImages(this.IMAGE_WALKING);
         this.loadImages(this.IMAGE_DEAD);
     }
-
+    intervals = []; // Speicher für Animations-Intervalle
    
 
     constructor() {
@@ -32,40 +32,47 @@ class Chicken extends MovableObject {
         this.speed = 0.15 + Math.random() * 0.25;
         this.animate();
         this.loadAllImages();
+
+        // AnimationManager registrieren
+        AnimationManager.register(this);
     }
 
     animate() {
-        setInterval(() => {
-            if (this.isDead) return; // Wenn das Huhn tot ist, nichts mehr tun
+        const moveInterval = setInterval(() => {
+            if (this.isDead) return;
             this.moveLeft();
             this.otherDirection = false;
         }, 1000 / 60);
+        this.intervals.push(moveInterval);
 
-        let chickenWalkInterval = setInterval(() => {
-            if (this.isDead) return; // Wenn das Huhn tot ist, nichts mehr tun
+        const animationInterval = setInterval(() => {
+            if (this.isDead) return;
             this.playAnimation(this.IMAGE_WALKING);
         }, 220);
+        this.intervals.push(animationInterval);
     }
 
-    /**
-     * Markiert das Huhn als "tot" und entfernt es nach 5 Sekunden.
-     */
+    pause() {
+        this.intervals.forEach(clearInterval); // Stoppt alle Intervalle
+        this.intervals = [];
+    }
+
+    resume() {
+        this.animate(); // Startet die Animationen neu
+    }
+
     die() {
-        if (this.isDead) return; // Stelle sicher, dass die Methode nur einmal aufgerufen wird
+        if (this.isDead) return;
         this.isDead = true;
-        this.moveStop(); // Stoppt die Bewegung
-        this.playAnimation(this.IMAGE_DEAD); // Spielt die Dead-Animation ab
-        setTimeout(() => this.removeChicken(), 500); // Entfernt das Huhn nach 5 Sekunden
+        this.pause(); // Stoppt die Bewegung
+        this.playAnimation(this.IMAGE_DEAD);
+        setTimeout(() => this.removeChicken(), 500);
     }
 
-    /**
-     * Entfernt das Huhn aus der Level-Array-Liste.
-     */
     removeChicken() {
-        const index = level1.enemies.indexOf(this); // Sucht das Huhn im Array der Gegner
+        const index = level1.enemies.indexOf(this);
         if (index > -1) {
-            level1.enemies.splice(index, 1); // Entfernt das Huhn aus der Gegnerliste
-            // console.log('Chicken removed from the game');
+            level1.enemies.splice(index, 1);
         }
     }
 }

@@ -1,5 +1,6 @@
 class Cloud extends MovableObject {
-    static cloudIntervals = []; // Liste aller Cloud-Intervalle
+    static fixedXPositions = [10, 800, 1600, 2500];
+
     y = 20;
     width = 500;
     height = 250;
@@ -7,7 +8,7 @@ class Cloud extends MovableObject {
         'img/5_background/layers/4_clouds/1.png',
         'img/5_background/layers/4_clouds/2.png'
     ];
-    static fixedXPositions = [10, 800, 1600, 2500];
+    intervals = []; // Speicher für Cloud-Intervalle
 
     constructor(index) {
         super();
@@ -18,12 +19,24 @@ class Cloud extends MovableObject {
         this.speed = 0.05 + Math.random() * 0.27;
 
         this.animate();
+
+        // Registrierung im AnimationManager
+        AnimationManager.register(this);
     }
 
     animate() {
-        let cloudInterval = setInterval(() => {
+        const cloudInterval = setInterval(() => {
             this.moveLeft();
         }, 10);
-        Cloud.cloudIntervals.push(cloudInterval); // Speichere das Intervall
+        this.intervals.push(cloudInterval); // Speichere das Intervall
+    }
+
+    pause() {
+        this.intervals.forEach(clearInterval); // Stoppe alle Intervalle
+        this.intervals = [];
+    }
+
+    resume() {
+        this.animate(); // Starte die Animationen neu
     }
 }

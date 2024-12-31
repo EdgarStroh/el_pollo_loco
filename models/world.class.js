@@ -1,22 +1,22 @@
 class World {
     character = new Character();
-    level = level1;
-    // playAnimationObject = new MovableObject();
-    // loadImagesFromDO = new DrawableObject();
-    // bottleToHit = new ThrowableObject();
     MO = new MovableObject();
     TO = new ThrowableObject();
     statusBarHealth = new StatusBarHealth();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
-    bottleToThrow = [];
-    damage = -5;
+    level = level1;
     canvas;
     ctx;
     keyboard;
+    damage = -5;
     camera_x = 0;
+    bottleToThrow = [];
     intervalIds = [];
     gamePaused = false;
+      // playAnimationObject = new MovableObject();
+    // loadImagesFromDO = new DrawableObject();
+    // bottleToHit = new ThrowableObject();
     bottleEmpty_sound = AudioManager.bottleEmpty_sound;
     coin_sound = AudioManager.coin_sound;
     bottlePickUp_sound = AudioManager.bottlePickUp_sound;
@@ -47,12 +47,12 @@ class World {
         this.bottleThrow_sound.loop = true; // Loop für den Flaschensound aktiviert
 
     }
-    // setInterval(fn, time) {
-    //     const intervalId = setInterval(fn, time);
-    //     this.intervals.push(intervalId); // Speichere die ID
-    //     console.log("Interval gestartet:", intervalId); // Logge die ID
-    //     return intervalId;
-    // }
+    setInterval(fn, time) {
+        const intervalId = setInterval(fn, time);
+        this.intervals.push(intervalId); // Speichere die ID
+        console.log("Interval gestartet:", intervalId); // Logge die ID
+        return intervalId;
+    }
 
     // clearAllIntervals() {
     //     console.log("Aktive Intervalle vor dem Stoppen:", this.intervals);
@@ -67,13 +67,13 @@ class World {
     //     console.log("Alle Intervalle gestoppt.");
     // }
 
-    // resumeAllIntervals() {
-    //     for (let id in this.intervals) {
-    //         const { callback, interval } = this.intervals[id];
-    //         const intervalId = setInterval(callback, interval);
-    //         this.intervals[id].intervalId = intervalId; // Speichere die neue ID
-    //     }
-    // }
+    resumeAllIntervals() {
+        for (let id in this.intervals) {
+            const { callback, interval } = this.intervals[id];
+            const intervalId = setInterval(callback, interval);
+            this.intervals[id].intervalId = intervalId; // Speichere die neue ID
+        }
+    }
     // pushIntervall(interval) {
     //     this.intervalIds.push(interval);
     //     console.log('gepushte Intervale', this.intervalIds);
@@ -166,16 +166,18 @@ class World {
     }
 
     pauseGame() {
+        console.log("Spiel pausiert.");
         this.gamePaused = true;
         // this.clearAllIntervals(); // Stoppe alle Intervalle, einschließlich der Wolken
         // Cloud.stopAnimation(); // Stoppe Wolken-Animationen
         clearAllIntervals();
-        console.log("Spiel pausiert.");
+     
     }
 
     resumeGame() {
-        this.gamePaused = false;
         console.log("Spiel wird fortgesetzt.");
+        this.gamePaused = false;
+  
         //  this.run(); // Starte die Haupt-Intervalle erneut
 
         // Starte die Wolkenanimationen erneut
@@ -345,22 +347,22 @@ checkCollisions() {
     }
 
 
-    // pauseAllSounds() {
-    //     this.bottleToThrow.forEach(bottle => {
-    //         if (bottle.sound) {
-    //             bottle.sound.pause();
-    //         }
-    //     });
-    // }
+    pauseBottleSounds() {
+        this.bottleToThrow.forEach(bottle => {
+            if (bottle.sound) {
+                bottle.sound.pause();
+            }
+        });
+    }
 
-    // // Methode zum Wiederaufnehmen aller pausierten Sounds
-    // resumeAllSounds() {
-    //     this.bottleToThrow.forEach(bottle => {
-    //         if (bottle.sound) {
-    //             bottle.sound.play();
-    //         }
-    //     });
-    // }
+    // Methode zum Wiederaufnehmen aller pausierten Sounds
+    resumeBottleSounds() {
+        this.bottleToThrow.forEach(bottle => {
+            if (bottle.sound) {
+                bottle.sound.play();
+            }
+        });
+    }
 
 
     playBottlePickUpSound() {
