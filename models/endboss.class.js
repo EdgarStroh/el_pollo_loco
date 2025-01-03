@@ -56,12 +56,12 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/5_dead/G26.png',
     ];
 
-    muteAllSounds() {
-        // Alle audio-Elemente auf der Seite finden und stummschalten
-        document.querySelectorAll('audio').forEach(audio => {
-            audio.muted = true;
-        });
-    }
+    // muteAllSounds() {
+    //     // Alle audio-Elemente auf der Seite finden und stummschalten
+    //     document.querySelectorAll('audio').forEach(audio => {
+    //         audio.muted = true;
+    //     });
+    // }
 
     loadAllImages() {
         this.loadImages(this.IMAGE_ALERT);
@@ -75,8 +75,6 @@ class Endboss extends MovableObject {
         super().loadImage(this.IMAGE_ALERT[0]);
         this.loadAllImages();
         this.animate();
-        this.endbossStatus();
-
         AnimationManager.register(this);
     }
 
@@ -107,12 +105,6 @@ class Endboss extends MovableObject {
         AnimationManager.addInterval(hurtInterval); // Timer im Manager registrieren
     }
     
-
-
-    endbossStatus() {
-
-    }
-
     endbossHurt() {
         //HIER muss im allgeminen noch das timeout resetet werden falls endboss im hurt animation ist 
         if (!this.isDead) {
