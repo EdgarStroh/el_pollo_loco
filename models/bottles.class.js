@@ -7,7 +7,7 @@ class Bottle extends MovableObject {
         'img/6_salsa_bottle/1_salsa_bottle_on_ground.png',
         'img/6_salsa_bottle/2_salsa_bottle_on_ground.png',
     ];
-    intervals = [];
+    // intervals = [];
     constructor() {
         super();
         this.loadImages(this.IMAGEBOTTLE);
@@ -27,18 +27,19 @@ class Bottle extends MovableObject {
             currentIndex = (currentIndex + 1) % this.IMAGEBOTTLE.length;
             this.img = this.imageCache[this.IMAGEBOTTLE[currentIndex]];
         }, 500);
-
-        this.intervals.push(imageChangeInterval);
+    
+        AnimationManager.addInterval(imageChangeInterval); // Intervall im Manager registrieren
     }
+    
 
     draw(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
-    pause() {
-        this.intervals.forEach(clearInterval);
-        this.intervals = [];
-    }
+    // pause() {
+    //     this.intervals.forEach(clearInterval);
+    //     this.intervals = [];
+    // }
 
     resume() {
         this.startImageChange();

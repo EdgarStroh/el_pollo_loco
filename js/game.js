@@ -2,7 +2,8 @@ let canvas;
 let world;
 // world = null;
 let keyboard = new Keyboard();
-MO = new MovableObject();
+// MO = new MovableObject();
+pausedGame = false;
 
 function init() {
     canvas = document.getElementById("canvas");
@@ -48,9 +49,13 @@ window.addEventListener("keydown", (event) => {
         world.gamePaused = !world.gamePaused;
 
         if (world.gamePaused) {
+            pausedGame = true;
+            
             console.log("Game paused");
             AnimationManager.pauseAll(); // Alle Animationen pausieren
         } else {
+            pausedGame = false;
+            // console.log(pausedGame);
             console.log("Game resumed");
             AnimationManager.resumeAll(); // Alle Animationen fortsetzen
         }

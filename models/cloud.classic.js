@@ -28,13 +28,14 @@ class Cloud extends MovableObject {
         const cloudInterval = setInterval(() => {
             this.moveLeft();
         }, 10);
-        this.intervals.push(cloudInterval); // Speichere das Intervall
+        // Speichere den Timer im Manager
+        AnimationManager.addInterval(cloudInterval);
     }
 
-    pause() {
-        this.intervals.forEach(clearInterval); // Stoppe alle Intervalle
-        this.intervals = [];
-    }
+    // pause() {
+    //     this.intervals.forEach(clearInterval); // Stoppe alle Intervalle
+    //     this.intervals = [];
+    // }
 
     resume() {
         this.animate(); // Starte die Animationen neu

@@ -18,7 +18,7 @@ class Endboss extends MovableObject {
     reallyDead = false;
     endbossHurt_sound = AudioManager.endbossHurt_sound;
     endbossDead_sound = AudioManager.endbossDead_sound;
-    intervals = [];
+    // intervals = [];
     IMAGE_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -86,28 +86,27 @@ class Endboss extends MovableObject {
                 this.randomMovement(); // Zufällige Richtung bestimmen
                 this.playAnimation(this.IMAGE_WALKING);
             }
-        }, 500); // Alle 1 Sekunde entscheidet der Endboss, wohin er geht
-        this.intervals.push(walkingInterval);
-
-
+        }, 500); // Alle 500 ms entscheidet der Endboss, wohin er geht
+        AnimationManager.addInterval(walkingInterval); // Timer im Manager registrieren
+    
         const hurtInterval = setInterval(() => {
             if (this.isDead) {
-                this.endbossDead();
+                this.endbossDead(); // Endboss-Tod-Animation
                 return;
             } else if (this.isAlert) {
                 this.playAnimation(this.IMAGE_ALERT); // Alarm-Animation
                 this.otherDirection = false; // Nach links
-
             } else if (this.isHurt) {
-                this.endbossHurt();
-                this.endbossHurt_sound.play();
+                this.endbossHurt(); // Hurt-Animation
+                this.endbossHurt_sound.play(); // Sound abspielen
             } else if (this.isAttack) {
                 this.playAnimation(this.IMAGE_ATTACK); // Angriff-Animation
                 this.otherDirection = false; // Nach links
             }
         }, 200);
-        this.intervals.push(hurtInterval);
+        AnimationManager.addInterval(hurtInterval); // Timer im Manager registrieren
     }
+    
 
 
     endbossStatus() {
@@ -171,10 +170,10 @@ class Endboss extends MovableObject {
         }
     }
 
-    pause() {
-        this.intervals.forEach(clearInterval);
-        this.intervals = [];
-    }
+    // pause() {
+    //     this.intervals.forEach(clearInterval);
+    //     this.intervals = [];
+    // }
 
     resume() {
         this.animate();

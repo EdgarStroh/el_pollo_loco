@@ -18,12 +18,17 @@ class MovableObject extends DrawableObject {
     // }
 
     applyGravity() {
-        const gravityInterval = setInterval(() => {
+        // const gravityInterval = 
+        setInterval(() => {
+            // console.log(World.gamePaused);
+            
+            if(pausedGame) return;
+            // console.log(World.gamePaused);
             if (this.isAboveGround() || this.speedY > 0)
                 this.y -= this.speedY;
             this.speedY -= this.acceleration;
         }, 1000 / 25);
-         this.intervals.push(gravityInterval); // Speichere das Intervall
+        //  AnimationManager.addInterval(gravityInterval); // Intervall im Manager registrieren
     }
 
     isAboveGround() {
