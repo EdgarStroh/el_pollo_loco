@@ -3,7 +3,7 @@ class Endboss extends MovableObject {
     height = 450;
     width = 300;
     y = 10;
-    x = 2400;
+    x = 2400; //2400
     offsetX = 20;
     offsetY = 80;
     offsetWidth = 70;
@@ -86,7 +86,7 @@ class Endboss extends MovableObject {
             }
         }, 500); // Alle 500 ms entscheidet der Endboss, wohin er geht
         AnimationManager.addInterval(walkingInterval); // Timer im Manager registrieren
-    
+
         const hurtInterval = setInterval(() => {
             if (this.isDead) {
                 this.endbossDead(); // Endboss-Tod-Animation
@@ -104,7 +104,7 @@ class Endboss extends MovableObject {
         }, 200);
         AnimationManager.addInterval(hurtInterval); // Timer im Manager registrieren
     }
-    
+
     endbossHurt() {
         //HIER muss im allgeminen noch das timeout resetet werden falls endboss im hurt animation ist 
         if (!this.isDead) {
@@ -130,9 +130,7 @@ class Endboss extends MovableObject {
             this.resetAnimation();
             this.hasResetAnimation = true;
         }
-
-        this.playAnimation(this.IMAGE_DEAD);
-
+       
         if (!this.hasPlayedDeathSound) {
             this.endbossDead_sound.play();
             this.hasPlayedDeathSound = true;
@@ -141,7 +139,11 @@ class Endboss extends MovableObject {
         setTimeout(() => {
             this.reallyDead = true;
             this.currentImage = 2;
-        }, this.IMAGE_DEAD.length * 80);
+        }, this.IMAGE_DEAD.length * 160);
+
+        if ( !this.reallyDead) {
+            this.playAnimation(this.IMAGE_DEAD);
+        }
     }
 
 
