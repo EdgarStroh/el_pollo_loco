@@ -56,6 +56,8 @@ function muteOrUnmuteAudio(muteStatus) {
             bottle.sound.muted = muteStatus;
         }
     });
+
+
 }
 
 function updateButtonImage(muteStatus) {

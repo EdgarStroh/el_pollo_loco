@@ -14,7 +14,7 @@ class World {
     bottleToThrow = [];
     intervalIds = [];
     gamePaused = false;
-      // playAnimationObject = new MovableObject();
+    // playAnimationObject = new MovableObject();
     // loadImagesFromDO = new DrawableObject();
     // bottleToHit = new ThrowableObject();
     bottleEmpty_sound = AudioManager.bottleEmpty_sound;
@@ -44,29 +44,10 @@ class World {
         this.setWorld();
         this.run();
         this.hasDealtDamage = false; // Neues Flag
-        this.bottleThrow_sound.loop = true; // Loop für den Flaschensound aktiviert
+        // this.bottleThrow_sound.loop = true; // Loop für den Flaschensound aktiviert
 
     }
-    setInterval(fn, time) {
-        const intervalId = setInterval(fn, time);
-        this.intervals.push(intervalId); // Speichere die ID
-        console.log("Interval gestartet:", intervalId); // Logge die ID
-        return intervalId;
-    }
-
-    // clearAllIntervals() {
-    //     console.log("Aktive Intervalle vor dem Stoppen:", this.intervals);
-
-    //     // Stoppe alle allgemeinen Intervalle
-    //     this.intervals.forEach(intervalId => clearInterval(intervalId));
-    //     this.intervals = [];
-
-    //     // Stoppe alle Cloud-Intervalle
-    //     Cloud.cloudIntervals.forEach(intervalId => clearInterval(intervalId));
-    //     Cloud.cloudIntervals = []; // Liste zurücksetzen
-    //     console.log("Alle Intervalle gestoppt.");
-    // }
-
+   
     resumeAllIntervals() {
         for (let id in this.intervals) {
             const { callback, interval } = this.intervals[id];
@@ -74,23 +55,7 @@ class World {
             this.intervals[id].intervalId = intervalId; // Speichere die neue ID
         }
     }
-    // pushIntervall(interval) {
-    //     this.intervalIds.push(interval);
-    //     console.log('gepushte Intervale', this.intervalIds);
-    // }
-
-    // stoppAllInterval() {
-    //     for (let i = 0; i < this.intervalIds.length; i++) {
-    //         let id = this.intervalIds[i];
-    //         console.log(id);
-
-    //         clearInterval(id)
-    //         console.log('gelöschte Intervale');
-    //     }
-    //     this.intervalIds.forEach(clearInterval);
-    //     this.intervalIds = [];
-    //     console.log('Anzahl nach dem löschen Intervale', this.intervalIds);
-    // }
+   
     clearAllIntervals() {
         for (let i = 1; i < 9999; i++) window.clearInterval(i);
     }
@@ -156,6 +121,7 @@ class World {
     run() {
         setInterval(() => {
             if (!this.gamePaused) {
+                // this.pauseBottleSounds();
                 this.checkCollisions();
                 this.checkCollisionsBottleOnEnemy();
                 this.checkCoinCollisionsPickUp();
@@ -171,13 +137,13 @@ class World {
         // this.clearAllIntervals(); // Stoppe alle Intervalle, einschließlich der Wolken
         // Cloud.stopAnimation(); // Stoppe Wolken-Animationen
         clearAllIntervals();
-     
+
     }
 
     resumeGame() {
         console.log("Spiel wird fortgesetzt.");
         this.gamePaused = false;
-  
+
         //  this.run(); // Starte die Haupt-Intervalle erneut
 
         // Starte die Wolkenanimationen erneut
@@ -185,45 +151,45 @@ class World {
     }
 
     // Refaktorisierte Methode für die Springen- und Gegner-Kollisionslogik
-handleJumpingCollisionWithEnemy(enemy) {
-    // Wenn der Charakter springt und unter ihm mit einem Gegner kollidiert
-    if (this.character.isJumping && this.isCollisionBelowCharacter(enemy)) {
-        // Gegner bekommt Schaden
-        this.jumpOnEnemy_sound.play();
-        enemy.chickenHealth += this.damage;
-        if (enemy.chickenHealth <= 0) {
-            enemy.die();  // Gegner stirbt
-        }
-        return true; // Kollisions- und Schadenbehandlung abgeschlossen
-    }
-    return false; // Keine Kollision mit dem Gegner
-}
-
-// Refaktorisierte checkCollisions Methode
-checkCollisions() {
-    this.level.enemies.forEach((enemy) => {
-        if (!enemy.isDead && this.character.isColliding(enemy)) {
-            // Springt der Charakter und kollidiert mit einem Gegner?
-            if (this.handleJumpingCollisionWithEnemy(enemy)) {
-                return; // Kein Schaden am Charakter, wenn der Gegner getroffen wurde
+    handleJumpingCollisionWithEnemy(enemy) {
+        // Wenn der Charakter springt und unter ihm mit einem Gegner kollidiert
+        if (this.character.isJumping && this.isCollisionBelowCharacter(enemy)) {
+            // Gegner bekommt Schaden
+            this.jumpOnEnemy_sound.play();
+            enemy.chickenHealth += this.damage;
+            if (enemy.chickenHealth <= 0) {
+                enemy.die();  // Gegner stirbt
             }
-
-            // Andernfalls bekommt der Charakter Schaden
-            this.character.hit();
-            this.statusBarHealth.setPercentage(this.character.myHealth);
+            return true; // Kollisions- und Schadenbehandlung abgeschlossen
         }
-    });
-}
+        return false; // Keine Kollision mit dem Gegner
+    }
+
+    // Refaktorisierte checkCollisions Methode
+    checkCollisions() {
+        this.level.enemies.forEach((enemy) => {
+            if (!enemy.isDead && this.character.isColliding(enemy)) {
+                // Springt der Charakter und kollidiert mit einem Gegner?
+                if (this.handleJumpingCollisionWithEnemy(enemy)) {
+                    return; // Kein Schaden am Charakter, wenn der Gegner getroffen wurde
+                }
+
+                // Andernfalls bekommt der Charakter Schaden
+                this.character.hit();
+                this.statusBarHealth.setPercentage(this.character.myHealth);
+            }
+        });
+    }
 
     // Überprüft, ob die Kollision unter dem Charakter stattfindet (z.B. beim Landen auf einem Gegner)
     isCollisionBelowCharacter(enemy) {
         const characterBottom = this.character.y + this.character.height - this.character.offsetHeight;
         const enemyTop = enemy.y + enemy.offsetY;
-    
+
         // Wenn die untere Kante des Charakters über der oberen Kante des Gegners ist, bedeutet dies, dass der Charakter auf dem Gegner landet
         return characterBottom <= enemyTop;
     }
-    
+
 
     checkCollisionsBottleOnEnemy() {
         this.bottleToThrow.forEach((bottle) => {
@@ -254,7 +220,7 @@ checkCollisions() {
                     hasCollided = true;
 
                     setTimeout(() => {
-                        clearInterval(bottle.animationInterval);
+                        // clearInterval(bottle.animationInterval);
                         bottle.isDestroyed = true;
                     }, 500);
                 }
@@ -280,7 +246,7 @@ checkCollisions() {
                 }
 
                 setTimeout(() => {
-                    clearInterval(bottle.animationInterval);
+                    // clearInterval(bottle.animationInterval);
                     bottle.isDestroyed = true;
                 }, 500);
             }
@@ -345,25 +311,6 @@ checkCollisions() {
             AudioManager.bottleEmpty_sound.play(); // Leere Flasche-Sound
         }
     }
-
-
-    pauseBottleSounds() {
-        this.bottleToThrow.forEach(bottle => {
-            if (bottle.sound) {
-                bottle.sound.pause();
-            }
-        });
-    }
-
-    // Methode zum Wiederaufnehmen aller pausierten Sounds
-    resumeBottleSounds() {
-        this.bottleToThrow.forEach(bottle => {
-            if (bottle.sound) {
-                bottle.sound.play();
-            }
-        });
-    }
-
 
     playBottlePickUpSound() {
         this.bottlePickUp_sound.pause(); // Sound stoppen

@@ -18,13 +18,20 @@ window.AnimationManager = {
     pauseAll() {
         // Stoppe alle Timer
         this.intervals.forEach(clearInterval);
-        // this.timeouts.forEach(clearTimeout); // Stoppe auch alle setTimeouts
-    
         this.intervals = [];
-        // this.timeouts = [];
+        this.timeouts.forEach(clearTimeout);
+        this.timeouts = [];
+
+        // Pausiere alle animierten Objekte
+        this.animations.forEach(animation => {
+            if (animation.pause) animation.pause();
+        });
     },
 
     resumeAll() {
-        this.animations.forEach(animation => animation.resume());
+        // Setze alle animierten Objekte fort
+        this.animations.forEach(animation => {
+            if (animation.resume) animation.resume();
+        });
     }
 };

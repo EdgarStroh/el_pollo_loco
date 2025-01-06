@@ -3,7 +3,20 @@ class ThrowableObject extends MovableObject {
     offsetY = 20;
     offsetWidth = 25;
     offsetHeight = 25;
-    // bottleSound;
+    speedX = 400;  // Horizontale Geschwindigkeit
+    speedY = -650;  // Anfangsgeschwindigkeit nach oben (vertikal)
+    gravity = 1350;  // Schwerkraft (Beschleunigung nach unten)
+    // isMoving = true; // Status, ob die Flasche in Bewegung ist
+    lastTimestamp = 0;
+    pauseStart = null; // Zeitstempel, wann das Spiel pausiert wurde
+    totalPauseDuration = 0; // Gesamtdauer aller Pausen
+    i = 0;  // Zeit-Variable, die du nach Bedarf ändern kannst
+    imageChangeInterval = 52;  // Intervall in Millisekunden, nach dem das Bild wechseln soll
+    isAnimatingSplash = false; // Standardmäßig keine Splash-Animation
+    hasResetAnimation = false; // Standardmäßig nicht zurückgesetzt
+    IMAGE_BOTTLE_ANIMATION = [
+    ];
+
     IMAGE_BOTTLE_ROTATE = [
         'img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
         'img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png',
@@ -19,74 +32,82 @@ class ThrowableObject extends MovableObject {
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
     ];
     intervals = [];
+
     constructor(x, y, otherDirection) {
         super().loadImage('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png');
         this.loadImages(this.IMAGE_BOTTLE_ROTATE);
         this.loadImages(this.IMAGES_SPLASH);
         this.x = x;
         this.y = y;
-        this.otherDirection = otherDirection;  // speichere die Richtung
-        this.throw();
-        this.hasResetAnimation = false; // Standardmäßig nicht zurückgesetzt
-        // this.bottleSound = new Audio('audio/bottleThrow.mp3');  // path to your sound file
-
-        // Start the sound for this specific bottle when thrown
-        
+        this.otherDirection = otherDirection;
+        this.throw(); // Wurf starten
     }
 
     throw() {
-        this.speedY = 30;
-        this.applyGravity();
-        // Intervall für die Bewegung speichern
-        this.movementInterval = setInterval(() => {
-            // Bewege die Flasche nach links oder rechts basierend auf otherDirection
-            if (this.otherDirection) {
-                this.throwLeft();
-            } else {
-                this.throwRight();
-            }
-        }, 55);
-       
+        // this.isMoving = true;
+        this.animateThrow(0); // Starte die Animation
     }
 
-    throwLeft() {
-        this.playAnimation(this.IMAGE_BOTTLE_ROTATE);
-        this.x -= 15; // nach links werfen
+    animateThrow(timestamp) {
+        if (pausedGame) {
+            if (!this.pauseStart) this.pauseStart = timestamp;
+            requestAnimationFrame(this.animateThrow.bind(this));
+            return;
+        }
+
+        if (this.pauseStart) {
+            this.totalPauseDuration += timestamp - this.pauseStart;
+            this.pauseStart = null;
+        }
+
+        if (!this.lastTimestamp) this.lastTimestamp = timestamp;
+        const effectiveTimestamp = timestamp - this.totalPauseDuration;
+        const deltaTime = (effectiveTimestamp - this.lastTimestamp) / 1000;
+        this.lastTimestamp = effectiveTimestamp;
+
+        if (!this.isAnimatingSplash) {
+            // Nur Rotationsanimation ausführen, wenn keine Splash-Animation aktiv ist
+            this.applyGravity(deltaTime);
+            this.updatePosition(deltaTime);
+
+            this.i += deltaTime * 1000;
+            if (this.i >= this.imageChangeInterval) {
+                this.i = 0;
+                this.playAnimation(this.IMAGE_BOTTLE_ROTATE);
+            }
+        }
+
+        requestAnimationFrame(this.animateThrow.bind(this));
     }
-    throwRight() {
-        this.playAnimation(this.IMAGE_BOTTLE_ROTATE);
-        this.x += 15; // nach rechts werfen
+
+
+
+    applyGravity(deltaTime) {
+        // Hier wird die Schwerkraft auf die vertikale Geschwindigkeit angewendet
+        this.speedY += this.gravity * deltaTime;
     }
-    // stopThrowingSound() {
-    //     if (this.bottleSound) {
-    //         this.bottleSound.pause(); 
-    //         this.bottleSound.currentTime = 0;
-    //     }
-    // }
+
+    updatePosition(deltaTime) {
+        // Horizontale Bewegung (konstante Geschwindigkeit)
+        this.x += (this.otherDirection ? -1 : 1) * this.speedX * deltaTime;
+
+        // Vertikale Bewegung (durch Schwerkraft beeinflusst)
+        this.y += this.speedY * deltaTime;
+
+        // Wenn die Flasche den Boden erreicht, stoppen wir sie und zeigen die Splash-Animation
+        // if (this.y >= this.groundLevel) {
+        //     this.y = this.groundLevel;
+        // this.isMoving = false;
+        // this.animateSplash();
+        // }
+    }
+
     animateSplash() {
-        this.stopMovement();
-        if (!this.hasResetAnimation) {
+        if (!this.isAnimatingSplash) {
             this.resetAnimation(); // Index zurücksetzen
-            this.hasResetAnimation = true; // Markieren, dass die Animation zurückgesetzt wurde
+            this.isAnimatingSplash = true; // Markieren, dass die Animation zurückgesetzt wurde
         }
         this.playAnimation(this.IMAGES_SPLASH);
     }
-
-    // animateSplashGround() {
-    //     this.stopMovement();
-    //     if (!this.hasResetAnimation) {
-    //         this.resetAnimation(); // Index zurücksetzen
-    //         this.hasResetAnimation = true; // Markieren, dass die Animation zurückgesetzt wurde
-    //     }
-    //     this.playAnimation(this.IMAGES_SPLASH);
-    // }
-
-
-    stopMovement() {
-        if (this.movementInterval) {
-            clearInterval(this.movementInterval);
-            this.movementInterval = null; // Intervall-Referenz zurücksetzen
-        }
-    }
-
+    
 }

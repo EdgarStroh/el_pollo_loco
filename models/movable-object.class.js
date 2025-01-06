@@ -10,7 +10,7 @@ class MovableObject extends DrawableObject {
     hurt_sound = AudioManager.hurt_sound;
     intervals = [];
     // AnimationManager.register(this);
-    
+
 
     // sayHello() {
     //     console.log('Hallo');
@@ -21,12 +21,12 @@ class MovableObject extends DrawableObject {
         // const gravityInterval = 
         setInterval(() => {
             // console.log(World.gamePaused);
-            
-            if(pausedGame) return;
+
+            if (pausedGame) return;
             // console.log(World.gamePaused);
             if (this.isAboveGround() || this.speedY > 0)
                 this.y -= this.speedY;
-            this.speedY -= this.acceleration;
+                this.speedY -= this.acceleration;
         }, 1000 / 25);
         //  AnimationManager.addInterval(gravityInterval); // Intervall im Manager registrieren
     }
@@ -49,7 +49,7 @@ class MovableObject extends DrawableObject {
         // Anpassung der Hitbox bei Blickrichtung
         const offsetX = this.otherDirection ? this.offsetX - 20 : this.offsetX;
         const width = this.otherDirection ? this.width + 25 : this.width;
-    
+
         // Kollisionserkennung
         return (
             this.x + offsetX + width - this.offsetWidth >= obj.x + obj.offsetX && // Rechte Kante von this

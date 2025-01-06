@@ -50,13 +50,13 @@ window.addEventListener("keydown", (event) => {
 
         if (world.gamePaused) {
             pausedGame = true;
-            
-            console.log("Game paused");
+            // world.pauseBottleSounds();
+            // console.log("Game paused");
             AnimationManager.pauseAll(); // Alle Animationen pausieren
         } else {
             pausedGame = false;
             // console.log(pausedGame);
-            console.log("Game resumed");
+            // console.log("Game resumed");
             AnimationManager.resumeAll(); // Alle Animationen fortsetzen
         }
     }
