@@ -14,8 +14,6 @@ class ThrowableObject extends MovableObject {
     imageChangeInterval = 52;  // Intervall in Millisekunden, nach dem das Bild wechseln soll
     isAnimatingSplash = false; // Standardmäßig keine Splash-Animation
     hasResetAnimation = false; // Standardmäßig nicht zurückgesetzt
-    IMAGE_BOTTLE_ANIMATION = [
-    ];
 
     IMAGE_BOTTLE_ROTATE = [
         'img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
@@ -31,8 +29,7 @@ class ThrowableObject extends MovableObject {
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/5_bottle_splash.png',
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
     ];
-    intervals = [];
-
+    
     constructor(x, y, otherDirection) {
         super().loadImage('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png');
         this.loadImages(this.IMAGE_BOTTLE_ROTATE);

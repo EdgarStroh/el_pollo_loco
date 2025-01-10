@@ -136,8 +136,12 @@ class Character extends MovableObject {
     }
 
     animate() {
+        this.idleDuration = 0; 
+        this.idleSwitchThreshold = 10000;
+
         const moveInterval = setInterval(() => {
             this.walking_sound.pause();
+          
     
             // Move right
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && !this.noLife) {
@@ -160,23 +164,26 @@ class Character extends MovableObject {
                     this.walking_sound.play();
                 }
             }
+
+            
+            if (this.isHurt()) {
+                this.IMAGE_HURT;
+            }
     
             // Jump
             if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround() && !this.isHurt() && !this.isJumping && !this.noLife) {
                 this.jump();
+                this.playJumpAnimation();
                 this.jump_sound.play();
             }
     
-            if (this.noLife === true) {
-                // this.playDeadAnimation();
-            }
+          
     
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
         AnimationManager.addInterval(moveInterval); // Timer im Manager registrieren
     
-        this.idleDuration = 0; 
-        this.idleSwitchThreshold = 10000;
+    
     
         const animationInterval = setInterval(() => {
             let newAnimationState;
@@ -185,12 +192,12 @@ class Character extends MovableObject {
                 newAnimationState = this.playDeadAnimation();
                 this.idleDuration = 0; 
                 return;
-            } else if (this.isHurt()) {
+            } 
+            else if (this.isHurt()) {
                 newAnimationState = this.IMAGE_HURT;
                 this.idleDuration = 0; 
                 this.pepeSnoring_sound.pause();
             } else if (this.isAboveGround()) {
-                newAnimationState = this.playJumpAnimation();
                 this.idleDuration = 0; 
                 return;
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
@@ -221,7 +228,7 @@ class Character extends MovableObject {
     }
     
    playJumpAnimation() {
-    if (this.isJumping || this.world.gamePaused) return; // Verhindert die erneute Ausführung, wenn der Sprung läuft oder das Spiel pausiert ist
+    if (this.isJumping ) return; // Verhindert die erneute Ausführung, wenn der Sprung läuft oder das Spiel pausiert ist
     this.isJumping = true;
 
     const jumpSequence = [

@@ -48,18 +48,9 @@ class World {
 
     }
    
-    resumeAllIntervals() {
-        for (let id in this.intervals) {
-            const { callback, interval } = this.intervals[id];
-            const intervalId = setInterval(callback, interval);
-            this.intervals[id].intervalId = intervalId; // Speichere die neue ID
-        }
-    }
-   
     clearAllIntervals() {
         for (let i = 1; i < 9999; i++) window.clearInterval(i);
     }
-
 
     clearAllTimeouts() {
         for (let i = 1; i < 10000; i++) {
