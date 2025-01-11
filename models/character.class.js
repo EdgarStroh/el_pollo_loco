@@ -10,7 +10,7 @@ class Character extends MovableObject {
     offsetHeight = 140;
     pepeSnoring_sound = AudioManager.pepeSnoring_sound;
     walking_sound = AudioManager.walking_sound;
-    jump_sound= AudioManager.jump_sound;
+    jump_sound = AudioManager.jump_sound;
     pepeDead_sound = AudioManager.pepeDead_sound;
     // intervals = [];
     timeoutIds = []; // Array zum Speichern von Timeout-IDs
@@ -83,7 +83,7 @@ class Character extends MovableObject {
     IMAGE_LANDING_2 = ['img/2_character_pepe/3_jump/J-38.png'];
     IMAGE_LANDING_3 = ['img/2_character_pepe/3_jump/J-39.png'];
 
- 
+
     // Neue Dead-Animationen
     IMAGE_DEAD_1 = ['img/2_character_pepe/5_dead/D-51.png'];
     IMAGE_DEAD_2 = ['img/2_character_pepe/5_dead/D-52.png'];
@@ -116,14 +116,14 @@ class Character extends MovableObject {
             this.loadImages(this.IMAGE_DEAD_5);
             this.loadImages(this.IMAGE_DEAD_6);
             this.loadImages(this.IMAGE_DEAD_7);
-    
+
             this.loadImages(this.IMAGE_HURT);
         }, 100);
     }
 
     currentAnimationState = null;
     world;
-  
+
 
     constructor(world) {
         super().loadImage('img/2_character_pepe/1_idle/idle/I-1.png');
@@ -136,130 +136,127 @@ class Character extends MovableObject {
     }
 
     animate() {
-        this.idleDuration = 0; 
+        this.idleDuration = 0;
         this.idleSwitchThreshold = 10000;
+
 
         const moveInterval = setInterval(() => {
             this.walking_sound.pause();
-          
-    
+
+
             // Move right
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && !this.noLife) {
                 this.moveRight();
                 this.otherDirection = false;
-    
-                // Nur abspielen, wenn der Charakter nicht springt und nicht über dem Boden ist
-                if (!this.isAboveGround() && !this.isJumping) {
-                    this.walking_sound.play();
-                }
-            }
-    
-            // Move left
-            if (this.world.keyboard.LEFT && this.x > 0 && !this.noLife) {
-                this.moveLeft();
-                this.otherDirection = true;
-    
+
                 // Nur abspielen, wenn der Charakter nicht springt und nicht über dem Boden ist
                 if (!this.isAboveGround() && !this.isJumping) {
                     this.walking_sound.play();
                 }
             }
 
-            
-            if (this.isHurt()) {
-                this.IMAGE_HURT;
+            // Move left
+            if (this.world.keyboard.LEFT && this.x > 0 && !this.noLife) {
+                this.moveLeft();
+                this.otherDirection = true;
+
+                // Nur abspielen, wenn der Charakter nicht springt und nicht über dem Boden ist
+                if (!this.isAboveGround() && !this.isJumping) {
+                    this.walking_sound.play();
+                }
             }
-    
+
             // Jump
             if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround() && !this.isHurt() && !this.isJumping && !this.noLife) {
                 this.jump();
                 this.playJumpAnimation();
-                this.jump_sound.play();
+                this.jump_sound.play();           
             }
-    
-          
-    
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
         AnimationManager.addInterval(moveInterval); // Timer im Manager registrieren
-    
-    
-    
+
+
+
         const animationInterval = setInterval(() => {
+
             let newAnimationState;
-    
             if (this.isDead()) {
                 newAnimationState = this.playDeadAnimation();
-                this.idleDuration = 0; 
+                this.idleDuration = 0;
                 return;
-            } 
-            else if (this.isHurt()) {
+            }
+            if (this.isHurt()) {
                 newAnimationState = this.IMAGE_HURT;
-                this.idleDuration = 0; 
+                this.idleDuration = 0;
                 this.pepeSnoring_sound.pause();
-            } else if (this.isAboveGround()) {
-                this.idleDuration = 0; 
+                this.isJumping = false;
+            }
+            else if (this.isJumping) {
+                this.idleDuration = 0;
                 return;
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 newAnimationState = this.IMAGE_WALKING;
-                this.idleDuration = 0; 
+                this.idleDuration = 0;
             } else if (this.world.keyboard.Q || this.world.keyboard.B) {
                 newAnimationState = this.IMAGE_IDLE;
-                this.idleDuration = 0; 
+                this.idleDuration = 0;
             } else {
                 if (this.idleDuration >= this.idleSwitchThreshold) {
                     newAnimationState = this.IMAGE_IDLE_LONG;
                     this.pepeSnoring_sound.play();
                 } else {
-                    newAnimationState = this.IMAGE_IDLE; 
-                    this.idleDuration += 155; 
+                    newAnimationState = this.IMAGE_IDLE;
+                    this.idleDuration += 155;
                     this.pepeSnoring_sound.pause();
                 }
             }
-    
+
             if (newAnimationState !== this.currentAnimationState) {
-                this.resetAnimation(); 
-                this.currentAnimationState = newAnimationState; 
+                this.resetAnimation();
+                this.currentAnimationState = newAnimationState;
             }
-    
-            this.playAnimation(newAnimationState); 
+
+            this.playAnimation(newAnimationState);
         }, 155);
         AnimationManager.addInterval(animationInterval); // Timer im Manager registrieren
     }
-    
-   playJumpAnimation() {
-    if (this.isJumping ) return; // Verhindert die erneute Ausführung, wenn der Sprung läuft oder das Spiel pausiert ist
-    this.isJumping = true;
 
-    const jumpSequence = [
-        { animation: this.IMAGE_JUMP_START_1, delay: 0 },
-        { animation: this.IMAGE_JUMP_START_2, delay: 3 },
-        { animation: this.IMAGE_JUMP_START_3, delay: 8 },
-        { animation: this.IMAGE_JUMP_UP, delay: 10 },
-        { animation: this.IMAGE_JUMP_DOWN_1, delay: 240 },
-        { animation: this.IMAGE_JUMP_DOWN_2, delay: 420 },
-        { animation: this.IMAGE_LANDING_1, delay: 640 },
-        { animation: this.IMAGE_LANDING_2, delay: 740 },
-        { animation: this.IMAGE_LANDING_3, delay: 750 }
-    ];
 
-    jumpSequence.forEach((frame) => {
-        const jumpSequenceTimeout = setTimeout(() => {
-            if (!this.world.gamePaused && this.isJumping) {
-                this.playAnimation(frame.animation);
-            }
-        }, frame.delay);
 
-        // Registriere den Timeout bei AnimationManager
-        AnimationManager.addTimeout(jumpSequenceTimeout);
-    });
+    playJumpAnimation() {
+        if (this.isJumping) return; // Verhindert die erneute Ausführung, wenn der Sprung läuft oder das Spiel pausiert ist
+        this.isJumping = true;
 
-    // Setze den Sprungstatus zurück nach der Animation
-     setTimeout(() => {
-        this.isJumping = false;
-    }, 800);
-   
-}
+        const jumpSequence = [
+            { animation: this.IMAGE_JUMP_START_1, delay: 0 },
+            { animation: this.IMAGE_JUMP_START_2, delay: 3 },
+            { animation: this.IMAGE_JUMP_START_3, delay: 8 },
+            { animation: this.IMAGE_JUMP_UP, delay: 10 },
+            { animation: this.IMAGE_JUMP_DOWN_1, delay: 240 },
+            { animation: this.IMAGE_JUMP_DOWN_2, delay: 420 },
+            { animation: this.IMAGE_LANDING_1, delay: 700 },
+            { animation: this.IMAGE_LANDING_2, delay: 740 },
+            { animation: this.IMAGE_LANDING_3, delay: 750 }
+        ];
+
+        jumpSequence.forEach((frame) => {
+            const jumpSequenceTimeout = setTimeout(() => {
+                if (!this.world.gamePaused && this.isJumping) {
+                    this.playAnimation(frame.animation);
+                }
+            }, frame.delay);
+
+            // Registriere den Timeout bei AnimationManager
+            AnimationManager.addTimeout(jumpSequenceTimeout);
+        });
+
+        // Setze den Sprungstatus zurück nach der Animation
+        setTimeout(() => {
+            this.isJumping = false;
+        }, 800);
+
+    }
 
     resume() {
         this.animate();
@@ -320,7 +317,7 @@ class Character extends MovableObject {
     //     this.timeoutIds = [];
     // }
 
-    
+
 
     // clearAllTimeouts() {
     //     this.timeoutIds.forEach(clearTimeout);
@@ -333,5 +330,5 @@ class Character extends MovableObject {
     //     this.timeoutIds = []; // Array zurücksetzen
     // }
 
-    
+
 }

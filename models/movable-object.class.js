@@ -69,7 +69,7 @@ class MovableObject extends DrawableObject {
     hit() {
         // this.hurt_sound.volume = 0.05;
         if (!this.getDamage) {
-            this.myHealth -= 20;
+            this.myHealth -= 0;
             this.getDamage = true;
             this.hurt_sound.play();
             this.lastHit = new Date().getTime();
@@ -89,11 +89,11 @@ class MovableObject extends DrawableObject {
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit;
         timepassed = timepassed / 1000;
-        if (timepassed >= 1.4) {
+        if (timepassed >= 1.0) {
             this.getDamage = false;
             // console.log("kein dmg" + this.getDamage);     
         }
-        return timepassed < 1.4;
+        return timepassed < 1.0;
     }
 
     isDead() {
