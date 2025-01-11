@@ -69,7 +69,7 @@ class MovableObject extends DrawableObject {
     hit() {
         // this.hurt_sound.volume = 0.05;
         if (!this.getDamage) {
-            this.myHealth -= 0;
+            this.myHealth -= 20;
             this.getDamage = true;
             this.hurt_sound.play();
             this.lastHit = new Date().getTime();
