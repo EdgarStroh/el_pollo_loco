@@ -19,6 +19,8 @@ class Endboss extends MovableObject {
     endbossHurt_sound = AudioManager.endbossHurt_sound;
     endbossDead_sound = AudioManager.endbossDead_sound;
     // intervals = [];
+    abcAudio =  new Audio('audio/dead.mp3');
+    fireballs = [];
     IMAGE_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -55,16 +57,8 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/5_dead/G25.png',
         'img/4_enemie_boss_chicken/5_dead/G26.png',
     ];
-    IMAGE_ATTACK = [
-        'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_01.png',
-        'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_02.png',
-        'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_03.png',
-        'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_04.png',
-        'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_05.png',
-        'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_06.png',
-        'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_07.png',
-    ];
     
+
     // muteAllSounds() {
     //     // Alle audio-Elemente auf der Seite finden und stummschalten
     //     document.querySelectorAll('audio').forEach(audio => {
@@ -78,7 +72,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGE_ATTACK_STANCE);
         this.loadImages(this.IMAGE_HURT);
         this.loadImages(this.IMAGE_DEAD);
-        this.loadImages(this.IMAGE_ATTACK);
+        // this.loadImages(this.IMAGE_ATTACK);
     }
 
     constructor() {
@@ -96,23 +90,61 @@ class Endboss extends MovableObject {
             }
         }, 500); // Alle 500 ms entscheidet der Endboss, wohin er geht
         AnimationManager.addInterval(walkingInterval); // Timer im Manager registrieren
-
-        const hurtInterval = setInterval(() => {
+    
+        const attackInterval = () => {
+            const delay = Math.random() * (8000 - 5000) + 1000; // Zufällige Zeit zwischen 5 und 8 Sekunden
+            setTimeout(() => {
+                if (this.isAlert && !this.isDead) {
+                    this.randomAttack();
+                    // this.playAnimation(this.IMAGE_ATTACK);
+                    world.fireFireball();  // Feuerball spucken
+                }
+                attackInterval(); // Funktion erneut starten
+            }, delay);
+        };
+        attackInterval(); // Initial starten
+    
+        const endbossAnimationInterval = setInterval(() => {
             if (this.isDead) {
                 this.endbossDead(); // Endboss-Tod-Animation
                 return;
             } else if (this.isAlert) {
                 this.playAnimation(this.IMAGE_ALERT); // Alarm-Animation
                 this.otherDirection = false; // Nach links
+            } else if (this.isAttack) {
+                console.log('attack');
+                this.playAnimation(this.IMAGE_ATTACK_STANCE); // Angriff-Animation
+                this.otherDirection = false; // Nach links
             } else if (this.isHurt) {
                 this.endbossHurt(); // Hurt-Animation
                 this.endbossHurt_sound.play(); // Sound abspielen
-            } else if (this.isAttack) {
-                this.playAnimation(this.IMAGE_ATTACK_STANCE); // Angriff-Animation
-                this.otherDirection = false; // Nach links
             }
         }, 200);
-        AnimationManager.addInterval(hurtInterval); // Timer im Manager registrieren
+        AnimationManager.addInterval(endbossAnimationInterval); // Timer im Manager registrieren
+    }
+    
+    // fireFireball() {
+    //     if (this.isAttack) {
+    //         // Position des Endbosses berücksichtigen und Feuerball richtig ausrichten
+    //         const fireball = new Fireball(this.x + this.width / 2, this.y + this.height / 2, this.otherDirection ? 1 : -1);
+    //         this.fireballs.push(fireball); // Feuerball zum Array hinzufügen
+    //         fireball.launch(); // Feuerball starten
+    //         // this.abcAudio.play();
+    //         console.log(`Fireball launched at x: ${this.x}, y: ${this.y}`);
+    //     }
+    // }
+
+    randomAttack() {
+        this.isAlert = false;
+        this.isAttack = true;
+
+
+        setTimeout(() => {
+            this.isAttack = false;
+            this.isAlert = true;
+        }, 5000);
+
+        
     }
 
     endbossHurt() {
@@ -140,7 +172,7 @@ class Endboss extends MovableObject {
             this.resetAnimation();
             this.hasResetAnimation = true;
         }
-       
+
         if (!this.hasPlayedDeathSound) {
             this.endbossDead_sound.play();
             this.hasPlayedDeathSound = true;
@@ -151,12 +183,10 @@ class Endboss extends MovableObject {
             this.currentImage = 2;
         }, this.IMAGE_DEAD.length * 160);
 
-        if ( !this.reallyDead) {
+        if (!this.reallyDead) {
             this.playAnimation(this.IMAGE_DEAD);
         }
     }
-
-
 
     randomMovement() {
         const randomDirection = Math.random() < 0.5 ? -1 : 1; // Zufällig -1 (links) oder 1 (rechts)
@@ -173,6 +203,8 @@ class Endboss extends MovableObject {
             this.otherDirection = false; // Nach links
         }
     }
+
+
 
     // pause() {
     //     this.intervals.forEach(clearInterval);

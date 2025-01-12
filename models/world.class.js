@@ -1,7 +1,9 @@
 class World {
     character = new Character();
-    MO = new MovableObject();
-    TO = new ThrowableObject();
+    endboss = new Endboss();
+    // MO = new MovableObject();
+    // TO = new ThrowableObject();
+    // fireball = new Fireball(this.x,this.y);
     statusBarHealth = new StatusBarHealth();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
@@ -12,6 +14,7 @@ class World {
     damage = -5;
     camera_x = 0;
     bottleToThrow = [];
+    fireballs = [];
     intervalIds = [];
     gamePaused = false;
     // playAnimationObject = new MovableObject();
@@ -47,7 +50,7 @@ class World {
         // this.bottleThrow_sound.loop = true; // Loop für den Flaschensound aktiviert
 
     }
-   
+
     clearAllIntervals() {
         for (let i = 1; i < 9999; i++) window.clearInterval(i);
     }
@@ -303,6 +306,22 @@ class World {
         }
     }
 
+    fireFireball() {
+        if (this.gamePaused) {
+            return; // Keine Aktion, wenn das Spiel pausiert ist oder der Charakter tot ist
+        }
+
+
+        console.log("Fireball launched!");
+        let startX = this.endboss.x - 30;
+        let startY = this.endboss.y + 120;
+        // let bottle = new ThrowableObject(startX, startY, this.character.otherDirection);
+        let fireball = new Fireball(startX, startY);
+        this.fireballs.push(fireball);
+
+
+    }
+
     playBottlePickUpSound() {
         this.bottlePickUp_sound.pause(); // Sound stoppen
         this.bottlePickUp_sound.currentTime = 0; // Zurück zum Anfang des Sounds
@@ -324,6 +343,8 @@ class World {
         this.addObjectsToMap(this.level.bottles);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.bottleToThrow);
+        this.addObjectsToMap(this.fireballs);
+
         // this.addObjectsToMap(this.playAnimationObject);
         // this.addObjectsToMap(this.splashImages);
 
