@@ -55,22 +55,16 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/5_dead/G25.png',
         'img/4_enemie_boss_chicken/5_dead/G26.png',
     ];
-    IMAGE_ATTACK1 = [
-        'img/4_enemie_boss_chicken/5_dead/G24.png',
-        'img/4_enemie_boss_chicken/5_dead/G25.png',
-        'img/4_enemie_boss_chicken/5_dead/G26.png',
+    IMAGE_ATTACK = [
+        'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_01.png',
+        'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_02.png',
+        'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_03.png',
+        'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_04.png',
+        'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_05.png',
+        'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_06.png',
+        'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_07.png',
     ];
-    IMAGE_ATTACK2 = [
-        'img/4_enemie_boss_chicken/5_dead/G24.png',
-        'img/4_enemie_boss_chicken/5_dead/G25.png',
-        'img/4_enemie_boss_chicken/5_dead/G26.png',
-    ];
-    IMAGE_ATTACK_STANDART = [
-        'img/4_enemie_boss_chicken/5_dead/G24.png',
-        'img/4_enemie_boss_chicken/5_dead/G25.png',
-        'img/4_enemie_boss_chicken/5_dead/G26.png',
-    ];
-
+    
     // muteAllSounds() {
     //     // Alle audio-Elemente auf der Seite finden und stummschalten
     //     document.querySelectorAll('audio').forEach(audio => {
@@ -84,6 +78,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGE_ATTACK_STANCE);
         this.loadImages(this.IMAGE_HURT);
         this.loadImages(this.IMAGE_DEAD);
+        this.loadImages(this.IMAGE_ATTACK);
     }
 
     constructor() {
