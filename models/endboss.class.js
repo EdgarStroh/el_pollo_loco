@@ -3,13 +3,13 @@ class Endboss extends MovableObject {
     height = 450;
     width = 300;
     y = 10;
-    x = 2400; //2400
+    x = 400; //2400
     offsetX = 20;
     offsetY = 80;
     offsetWidth = 70;
     // enemyHealth = 25;
     offsetHeight = 100;
-    endbossHealth = 15;
+    endbossHealth = 100;
     isWalking = true;
     isAlert = false;
     isAttack = false;
@@ -35,7 +35,7 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/2_alert/G11.png',
         'img/4_enemie_boss_chicken/2_alert/G12.png'
     ];
-    IMAGE_ATTACK = [
+    IMAGE_ATTACK_STANCE = [
         'img/4_enemie_boss_chicken/3_attack/G13.png',
         'img/4_enemie_boss_chicken/3_attack/G14.png',
         'img/4_enemie_boss_chicken/3_attack/G15.png',
@@ -55,6 +55,21 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/5_dead/G25.png',
         'img/4_enemie_boss_chicken/5_dead/G26.png',
     ];
+    IMAGE_ATTACK1 = [
+        'img/4_enemie_boss_chicken/5_dead/G24.png',
+        'img/4_enemie_boss_chicken/5_dead/G25.png',
+        'img/4_enemie_boss_chicken/5_dead/G26.png',
+    ];
+    IMAGE_ATTACK2 = [
+        'img/4_enemie_boss_chicken/5_dead/G24.png',
+        'img/4_enemie_boss_chicken/5_dead/G25.png',
+        'img/4_enemie_boss_chicken/5_dead/G26.png',
+    ];
+    IMAGE_ATTACK_STANDART = [
+        'img/4_enemie_boss_chicken/5_dead/G24.png',
+        'img/4_enemie_boss_chicken/5_dead/G25.png',
+        'img/4_enemie_boss_chicken/5_dead/G26.png',
+    ];
 
     // muteAllSounds() {
     //     // Alle audio-Elemente auf der Seite finden und stummschalten
@@ -66,7 +81,7 @@ class Endboss extends MovableObject {
     loadAllImages() {
         this.loadImages(this.IMAGE_ALERT);
         this.loadImages(this.IMAGE_WALKING);
-        this.loadImages(this.IMAGE_ATTACK);
+        this.loadImages(this.IMAGE_ATTACK_STANCE);
         this.loadImages(this.IMAGE_HURT);
         this.loadImages(this.IMAGE_DEAD);
     }
@@ -98,7 +113,7 @@ class Endboss extends MovableObject {
                 this.endbossHurt(); // Hurt-Animation
                 this.endbossHurt_sound.play(); // Sound abspielen
             } else if (this.isAttack) {
-                this.playAnimation(this.IMAGE_ATTACK); // Angriff-Animation
+                this.playAnimation(this.IMAGE_ATTACK_STANCE); // Angriff-Animation
                 this.otherDirection = false; // Nach links
             }
         }, 200);
