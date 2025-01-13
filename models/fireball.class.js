@@ -1,5 +1,10 @@
 class Fireball extends MovableObject {
-
+    speedX = 6;
+    speedY = 3;
+    // offsetWidth = 25;
+    // offsetHeight = 25;
+    height = 60;
+    width = 60;
     IMAGE_FIREBALL = [
         'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_01.png',
         'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_02.png',
@@ -9,30 +14,31 @@ class Fireball extends MovableObject {
         'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_06.png',
         'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_07.png',
     ];
-    constructor(x, y, otherDirection) {
-        super().loadImage('img/4_enemie_boss_chicken/endbossAttack/endbossAttack_01.png');
+
+    constructor(x, y) {
+        super().loadImage(this.IMAGE_FIREBALL[0]); // Initiales Bild
         this.loadImages(this.IMAGE_FIREBALL);
         this.x = x;
         this.y = y;
-        this.otherDirection = otherDirection;
-        // this.direction = direction; // Richtung: 1 für rechts, -1 für links
-        // this.width = 50;
-        // this.height = 30;
+        // this.speedX = 5; // Geschwindigkeit des Fireballs nach links
+        this.animate(); // Startet die Animation des Fireballs
     }
 
-    launch() {
-        this.animate();
+    move() {
+        // Fireball bewegt sich kontinuierlich nach links
+        this.x -= this.speedX;
+        this.y += this.speedY;
     }
-    render(ctx) {
-        ctx.drawImage(this.image, this.x, this.y); // Zeichne den Feuerball
-    }
+
     animate() {
-        const moveInterval = setInterval(() => {
-            this.x += this.speed;
-            if (this.x < 0 || this.x > 3000) { // Wenn der Feuerball das Spiel verlässt, beende das Intervall
-                clearInterval(moveInterval);
-            }
-        }, 30); // Alle 30ms bewegen sich die Feuerbälle
-    }
+        const fireballMoveAnimation   = setInterval(() => {
+            this.move(); // Bewegung des Fireballs
+        }, 1000 / 60); // 60 FPS für flüssige Bewegung
+        AnimationManager.addInterval(fireballMoveAnimation); 
 
+        const fireballAnimation  = setInterval(() => {
+            this.playAnimation(this.IMAGE_FIREBALL); // Spielt die Animation ab
+        }, 100); // Bildwechsel alle 100ms
+        AnimationManager.addInterval(fireballAnimation); 
+    }
 }

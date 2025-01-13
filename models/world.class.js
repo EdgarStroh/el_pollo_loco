@@ -120,6 +120,7 @@ class World {
                 this.checkCollisionsBottleOnEnemy();
                 this.checkCoinCollisionsPickUp();
                 this.checkBottleCollisionsPickUp();
+                this.fireballs.forEach(fireball => this.checkGroundCollisionFireball(fireball));
             }
         }, 100);
 
@@ -306,20 +307,35 @@ class World {
         }
     }
 
+    
+
     fireFireball() {
         if (this.gamePaused) {
             return; // Keine Aktion, wenn das Spiel pausiert ist oder der Charakter tot ist
         }
-
-
+    
         console.log("Fireball launched!");
         let startX = this.endboss.x - 30;
         let startY = this.endboss.y + 120;
-        // let bottle = new ThrowableObject(startX, startY, this.character.otherDirection);
         let fireball = new Fireball(startX, startY);
         this.fireballs.push(fireball);
+    
+        // Starte die Überprüfung für diesen Fireball
+        this.checkGroundCollisionFireball(fireball);
+    }
 
-
+    checkGroundCollisionFireball(fireball) {
+        let checkGroundInterval = setInterval(() => {
+            if (fireball.y >= 360) { // Bedingung: Boden erreicht
+                console.log("Fireball hit the ground!");
+                
+                // Entferne den Fireball aus dem Array
+                this.fireballs = this.fireballs.filter(fb => fb !== fireball);
+    
+                // Stoppe die Überprüfung
+                clearInterval(checkGroundInterval);
+            }
+        }, 1000 / 60); // Überprüfe 60 Mal pro Sekunde
     }
 
     playBottlePickUpSound() {

@@ -112,7 +112,7 @@ class Endboss extends MovableObject {
                 this.playAnimation(this.IMAGE_ALERT); // Alarm-Animation
                 this.otherDirection = false; // Nach links
             } else if (this.isAttack) {
-                console.log('attack');
+                // console.log('attack');
                 this.playAnimation(this.IMAGE_ATTACK_STANCE); // Angriff-Animation
                 this.otherDirection = false; // Nach links
             } else if (this.isHurt) {
@@ -137,7 +137,6 @@ class Endboss extends MovableObject {
     randomAttack() {
         this.isAlert = false;
         this.isAttack = true;
-
 
         setTimeout(() => {
             this.isAttack = false;

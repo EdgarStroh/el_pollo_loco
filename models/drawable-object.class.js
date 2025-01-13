@@ -21,18 +21,20 @@ class DrawableObject {
     }
 
     drawFrame(ctx) {
-        // if (this instanceof Character || this instanceof Chicken || this instanceof Bottle || this instanceof Coin || this instanceof ThrowableObject || this instanceof Endboss) {
-        //     ctx.beginPath();
-        //     ctx.lineWidth = "5";
-        //     ctx.strokeStyle = "blue";
-        //     ctx.rect(
-        //         this.x + this.offsetX,
-        //         this.y + this.offsetY,
-        //         this.width - this.offsetWidth,
-        //         this.height - this.offsetHeight
-        //     );
-        //     ctx.stroke();
-        // }
+        // if (this instanceof Character || this instanceof Chicken || this instanceof Bottle || this instanceof Coin || this instanceof ThrowableObject || this instanceof Endboss) 
+          if(this instanceof Fireball )  
+            {
+            ctx.beginPath();
+            ctx.lineWidth = "5";
+            ctx.strokeStyle = "blue";
+            ctx.rect(
+                this.x + this.offsetX,
+                this.y + this.offsetY,
+                this.width - this.offsetWidth,
+                this.height - this.offsetHeight
+            );
+            ctx.stroke();
+        }
     }
 
     loadImages(arr) {
