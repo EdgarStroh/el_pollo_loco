@@ -22,6 +22,10 @@ class Fireball extends MovableObject {
         this.y = y;
         // this.speedX = 5; // Geschwindigkeit des Fireballs nach links
         this.animate(); // Startet die Animation des Fireballs
+        this.lastTimestamp = null;
+        this.totalPauseDuration = 0;
+        this.pauseStart = null;
+        this.isPaused = false;
     }
 
     move() {
@@ -30,15 +34,37 @@ class Fireball extends MovableObject {
         this.y += this.speedY;
     }
 
-    animate() {
-        const fireballMoveAnimation   = setInterval(() => {
-            this.move(); // Bewegung des Fireballs
-        }, 1000 / 60); // 60 FPS für flüssige Bewegung
-        AnimationManager.addInterval(fireballMoveAnimation); 
-
-        const fireballAnimation  = setInterval(() => {
-            this.playAnimation(this.IMAGE_FIREBALL); // Spielt die Animation ab
-        }, 100); // Bildwechsel alle 100ms
-        AnimationManager.addInterval(fireballAnimation); 
+    animate(timestamp) {
+        if (!this.totalPauseDuration) this.totalPauseDuration = 0; // Gesamte Pausendauer initialisieren
+        if (!this.lastTimestamp) this.lastTimestamp = timestamp; // Startzeit setzen
+        if (pausedGame) {
+            if (!this.pauseStart) this.pauseStart = timestamp; // Start der Pause
+            requestAnimationFrame(this.animate.bind(this));
+            return;
+        }
+    
+        if (this.pauseStart) {
+            // Berechne die gesamte Pausendauer
+            this.totalPauseDuration += timestamp - this.pauseStart;
+            this.pauseStart = null;
+        }
+    
+        const effectiveTimestamp = timestamp - this.totalPauseDuration;
+        const deltaTime = (effectiveTimestamp - this.lastTimestamp) / 1000; // Zeit seit dem letzten Frame
+        this.lastTimestamp = effectiveTimestamp;
+    
+        // Bewege den Fireball kontinuierlich
+        this.move();
+    
+        // Animationslogik: Wechsel der Bilder
+        this.i = this.i || 0; // Frame-Zähler initialisieren
+        this.i += deltaTime * 1000;
+        if (this.i >= 100) { // Alle 100 ms Bild wechseln
+            this.i = 0;
+            this.playAnimation(this.IMAGE_FIREBALL);
+        }
+    
+        requestAnimationFrame(this.animate.bind(this));
     }
+    
 }
