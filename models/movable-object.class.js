@@ -26,7 +26,7 @@ class MovableObject extends DrawableObject {
             // console.log(World.gamePaused);
             if (this.isAboveGround() || this.speedY > 0)
                 this.y -= this.speedY;
-                this.speedY -= this.acceleration;
+            this.speedY -= this.acceleration;
         }, 1000 / 25);
         //  AnimationManager.addInterval(gravityInterval); // Intervall im Manager registrieren
     }
@@ -57,14 +57,25 @@ class MovableObject extends DrawableObject {
             this.y + this.offsetY + this.height - this.offsetHeight >= obj.y + obj.offsetY && // Unterkante von this
             this.y + this.offsetY <= obj.y + obj.offsetY + obj.height - obj.offsetHeight // Oberkante von this
         );
-    }
+
+    //     // return (
+    //     //     this.x + this.width >this.mo.x &&
+    //     //     this.y + this,height > this.mo.y &&
+    //     //     this.x < this.mo.x + this.mo.width &&
+    //     //     this.y < this.mo.y + this.mo.height
+    //     // )
+
+    //     return (this.X + this.width) >= obj.X && this.X <= (obj.X + obj.width) &&
+    //         (this.Y + this.offsetY + this.height) >= obj.Y &&
+    //         (this.Y + this.offsetY) <= (obj.Y + obj.height)
+    // }
 
     // isColliding(obj){
     // return  this.x + this.width - this.offset.right > obj.x + obj.offset.left &&
     //         this.y + this.height - this.offset.bottom > obj.y + obj.offset.top &&
     //         this.x + this.offset.left < obj.x + obj.width - obj.offset.right &&
     //         this.y + this.offset.top < obj.y + obj.height - obj.offset.bottom;
-    // }
+   }
 
     hit() {
         // this.hurt_sound.volume = 0.05;

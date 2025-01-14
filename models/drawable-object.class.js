@@ -22,10 +22,10 @@ class DrawableObject {
 
     drawFrame(ctx) {
         // if (this instanceof Character || this instanceof Chicken || this instanceof Bottle || this instanceof Coin || this instanceof ThrowableObject || this instanceof Endboss) 
-          if(this instanceof Fireball )  
+          if(this instanceof Fireball || this instanceof Chicken  || this instanceof Character)  
             {
             ctx.beginPath();
-            ctx.lineWidth = "5";
+            ctx.lineWidth = "2";
             ctx.strokeStyle = "blue";
             ctx.rect(
                 this.x + this.offsetX,

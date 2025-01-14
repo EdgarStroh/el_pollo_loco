@@ -1,5 +1,5 @@
 class Cloud extends MovableObject {
-    static fixedXPositions = [10, 800, 1600, 2500];
+    static fixedXPositions = [10, 1800, 2600, 3700, 4800];
 
     y = 20;
     width = 500;

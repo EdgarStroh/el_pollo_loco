@@ -1,9 +1,10 @@
-class Chicken extends MovableObject {
-    height = 80;
-    y = 345;
-    offsetX = 0;
-    offsetY = 35;
-    offsetWidth = 0;
+class ChickenLittle extends MovableObject {
+    height = 50;
+    width = 50;
+    y = 370;
+    offsetX = 8;
+    offsetY = -7;
+    offsetWidth = 40;
     offsetHeight = 0;
     chickenHealth = 5;
     isDead = false;
@@ -11,12 +12,12 @@ class Chicken extends MovableObject {
     // world = new World;
 
     IMAGE_WALKING = [
-        'img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
-        'img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
-        'img/3_enemies_chicken/chicken_normal/1_walk/3_w.png'
+        'img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
+        'img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
+        'img/3_enemies_chicken/chicken_small/1_walk/3_w.png'
     ];
     IMAGE_DEAD = [
-        'img/3_enemies_chicken/chicken_normal/2_dead/dead.png'
+        'img/3_enemies_chicken/chicken_small/2_dead/dead.png'
     ];
 
     loadAllImages() {
@@ -27,8 +28,8 @@ class Chicken extends MovableObject {
    
 
     constructor() {
-        super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png')
-        this.x = 1680 + Math.random() * 2500;
+        super().loadImage('img/3_enemies_chicken/chicken_small/1_walk/1_w.png')
+        this.x = 280 + Math.random() * 1500;
         this.speed = 0.15 + Math.random() * 0.25;
         this.animate();
         this.loadAllImages();
@@ -41,8 +42,9 @@ class Chicken extends MovableObject {
         const moveInterval = setInterval(() => {
             if (this.isDead) return; // Animation stoppen, wenn das Objekt "tot" ist
             this.moveLeft();
+         
             this.otherDirection = false;
-        }, 1000 / 60);
+        }, 1000 / 40);
         AnimationManager.addInterval(moveInterval); // Timer im Manager registrieren
     
         const animationInterval = setInterval(() => {
@@ -51,7 +53,7 @@ class Chicken extends MovableObject {
         }, 220);
         AnimationManager.addInterval(animationInterval); // Timer im Manager registrieren
     }
-    
+   
 
     // pause() {
     //     this.intervals.forEach(clearInterval); // Stoppt alle Intervalle

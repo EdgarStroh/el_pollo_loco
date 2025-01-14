@@ -5,7 +5,7 @@ class Character extends MovableObject {
     isJumping = false;
     noLife = false;
     offsetX = 10;
-    offsetY = 130;
+    offsetY = 125;
     offsetWidth = 35;
     offsetHeight = 140;
     pepeSnoring_sound = AudioManager.pepeSnoring_sound;

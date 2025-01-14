@@ -1,8 +1,8 @@
 class Fireball extends MovableObject {
-    speedX = 6;
-    speedY = 3;
-    // offsetWidth = 25;
-    // offsetHeight = 25;
+    speedX = Math.random() * (7 - 5) + 4; // Zufällige Zahl zwischen 5 und 6
+    speedY = Math.random() * (5 - 1) + 2.5; // Zufällige Zahl zwischen 1.5 und 4
+    offsetWidth = 50;
+    offsetHeight = 25;
     height = 60;
     width = 60;
     IMAGE_FIREBALL = [
@@ -42,20 +42,20 @@ class Fireball extends MovableObject {
             requestAnimationFrame(this.animate.bind(this));
             return;
         }
-    
+
         if (this.pauseStart) {
             // Berechne die gesamte Pausendauer
             this.totalPauseDuration += timestamp - this.pauseStart;
             this.pauseStart = null;
         }
-    
+
         const effectiveTimestamp = timestamp - this.totalPauseDuration;
         const deltaTime = (effectiveTimestamp - this.lastTimestamp) / 1000; // Zeit seit dem letzten Frame
         this.lastTimestamp = effectiveTimestamp;
-    
+
         // Bewege den Fireball kontinuierlich
         this.move();
-    
+
         // Animationslogik: Wechsel der Bilder
         this.i = this.i || 0; // Frame-Zähler initialisieren
         this.i += deltaTime * 1000;
@@ -63,8 +63,8 @@ class Fireball extends MovableObject {
             this.i = 0;
             this.playAnimation(this.IMAGE_FIREBALL);
         }
-    
+
         requestAnimationFrame(this.animate.bind(this));
     }
-    
+
 }

@@ -2,6 +2,7 @@
 window.AudioManager = {
     endbossHurt_sound: new Audio('audio/endbossHurt.mp3'),
     endbossDead_sound: new Audio('audio/endbossDead.mp3'),
+    endbossFight_sound: new Audio('audio/BossMusic.mp3'),
     pepeSnoring_sound: new Audio('audio/snoringPepe.mp3'),
     walking_sound: new Audio('audio/walk.mp3'),
     jump_sound: new Audio('audio/jump.mp3'),
@@ -13,10 +14,12 @@ window.AudioManager = {
     bottleThrow_sound: new Audio('audio/bottleThrow.mp3'),
     bottleBreak_sound: new Audio('audio/bottleBreak.mp3'),
     jumpOnEnemy_sound: new Audio('audio/jumpOnEnemy.mp3'),
+    fireball_sound: new Audio('audio/fireball.mp3'),
 
     init() {
         this.endbossHurt_sound.volume = 0.15;
         this.endbossDead_sound.volume = 0.15;
+        this.endbossFight_sound.volume = 0.10;
         this.pepeSnoring_sound.volume = 0.0;      // 0.1
         this.walking_sound.volume = 0.05;
         this.jump_sound.volume = 0.05;
@@ -28,6 +31,7 @@ window.AudioManager = {
         this.bottleThrow_sound.volume = 0.03;
         this.bottleBreak_sound.volume = 0.25;
         this.jumpOnEnemy_sound.volume = 0.25;
+        this.fireball_sound.volume = 0.05;
     },
 };
 let isMuted = false; // Zustand, ob die Sounds stummgeschaltet sind oder nicht

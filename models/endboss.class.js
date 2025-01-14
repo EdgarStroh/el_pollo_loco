@@ -3,7 +3,7 @@ class Endboss extends MovableObject {
     height = 450;
     width = 300;
     y = 10;
-    x = 400; //2400
+    x = 4300; //4000
     offsetX = 20;
     offsetY = 80;
     offsetWidth = 70;
@@ -18,8 +18,9 @@ class Endboss extends MovableObject {
     reallyDead = false;
     endbossHurt_sound = AudioManager.endbossHurt_sound;
     endbossDead_sound = AudioManager.endbossDead_sound;
+    endbossFight_sound = AudioManager.endbossFight_sound;
     // intervals = [];
-    abcAudio =  new Audio('audio/dead.mp3');
+    abcAudio = new Audio('audio/dead.mp3');
     fireballs = [];
     IMAGE_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
@@ -57,7 +58,7 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/5_dead/G25.png',
         'img/4_enemie_boss_chicken/5_dead/G26.png',
     ];
-    
+
 
     // muteAllSounds() {
     //     // Alle audio-Elemente auf der Seite finden und stummschalten
@@ -82,31 +83,40 @@ class Endboss extends MovableObject {
         AnimationManager.register(this);
     }
 
+
+
     animate() {
         const walkingInterval = setInterval(() => {
             if (this.isWalking) {
                 this.randomMovement(); // Zufällige Richtung bestimmen
                 this.playAnimation(this.IMAGE_WALKING);
+            } else if (!this.isDead) {
+                this.endbossFight_sound.play();
+                this.randomMovementWhileAttacking();
+                this.playAnimation(this.IMAGE_WALKING);
             }
         }, 500); // Alle 500 ms entscheidet der Endboss, wohin er geht
         AnimationManager.addInterval(walkingInterval); // Timer im Manager registrieren
-    
+
         const attackInterval = () => {
             const delay = Math.random() * (8000 - 5000) + 1000; // Zufällige Zeit zwischen 5 und 8 Sekunden
             setTimeout(() => {
                 if (this.isAlert && !this.isDead) {
+                    // Zufällige Richtung bestimmen
                     this.randomAttack();
                     // this.playAnimation(this.IMAGE_ATTACK);
                     world.fireFireball();  // Feuerball spucken
+                    world.fireFireball();
                 }
                 attackInterval(); // Funktion erneut starten
             }, delay);
         };
         attackInterval(); // Initial starten
-    
+
         const endbossAnimationInterval = setInterval(() => {
             if (this.isDead) {
                 this.endbossDead(); // Endboss-Tod-Animation
+                this.endbossFight_sound.pause();
                 return;
             } else if (this.isAlert) {
                 this.playAnimation(this.IMAGE_ALERT); // Alarm-Animation
@@ -122,7 +132,7 @@ class Endboss extends MovableObject {
         }, 200);
         AnimationManager.addInterval(endbossAnimationInterval); // Timer im Manager registrieren
     }
-    
+
     // fireFireball() {
     //     if (this.isAttack) {
     //         // Position des Endbosses berücksichtigen und Feuerball richtig ausrichten
@@ -143,7 +153,7 @@ class Endboss extends MovableObject {
             this.isAlert = true;
         }, 5000);
 
-        
+
     }
 
     endbossHurt() {
@@ -188,12 +198,13 @@ class Endboss extends MovableObject {
     }
 
     randomMovement() {
+
         const randomDirection = Math.random() < 0.5 ? -1 : 1; // Zufällig -1 (links) oder 1 (rechts)
         this.speed = randomDirection * 2; // Geschwindigkeit auf ±2 setzen
 
         // Bewegung innerhalb der Grenzen
         const newX = this.x + this.speed;
-        if (newX >= 2200 && newX <= 2600) {
+        if (newX >= 4000 && newX <= 4600) {
             this.x = newX; // Neue Position innerhalb der Grenzen
         }
         if (randomDirection === 1) {
@@ -203,6 +214,18 @@ class Endboss extends MovableObject {
         }
     }
 
+    randomMovementWhileAttacking() {
+        const randomSpeed = Math.random() < 0.5 ? -1 : 1; // Zufällig -1 (links) oder 1 (rechts)
+        this.speed = randomSpeed * 6; // Geschwindigkeit auf ±2 setzen
+
+        // Bewegung innerhalb der Grenzen
+        const newX = this.x + this.speed;
+        if (newX >= 2200 && newX <= 2600) {
+            this.x = newX; // Neue Position innerhalb der Grenzen
+        }
+        this.otherDirection = false; // Nach links
+
+    }
 
 
     // pause() {
