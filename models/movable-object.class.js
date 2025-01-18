@@ -7,10 +7,9 @@ class MovableObject extends DrawableObject {
     enemyHealth = 0;
     lastHit = 0;
     getDamage = false;
-    hurt_sound = AudioManager.hurt_sound;
     intervals = [];
     // AnimationManager.register(this);
-
+    hurt_sound = AudioManager.hurt_sound;
 
     // sayHello() {
     //     console.log('Hallo');
@@ -79,16 +78,18 @@ class MovableObject extends DrawableObject {
 
     hit() {
         // this.hurt_sound.volume = 0.05;
-        if (!this.getDamage) {
+        if (!this.getDamage && this.myHealth > 0) {
             this.myHealth -= 20;
             this.getDamage = true;
             this.hurt_sound.play();
             this.lastHit = new Date().getTime();
 
-            if (this.myHealth <= 0) {
-                this.myHealth = 0;
-                // this.playDeathSound();  // Play the death sound when health reaches 0
-            }
+           
+        }
+        if (this.myHealth <= 0) {
+            this.myHealth = 0;
+            // this.hurt_sound.pause();
+            // this.playDeathSound();  // Play the death sound when health reaches 0
         }
     }
 

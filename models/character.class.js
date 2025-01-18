@@ -12,6 +12,8 @@ class Character extends MovableObject {
     walking_sound = AudioManager.walking_sound;
     jump_sound = AudioManager.jump_sound;
     pepeDead_sound = AudioManager.pepeDead_sound;
+    
+    
     // intervals = [];
     timeoutIds = []; // Array zum Speichern von Timeout-IDs
     savedState = {}; // Speichert den Zustand für Pause/Resume

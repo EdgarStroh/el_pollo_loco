@@ -1,6 +1,5 @@
 let level1;
 
-// function initLevel(){
 
 function hideStartscreen() {
     const startscreen = document.getElementById('startscreen');
@@ -16,7 +15,8 @@ function showStartscreen() {
 }
 function startGame() {
     hideStartscreen();
-    level1.start();
+    init();
+   
 }
 
 level1 = new Level(

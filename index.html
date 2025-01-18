@@ -30,24 +30,29 @@
     <script src="/levels/level1.js"></script>
     <script src="/js/game.js"></script>
     <script src="/js/fullscreen.js"></script>
-  
+
 </head>
 
-<body onload="init()">
+<body>
     <h1>El Pollo Loco</h1>
     <div id="fullscreen">
-        <!-- <img class="startscreen" id="startscreen" onclick="hideStartscreen()" src="img/9_intro_outro_screens/start/startscreen_1.png" alt="Start Screen"> -->
+        <div class="overlay">
+            <img class="startscreen" id="startscreen" onclick="startGame()"
+                src="img/9_intro_outro_screens/start/startscreen_1.png" alt="Start Screen">
 
+            <img class="gameover" id="" src="img/9_intro_outro_screens/game_over/game over.png" alt="Start Screen">
+            <img class="youwon" id="" src="img/9_intro_outro_screens/win/won_2.png" alt="Start Screen">
+        </div>
         <canvas id="canvas" width="720" height="480"></canvas>
+        <div class="button-container">
+            <button class="sound-btn" onclick="toggleSounds()">
+                <img src="icons/unmute.png" alt="toggle sound">
+            </button>
 
-        <button class="fullscreen-btn" onclick="toggleFullscreen()">
-            <img src="icons/fullscreenOpen.png" alt="fullscreen">
-        </button>
-
-        <button class="sound-btn" onclick="toggleSounds()">
-            <img src="icons/unmute.png" alt="toggle sound">
-        </button>
-
+            <button class="fullscreen-btn" onclick="toggleFullscreen()">
+                <img src="icons/fullscreenOpen.png" alt="fullscreen">
+            </button>
+        </div>
     </div>
 </body>
 

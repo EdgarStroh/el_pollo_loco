@@ -16,6 +16,7 @@ class World {
     gamePaused = false;
     gameStart = false;
     gameOver = false;
+    playInGameMusic_flag = false;
     bottleEmpty_sound = AudioManager.bottleEmpty_sound;
     coin_sound = AudioManager.coin_sound;
     bottlePickUp_sound = AudioManager.bottlePickUp_sound;
@@ -24,7 +25,7 @@ class World {
     jumpOnEnemy_sound = AudioManager.jumpOnEnemy_sound;
     fireball_sound = AudioManager.fireball_sound;
     inGameMusic_sound = AudioManager.inGameMusic_sound;
-   
+
     constructor(canvas, keyboard) {
         this.intervals = []; // Liste der aktiven Intervalle
         this.ctx = canvas.getContext('2d');
@@ -36,7 +37,7 @@ class World {
         this.runCheckCollisions();
         this.hasDealtDamage = false; // Neues Flag
         // this.bottleThrow_sound.loop = true; // Loop für den Flaschensound aktiviert
-
+        this.playInGameMusic();
     }
 
     clearAllIntervals() {
@@ -80,6 +81,8 @@ class World {
                 enemy.isWalking = false;
                 enemy.isAlert = true;
                 enemy.isHurt = true;
+                // this.playInGameMusic_flag = false;
+                this.inGameMusic_sound.pause();
             }
             if (enemy.isHurt) {
                 enemy.endbossHurt();
@@ -90,7 +93,7 @@ class World {
         } else {
             enemy.chickenHealth += this.damage;
             if (enemy.chickenHealth <= 0) {
-                enemy.die();   
+                enemy.die();
             }
         }
     }
@@ -113,7 +116,7 @@ class World {
                 // this.pauseBottleSounds();
                 this.checkCollisions();
             }
-        }, 1000/60);
+        }, 1000 / 60);
 
     }
 
@@ -126,6 +129,19 @@ class World {
     resumeGame() {
         console.log("Spiel wird fortgesetzt.");
         this.gamePaused = false;
+    }
+
+    playInGameMusic() {
+        if (!this.playInGameMusic_flag) {
+            this.inGameMusic_sound.play();
+
+            // Event-Listener, um zu überprüfen, wenn das Audio zu Ende ist
+            this.inGameMusic_sound.addEventListener('ended', () => {
+                this.playInGameMusic(); // Audio erneut abspielen im richtigen Kontext
+            });
+        } else {
+            this.inGameMusic_sound.pause();
+        }
     }
 
     // Refaktorisierte Methode für die Springen- und Gegner-Kollisionslogik
@@ -171,7 +187,7 @@ class World {
     // Überprüft, ob die Kollision unter dem Charakter stattfindet (z.B. beim Landen auf einem Gegner)
     isCollisionBelowCharacter(enemy) {
         const characterBottom = this.character.y + this.character.height - this.character.offsetHeight;
-        const enemyTop = enemy.y + enemy.offsetY ;
+        const enemyTop = enemy.y + enemy.offsetY;
 
         // Wenn die untere Kante des Charakters über der oberen Kante des Gegners ist, bedeutet dies, dass der Charakter auf dem Gegner landet
         return characterBottom <= enemyTop;
@@ -299,7 +315,7 @@ class World {
         }
     }
 
-    
+
 
     fireFireball() {
         if (this.gamePaused) {
@@ -320,10 +336,10 @@ class World {
         let checkGroundInterval = setInterval(() => {
             if (fireball.y >= 360) { // Bedingung: Boden erreicht
                 // console.log("Fireball hit the ground!");
-                
+
                 // Entferne den Fireball aus dem Array
                 this.fireballs = this.fireballs.filter(fb => fb !== fireball);
-    
+
                 // Stoppe die Überprüfung
                 clearInterval(checkGroundInterval);
             }

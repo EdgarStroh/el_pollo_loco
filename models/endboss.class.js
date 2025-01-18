@@ -72,6 +72,7 @@ class Endboss extends MovableObject {
         AnimationManager.register(this);
 
     }
+    
 
     animate() {
         const walkingInterval = setInterval(() => {
@@ -88,7 +89,7 @@ class Endboss extends MovableObject {
         AnimationManager.addInterval(walkingInterval); // Timer im Manager registrieren
 
         const attackInterval = () => {
-            const delay = Math.random() * (8000 - 5000) + 1000; // Zufällige Zeit zwischen 5 und 8 Sekunden
+            const delay = Math.random() * (1000 - 2000) + 1000; // Zufällige Zeit zwischen 5 und 8 Sekunden
             setTimeout(() => {
                 if (this.isAlert && !this.isDead) {
                     // Zufällige Richtung bestimmen
@@ -116,7 +117,7 @@ class Endboss extends MovableObject {
                 this.otherDirection = false; // Nach links
             } else if (this.isHurt) {
                 this.endbossHurt(); // Hurt-Animation
-                this.endbossHurt_sound.play(); // Sound abspielen
+               // Sound abspielen
             } 
         }, 200);
         AnimationManager.addInterval(endbossAnimationInterval); // Timer im Manager registrieren
@@ -137,6 +138,7 @@ class Endboss extends MovableObject {
         if (!this.isDead) {
             this.otherDirection = false; // Nach links
             this.isAlert = false;
+            this.endbossHurt_sound.play();
             this.playAnimation(this.IMAGE_HURT); // Spiele die "Hurt"-Animation
             setTimeout(() => {
                 this.isHurt = false; // Setze isHurt nach 250ms auf false
