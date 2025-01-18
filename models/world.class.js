@@ -1,9 +1,6 @@
 class World {
     character = new Character();
     endboss = new Endboss();
-    // MO = new MovableObject();
-    // TO = new ThrowableObject();
-    // fireball = new Fireball(this.x,this.y);
     statusBarHealth = new StatusBarHealth();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
@@ -17,9 +14,8 @@ class World {
     fireballs = [];
     intervalIds = [];
     gamePaused = false;
-    // playAnimationObject = new MovableObject();
-    // loadImagesFromDO = new DrawableObject();
-    // bottleToHit = new ThrowableObject();
+    gameStart = false;
+    gameOver = false;
     bottleEmpty_sound = AudioManager.bottleEmpty_sound;
     coin_sound = AudioManager.coin_sound;
     bottlePickUp_sound = AudioManager.bottlePickUp_sound;
@@ -27,18 +23,8 @@ class World {
     bottleBreak_sound = AudioManager.bottleBreak_sound;
     jumpOnEnemy_sound = AudioManager.jumpOnEnemy_sound;
     fireball_sound = AudioManager.fireball_sound;
-    // bottleBreak2_sound = new Audio('audio/bottleBreak2.mp3');
-    // bottleBreak3_sound = new Audio('audio/bottleBreak3.mp3');
-
-    // IMAGE_BOTTLE_SPLASH = [
-    //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
-    //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png',
-    //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/3_bottle_splash.png',
-    //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/4_bottle_splash.png',
-    //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/5_bottle_splash.png',
-    //     'img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png',
-    // ];
-    // splashImages = [];
+    inGameMusic_sound = AudioManager.inGameMusic_sound;
+   
     constructor(canvas, keyboard) {
         this.intervals = []; // Liste der aktiven Intervalle
         this.ctx = canvas.getContext('2d');
@@ -98,18 +84,13 @@ class World {
             if (enemy.isHurt) {
                 enemy.endbossHurt();
             }
-            // console.log(`Endboss hit! Remaining health: ${enemy.endbossHealth}`);
             if (enemy.endbossHealth <= 0) {
                 enemy.isDead = true;
-                // enemy.endbossDead();
-                // console.log('Endboss defeated!');
             }
         } else {
             enemy.chickenHealth += this.damage;
-            // console.log(`Enemy hit! Remaining health: ${enemy.chickenHealth}`);
             if (enemy.chickenHealth <= 0) {
-                enemy.die(); // <-- Hier rufen wir die `die()` Methode auf
-                // console.log('Enemy defeated!');
+                enemy.die();   
             }
         }
     }
@@ -117,8 +98,6 @@ class World {
     run() {
         setInterval(() => {
             if (!this.gamePaused) {
-                // this.pauseBottleSounds();
-                // this.checkCollisions();
                 this.checkCollisionsBottleOnEnemy();
                 this.checkCoinCollisionsPickUp();
                 this.checkBottleCollisionsPickUp();
@@ -141,20 +120,12 @@ class World {
     pauseGame() {
         console.log("Spiel pausiert.");
         this.gamePaused = true;
-        // this.clearAllIntervals(); // Stoppe alle Intervalle, einschließlich der Wolken
-        // Cloud.stopAnimation(); // Stoppe Wolken-Animationen
         clearAllIntervals();
-
     }
 
     resumeGame() {
         console.log("Spiel wird fortgesetzt.");
         this.gamePaused = false;
-
-        //  this.run(); // Starte die Haupt-Intervalle erneut
-
-        // Starte die Wolkenanimationen erneut
-        // Cloud.startAnimation();
     }
 
     // Refaktorisierte Methode für die Springen- und Gegner-Kollisionslogik
@@ -348,7 +319,7 @@ class World {
     checkGroundCollisionFireball(fireball) {
         let checkGroundInterval = setInterval(() => {
             if (fireball.y >= 360) { // Bedingung: Boden erreicht
-                console.log("Fireball hit the ground!");
+                // console.log("Fireball hit the ground!");
                 
                 // Entferne den Fireball aus dem Array
                 this.fireballs = this.fireballs.filter(fb => fb !== fireball);

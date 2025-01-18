@@ -15,6 +15,7 @@ window.AudioManager = {
     bottleBreak_sound: new Audio('audio/bottleBreak.mp3'),
     jumpOnEnemy_sound: new Audio('audio/jumpOnEnemy.mp3'),
     fireball_sound: new Audio('audio/fireball.mp3'),
+    inGameMusic_sound: new Audio('audio/InGameMusic.mp3'),
 
     init() {
         this.endbossHurt_sound.volume = 0.15;
@@ -32,6 +33,7 @@ window.AudioManager = {
         this.bottleBreak_sound.volume = 0.25;
         this.jumpOnEnemy_sound.volume = 0.25;
         this.fireball_sound.volume = 0.05;
+        this.inGameMusic_sound.volume = 0.05;
     },
 };
 let isMuted = false; // Zustand, ob die Sounds stummgeschaltet sind oder nicht

@@ -1,13 +1,32 @@
 let level1;
 
+// function initLevel(){
+
+function hideStartscreen() {
+    const startscreen = document.getElementById('startscreen');
+    if (startscreen) {
+        startscreen.style.display = 'none';
+    }
+}
+function showStartscreen() {
+    const startscreen = document.getElementById('startscreen');
+    if (startscreen) {
+        startscreen.style.display = 'block';
+    }
+}
+function startGame() {
+    hideStartscreen();
+    level1.start();
+}
+
 level1 = new Level(
     [
        
         // new Chicken(),
-        new Chicken(),
-        new Chicken(),
-        new ChickenLittle(),
-        new ChickenLittle(),
+        // new Chicken(),
+        // new Chicken(),
+        // new ChickenLittle(),
+        // new ChickenLittle(),
         new Endboss()
     ],
     [
@@ -71,4 +90,6 @@ level1 = new Level(
         new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 719 * 7),
         new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719 * 7),
     ],
+
 );
+// }

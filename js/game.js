@@ -2,7 +2,6 @@ let canvas;
 let world;
 // world = null;
 let keyboard = new Keyboard();
-// MO = new MovableObject();
 pausedGame = false;
 
 function init() {
@@ -11,6 +10,8 @@ function init() {
     ctx = canvas.getContext('2d');
     // console.log('My character is ', world.character);
 }
+
+
 
 window.addEventListener("keydown", (event) => {
     if (event.keyCode == 39 || event.key == 'd') {
@@ -50,13 +51,10 @@ window.addEventListener("keydown", (event) => {
 
         if (world.gamePaused) {
             pausedGame = true;
-            // world.pauseBottleSounds();
-            // console.log("Game paused");
             AnimationManager.pauseAll(); // Alle Animationen pausieren
+            world.endboss.endbossFight_sound.pause(); // Endboss-Sound pausieren
         } else {
             pausedGame = false;
-            // console.log(pausedGame);
-            // console.log("Game resumed");
             AnimationManager.resumeAll(); // Alle Animationen fortsetzen
         }
     }

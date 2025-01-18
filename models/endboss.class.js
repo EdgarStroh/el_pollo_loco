@@ -3,13 +3,13 @@ class Endboss extends MovableObject {
     height = 450;
     width = 300;
     y = 10;
-    x = 4300; //4000
+    x = 4300; //4300
     offsetX = 20;
     offsetY = 80;
     offsetWidth = 70;
     // enemyHealth = 25;
     offsetHeight = 100;
-    endbossHealth = 100;
+    endbossHealth = 100; //100
     isWalking = true;
     isAlert = false;
     isAttack = false;
@@ -19,8 +19,6 @@ class Endboss extends MovableObject {
     endbossHurt_sound = AudioManager.endbossHurt_sound;
     endbossDead_sound = AudioManager.endbossDead_sound;
     endbossFight_sound = AudioManager.endbossFight_sound;
-    // intervals = [];
-    abcAudio = new Audio('audio/dead.mp3');
     fireballs = [];
     IMAGE_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
@@ -59,21 +57,12 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/5_dead/G26.png',
     ];
 
-
-    // muteAllSounds() {
-    //     // Alle audio-Elemente auf der Seite finden und stummschalten
-    //     document.querySelectorAll('audio').forEach(audio => {
-    //         audio.muted = true;
-    //     });
-    // }
-
     loadAllImages() {
         this.loadImages(this.IMAGE_ALERT);
         this.loadImages(this.IMAGE_WALKING);
         this.loadImages(this.IMAGE_ATTACK_STANCE);
         this.loadImages(this.IMAGE_HURT);
         this.loadImages(this.IMAGE_DEAD);
-        // this.loadImages(this.IMAGE_ATTACK);
     }
 
     constructor() {
@@ -81,9 +70,8 @@ class Endboss extends MovableObject {
         this.loadAllImages();
         this.animate();
         AnimationManager.register(this);
+
     }
-
-
 
     animate() {
         const walkingInterval = setInterval(() => {
@@ -95,6 +83,7 @@ class Endboss extends MovableObject {
                 this.randomMovementWhileAttacking();
                 this.playAnimation(this.IMAGE_WALKING);
             }
+
         }, 500); // Alle 500 ms entscheidet der Endboss, wohin er geht
         AnimationManager.addInterval(walkingInterval); // Timer im Manager registrieren
 
@@ -128,21 +117,10 @@ class Endboss extends MovableObject {
             } else if (this.isHurt) {
                 this.endbossHurt(); // Hurt-Animation
                 this.endbossHurt_sound.play(); // Sound abspielen
-            }
+            } 
         }, 200);
         AnimationManager.addInterval(endbossAnimationInterval); // Timer im Manager registrieren
     }
-
-    // fireFireball() {
-    //     if (this.isAttack) {
-    //         // Position des Endbosses berücksichtigen und Feuerball richtig ausrichten
-    //         const fireball = new Fireball(this.x + this.width / 2, this.y + this.height / 2, this.otherDirection ? 1 : -1);
-    //         this.fireballs.push(fireball); // Feuerball zum Array hinzufügen
-    //         fireball.launch(); // Feuerball starten
-    //         // this.abcAudio.play();
-    //         console.log(`Fireball launched at x: ${this.x}, y: ${this.y}`);
-    //     }
-    // }
 
     randomAttack() {
         this.isAlert = false;
@@ -152,8 +130,6 @@ class Endboss extends MovableObject {
             this.isAttack = false;
             this.isAlert = true;
         }, 5000);
-
-
     }
 
     endbossHurt() {
@@ -220,7 +196,7 @@ class Endboss extends MovableObject {
 
         // Bewegung innerhalb der Grenzen
         const newX = this.x + this.speed;
-        if (newX >= 2200 && newX <= 2600) {
+        if (newX >= 4100 && newX <= 4500) {
             this.x = newX; // Neue Position innerhalb der Grenzen
         }
         this.otherDirection = false; // Nach links

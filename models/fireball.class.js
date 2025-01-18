@@ -1,10 +1,13 @@
 class Fireball extends MovableObject {
     speedX = Math.random() * (7 - 5) + 4; // Zufällige Zahl zwischen 5 und 6
     speedY = Math.random() * (5 - 1) + 2.5; // Zufällige Zahl zwischen 1.5 und 4
-    offsetWidth = 50;
-    offsetHeight = 25;
     height = 60;
     width = 60;
+    offsetWidth = 50;
+    offsetHeight = 25; 
+    offsetX = 15;
+    offsetY = 0;
+  
     IMAGE_FIREBALL = [
         'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_01.png',
         'img/4_enemie_boss_chicken/endbossAttack/endbossAttack_02.png',
