@@ -9,7 +9,7 @@ class Endboss extends MovableObject {
     offsetWidth = 70;
     // enemyHealth = 25;
     offsetHeight = 100;
-    endbossHealth = 100; //100
+    endbossHealth = 1; //100
     isWalking = true;
     isAlert = false;
     isAttack = false;

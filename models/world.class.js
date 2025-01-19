@@ -25,6 +25,7 @@ class World {
     jumpOnEnemy_sound = AudioManager.jumpOnEnemy_sound;
     fireball_sound = AudioManager.fireball_sound;
     inGameMusic_sound = AudioManager.inGameMusic_sound;
+    youWon_sound = AudioManager.youWon_sound;
 
     constructor(canvas, keyboard) {
         this.intervals = []; // Liste der aktiven Intervalle
@@ -89,6 +90,7 @@ class World {
             }
             if (enemy.endbossHealth <= 0) {
                 enemy.isDead = true;
+                this.showYouWonScreen();
             }
         } else {
             enemy.chickenHealth += this.damage;
@@ -96,6 +98,12 @@ class World {
                 enemy.die();
             }
         }
+    }
+    showYouWonScreen() {
+        this.youWon_sound.play();
+        const youWonImage = document.getElementById('youwon');
+        youWonImage.classList.remove('hidden');
+        // this.clearAllIntervals();
     }
 
     run() {

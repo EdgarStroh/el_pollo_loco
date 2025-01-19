@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>El pollo loco</title>
+    <title>El Pollo Loco</title>
     <link rel="icon" type="image/vnd.icon" href="img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png">
     <script src="/js/animationManager.js"></script>
     <script src="/models/drawable-object.class.js"></script>
@@ -37,15 +37,43 @@
     <h1>El Pollo Loco</h1>
     <div id="fullscreen">
         <div class="overlay">
-            <img class="startscreen" id="startscreen" onclick="startGame()"
-                src="img/9_intro_outro_screens/start/startscreen_1.png" alt="Start Screen">
+            <img class="startscreen" id="startscreen" src="img/9_intro_outro_screens/start/startscreen_1.png"
+                alt="Start Screen">
+            <div class="buttonsOverlay" id="buttonsOverlay">
+                <button onclick="startGame()" class="buttonStyle">Start Game</button>
+                <button onclick="openHowToPlay()" class="buttonStyle">How to Play</button>
+            </div>
+            <!-- howToPlayOverlay -->
+            <div id="howToPlayOverlay" class="how-to-play-overlay hidden" onclick="closeHowToPlay()">
+                <div class="how-to-play-content">
+                    <h2>How to Play</h2>
+                    <p>
+                        <u>Steuerung:</u><br>
+                        - Spiel Pausieren: <kbd>P</kbd><br>
+                        - Bewegung nach links: <kbd>A</kbd> oder <kbd>←</kbd><br>
+                        - Bewegung nach rechts: <kbd>D</kbd> oder <kbd>→</kbd><br>
+                        - Springen: <kbd>SPACE</kbd><br>
+                        - Flasche werfen: <kbd>Q</kbd> oder <kbd>B</kbd>
 
-            <img class="gameover" id="" src="img/9_intro_outro_screens/game_over/game over.png" alt="Start Screen">
-            <img class="youwon" id="" src="img/9_intro_outro_screens/win/won_2.png" alt="Start Screen">
+                    </p>
+                    <p>
+                        <u>Gegner besiegen:</u><br>
+                        - Wirf Flaschen auf Gegner.<br>
+                        - Spring auf Gegner drauf.
+                    </p>
+                    <!-- <button class="close-overlay" onclick="closeHowToPlay()">Close</button> -->
+                </div>
+            </div>
+
+            <img class="gameover hidden" id="gameover" src="img/9_intro_outro_screens/game_over/game over.png"
+                alt="Game Over">
+            <img class="youwon hidden" id="youwon" src="img/9_intro_outro_screens/win/won_2.png" alt="You Won">
+
+
         </div>
         <canvas id="canvas" width="720" height="480"></canvas>
         <div class="button-container">
-            <button class="sound-btn" onclick="toggleSounds()">
+            <button class="sound-btn" id="sound-btn" onclick="toggleSounds()">
                 <img src="icons/unmute.png" alt="toggle sound">
             </button>
 

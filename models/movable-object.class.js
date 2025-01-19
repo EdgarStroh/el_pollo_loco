@@ -109,9 +109,10 @@ class MovableObject extends DrawableObject {
     }
 
     isDead() {
+        // this.showGameOverScreen();
         return this.myHealth == 0;
     }
-
+  
 
     resetAnimation() {
         this.currentImage = 0; // Setzt die aktuelle Bildnummer auf 0 zurück

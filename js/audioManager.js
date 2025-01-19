@@ -16,6 +16,9 @@ window.AudioManager = {
     jumpOnEnemy_sound: new Audio('audio/jumpOnEnemy.mp3'),
     fireball_sound: new Audio('audio/fireball.mp3'),
     inGameMusic_sound: new Audio('audio/InGameMusic.mp3'),
+    lobbyMusic_sound: new Audio('audio/lobbyMusic.mp3'),
+    gameOver_sound: new Audio('audio/gameOver.mp3'),
+    youWon_sound: new Audio('audio/youWon.mp3'),
 
     init() {
         this.endbossHurt_sound.volume = 0.15;
@@ -34,6 +37,9 @@ window.AudioManager = {
         this.jumpOnEnemy_sound.volume = 0.25;
         this.fireball_sound.volume = 0.05;
         this.inGameMusic_sound.volume = 0.05;
+        this.lobbyMusic_sound.volume = 0.05;
+        this.gameOver_sound.volume = 0.05;
+        this.youWon_sound.volume = 0.05;
     },
 };
 let isMuted = false; // Zustand, ob die Sounds stummgeschaltet sind oder nicht

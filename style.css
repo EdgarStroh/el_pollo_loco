@@ -15,10 +15,10 @@
     position-area: center;
 }
 .gameover{
-    display: none;
+    /* display: none; */
 }
 .youwon{
-    display: none;
+    /* display: none; */
 }
 body {
     margin: 0;
@@ -32,17 +32,56 @@ body {
     -o-background-size: cover;
     background-size: cover;
 }
-
 h1 {
     font-size: 67px;
     letter-spacing: 3px;
-    text-shadow: 4px 2px 1px rgba(0, 0, 0, 0.2);
+    text-shadow: 5px 1px 2px rgb(102 70 6 / 13%);
+    color: transparent; /* Textfarbe wird transparent gemacht */
+    background-image: linear-gradient(135deg, #ffdd33, #ff9800); /* Farbverlauf */
+    -webkit-background-clip: text; /* Wichtig für WebKit-Browser */
+    background-clip: text;
+    -webkit-text-fill-color: transparent; /* Füllfarbe auf transparent setzen */
 }
 
 .overlay {
     background-color: black;
     display: block;
 }
+.buttonsOverlay{
+    z-index: 2; 
+    position: absolute;
+    display: flex;
+    /* flex-flow: column; */
+    /* bottom: 0px; */
+    left: 189px;
+    top: 10px;
+    gap: 10px;
+}
+.buttonStyle {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid #d2a16f;
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-size: 30px;
+    font-family: 'zabars';
+    color: transparent; /* Die Farbe des Textes wird transparent gemacht */
+    background-clip: text;
+    -webkit-background-clip: text; /* Wichtig für WebKit-Browser */
+    -webkit-text-fill-color: transparent; /* Setzt die Füllfarbe auf transparent */
+    background-image: linear-gradient(135deg, #ffdd33, #ff9800); /* Farbverlauf */
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease-in-out;
+}
+
+  
+  .buttonStyle:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  }
+  
 
 #fullscreen {
     position: relative;
@@ -64,6 +103,10 @@ h1 {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    
+}
+.sound-btn {
+    display: none;
 }
 
 .fullscreen-btn img, .sound-btn img {
@@ -74,6 +117,91 @@ h1 {
 
 .fullscreen-btn:hover, .sound-btn:hover {
     background-color: rgba(165, 163, 163, 0.7);
+}
+.how-to-play-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Verstecken */
+.hidden {
+    display: none;
+}
+
+/* Overlay-Inhalt */
+.how-to-play-content {
+    background: linear-gradient(135deg, #ffdd33, #ff9800);
+    padding: 20px 90px;
+    border: 1px solid #ffdd33;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    color: white;
+    font-family: 'zabars', Arial, Helvetica, sans-serif;
+    animation: slideDown 0.5s ease-out;
+    z-index: 4;
+}
+
+/* Überschrift */
+.how-to-play-content h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 5px #000;
+}
+
+/* Text */
+.how-to-play-content p {
+    font-size: 20px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+/* Button im Overlay */
+.how-to-play-content .close-overlay {
+    background: red;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 18px;
+    color: white;
+    cursor: pointer;
+    text-shadow: 1px 1px 3px #000;
+    transition: all 0.3s ease-in-out;
+}
+
+.how-to-play-content .close-overlay:hover {
+    background: darkred;
+    transform: scale(1.1);
+}
+
+/* Animationen */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 @media only screen and (max-width: 720px) {

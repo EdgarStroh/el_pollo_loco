@@ -1,32 +1,55 @@
 let level1;
 
+// lobbyMusic_sound = AudioManager.lobbyMusic_sound;
+
+// function playLobbyMusic() {
+//     lobbyMusic_sound.play();
+// }
+// playLobbyMusic();
 
 function hideStartscreen() {
     const startscreen = document.getElementById('startscreen');
-    if (startscreen) {
+    const buttonsOverlay = document.getElementById('buttonsOverlay');
+    const soundBtn = document.getElementById('sound-btn');
+    if (startscreen && buttonsOverlay && soundBtn) {
         startscreen.style.display = 'none';
+        buttonsOverlay.style.display = 'none';
+        soundBtn.style.display = 'flex';
     }
 }
 function showStartscreen() {
     const startscreen = document.getElementById('startscreen');
-    if (startscreen) {
+    const buttonsOverlay = document.getElementById('buttonsOverlay');
+    const soundBtn = document.getElementById('sound-btn');
+    if (startscreen && buttonsOverlay && soundBtn) {
         startscreen.style.display = 'block';
+        buttonsOverlay.style.display = 'flex';
+        soundBtn.style.display = 'none';
     }
 }
+
+function openHowToPlay() {
+    document.getElementById('howToPlayOverlay').classList.remove('hidden');
+}
+
+function closeHowToPlay() {
+    document.getElementById('howToPlayOverlay').classList.add('hidden');
+}
+
 function startGame() {
     hideStartscreen();
     init();
-   
+
 }
 
 level1 = new Level(
     [
-       
-        // new Chicken(),
-        // new Chicken(),
-        // new Chicken(),
-        // new ChickenLittle(),
-        // new ChickenLittle(),
+
+        new Chicken(),
+        new Chicken(),
+        new Chicken(),
+        new ChickenLittle(),
+        new ChickenLittle(),
         new Endboss()
     ],
     [
@@ -38,7 +61,7 @@ level1 = new Level(
         new Bottle(),
         new Bottle(),
         new Bottle(),
-        
+
     ],
     [
         new Cloud(0),
@@ -80,7 +103,7 @@ level1 = new Level(
         new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 719 * 5),
         new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719 * 5),
 
-        
+
         new BackgroundObject('img/5_background/layers/air.png', 719 * 6),
         new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 719 * 6),
         new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 719 * 6),

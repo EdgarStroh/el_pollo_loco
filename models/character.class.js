@@ -4,6 +4,7 @@ class Character extends MovableObject {
     speed = 10;
     isJumping = false;
     noLife = false;
+    gameOverSoundPlayed = false; // Flagge, um sicherzustellen, dass der Sound nur einmal abgespielt wird
     offsetX = 10;
     offsetY = 125;
     offsetWidth = 35;
@@ -12,7 +13,7 @@ class Character extends MovableObject {
     walking_sound = AudioManager.walking_sound;
     jump_sound = AudioManager.jump_sound;
     pepeDead_sound = AudioManager.pepeDead_sound;
-    
+    gameOver_sound = AudioManager.gameOver_sound;
     
     // intervals = [];
     timeoutIds = []; // Array zum Speichern von Timeout-IDs
@@ -184,6 +185,7 @@ class Character extends MovableObject {
 
             let newAnimationState;
             if (this.isDead()) {
+                this.showGameOverScreen();
                 newAnimationState = this.playDeadAnimation();
                 this.idleDuration = 0;
                 return;
@@ -273,7 +275,22 @@ class Character extends MovableObject {
     //     }, delay);
     //     this.timeoutIds.push(timeoutId);
     // }
+    
 
+    showGameOverScreen() {
+        // Stoppe die In-Game-Musik
+        inGameMusic_sound.pause();
+    
+        // Spiele den Game Over-Sound nur, wenn er noch nicht abgespielt wurde
+        if (!this.gameOverSoundPlayed) {
+            this.gameOver_sound.play();
+            this.gameOverSoundPlayed = true;  // Setze die Flagge, damit der Sound nicht nochmal abgespielt wird
+        }
+    
+        // Zeige das Game Over-Bild an
+        const gameOverImage = document.getElementById('gameover');
+        gameOverImage.classList.remove('hidden');
+    }
     stopMovement() {
         if (this.movementInterval) {
             clearInterval(this.movementInterval);
