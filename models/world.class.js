@@ -14,7 +14,6 @@ class World {
     fireballs = [];
     intervalIds = [];
     gamePaused = false;
-    gameStart = false;
     gameOver = false;
     playInGameMusic_flag = false;
     bottleEmpty_sound = AudioManager.bottleEmpty_sound;
@@ -44,6 +43,7 @@ class World {
     clearAllIntervals() {
         for (let i = 1; i < 9999; i++) window.clearInterval(i);
     }
+
 
     clearAllTimeouts() {
         for (let i = 1; i < 10000; i++) {
@@ -90,6 +90,7 @@ class World {
             }
             if (enemy.endbossHealth <= 0) {
                 enemy.isDead = true;
+                this.youWon_sound.play();
                 this.showYouWonScreen();
             }
         } else {
@@ -100,10 +101,16 @@ class World {
         }
     }
     showYouWonScreen() {
-        this.youWon_sound.play();
         const youWonImage = document.getElementById('youwon');
+        const mainMenuBtn = document.getElementById('mainMenuBtn');
         youWonImage.classList.remove('hidden');
-        // this.clearAllIntervals();
+
+        setTimeout(() => {
+            this.clearAllIntervals();
+            this.gameOver = true;
+            this.gamePaused = true;
+            mainMenuBtn.classList.remove('hidden');
+        }, 4000);
     }
 
     run() {

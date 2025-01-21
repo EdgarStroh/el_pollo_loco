@@ -57,24 +57,24 @@ class MovableObject extends DrawableObject {
             this.y + this.offsetY <= obj.y + obj.offsetY + obj.height - obj.offsetHeight // Oberkante von this
         );
 
-    //     // return (
-    //     //     this.x + this.width >this.mo.x &&
-    //     //     this.y + this,height > this.mo.y &&
-    //     //     this.x < this.mo.x + this.mo.width &&
-    //     //     this.y < this.mo.y + this.mo.height
-    //     // )
+        //     // return (
+        //     //     this.x + this.width >this.mo.x &&
+        //     //     this.y + this,height > this.mo.y &&
+        //     //     this.x < this.mo.x + this.mo.width &&
+        //     //     this.y < this.mo.y + this.mo.height
+        //     // )
 
-    //     return (this.X + this.width) >= obj.X && this.X <= (obj.X + obj.width) &&
-    //         (this.Y + this.offsetY + this.height) >= obj.Y &&
-    //         (this.Y + this.offsetY) <= (obj.Y + obj.height)
-    // }
+        //     return (this.X + this.width) >= obj.X && this.X <= (obj.X + obj.width) &&
+        //         (this.Y + this.offsetY + this.height) >= obj.Y &&
+        //         (this.Y + this.offsetY) <= (obj.Y + obj.height)
+        // }
 
-    // isColliding(obj){
-    // return  this.x + this.width - this.offset.right > obj.x + obj.offset.left &&
-    //         this.y + this.height - this.offset.bottom > obj.y + obj.offset.top &&
-    //         this.x + this.offset.left < obj.x + obj.width - obj.offset.right &&
-    //         this.y + this.offset.top < obj.y + obj.height - obj.offset.bottom;
-   }
+        // isColliding(obj){
+        // return  this.x + this.width - this.offset.right > obj.x + obj.offset.left &&
+        //         this.y + this.height - this.offset.bottom > obj.y + obj.offset.top &&
+        //         this.x + this.offset.left < obj.x + obj.width - obj.offset.right &&
+        //         this.y + this.offset.top < obj.y + obj.height - obj.offset.bottom;
+    }
 
     hit() {
         // this.hurt_sound.volume = 0.05;
@@ -84,7 +84,7 @@ class MovableObject extends DrawableObject {
             this.hurt_sound.play();
             this.lastHit = new Date().getTime();
 
-           
+
         }
         if (this.myHealth <= 0) {
             this.myHealth = 0;
@@ -112,7 +112,7 @@ class MovableObject extends DrawableObject {
         // this.showGameOverScreen();
         return this.myHealth == 0;
     }
-  
+
 
     resetAnimation() {
         this.currentImage = 0; // Setzt die aktuelle Bildnummer auf 0 zurück
@@ -132,8 +132,10 @@ class MovableObject extends DrawableObject {
         // this.walking_sound.play();
     }
     moveLeft() {
-        this.x -= this.speed;
-        // this.otherDirection = true;
+        if (window.gameStart) {
+            this.x -= this.speed;
+            // this.otherDirection = true;
+        }
     }
 
     moveStop() {

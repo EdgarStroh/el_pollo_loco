@@ -12,6 +12,7 @@ function init() {
     world = new World(canvas, keyboard);
     ctx = canvas.getContext('2d');
     // playInGameMusic();
+    
 }
 // window.init = init;
 
@@ -44,7 +45,7 @@ window.addEventListener("keydown", (event) => {
             world.clearAllIntervals();
             world.pauseBottleSounds();
         } else {
-            world.resumeGame();
+            // world.resumeGame();
         }
     }
     if (event.key == 'l') {
