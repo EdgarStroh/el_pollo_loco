@@ -16,18 +16,18 @@ window.AudioManager = {
     jumpOnEnemy_sound: new Audio('audio/jumpOnEnemy.mp3'),
     fireball_sound: new Audio('audio/fireball.mp3'),
     inGameMusic_sound: new Audio('audio/InGameMusic.mp3'),
-    lobbyMusic_sound: new Audio('audio/lobbyMusic.mp3'),
     gameOver_sound: new Audio('audio/gameOver.mp3'),
     youWon_sound: new Audio('audio/youWon.mp3'),
+    select_sound: new Audio('audio/select.mp3'),
 
     init() {
         this.endbossHurt_sound.volume = 0.15;
         this.endbossDead_sound.volume = 0.15;
         this.endbossFight_sound.volume = 0.10;
-        this.pepeSnoring_sound.volume = 0.0;      // 0.1
+        this.pepeSnoring_sound.volume = 0.08;      // 0.08
         this.walking_sound.volume = 0.05;
         this.jump_sound.volume = 0.05;
-        this.pepeDead_sound.volume = 0.1;
+        this.pepeDead_sound.volume = 0.08;
         this.hurt_sound.volume = 0.05;
         this.bottleEmpty_sound.volume = 0.09;
         this.coin_sound.volume = 0.06;
@@ -36,10 +36,10 @@ window.AudioManager = {
         this.bottleBreak_sound.volume = 0.25;
         this.jumpOnEnemy_sound.volume = 0.25;
         this.fireball_sound.volume = 0.05;
-        this.inGameMusic_sound.volume = 0.00; //0.05
-        this.lobbyMusic_sound.volume = 0.05;
+        this.inGameMusic_sound.volume = 0.05; //0.05
         this.gameOver_sound.volume = 0.05;
-        this.youWon_sound.volume = 0.05;
+        this.youWon_sound.volume = 0.05;//0.05
+        this.select_sound.volume = 0.05;
     },
 };
 let isMuted = false; // Zustand, ob die Sounds stummgeschaltet sind oder nicht
@@ -47,10 +47,8 @@ let isMuted = false; // Zustand, ob die Sounds stummgeschaltet sind oder nicht
 function toggleSounds() {
     // Wechsle zwischen gemutet und ungemutet
     isMuted = !isMuted;
-
     // Setze den mute-Status für alle Audio-Objekte in AudioManager
     muteOrUnmuteAudio(isMuted);
-
     // Ändere das Bild im Button je nach Zustand
     updateButtonImage(isMuted);
 }
@@ -68,8 +66,6 @@ function muteOrUnmuteAudio(muteStatus) {
             bottle.sound.muted = muteStatus;
         }
     });
-
-
 }
 
 function updateButtonImage(muteStatus) {

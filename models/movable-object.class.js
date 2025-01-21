@@ -3,7 +3,7 @@ class MovableObject extends DrawableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
-    myHealth = 100;
+    myHealth = 1;
     enemyHealth = 0;
     lastHit = 0;
     getDamage = false;
@@ -132,10 +132,9 @@ class MovableObject extends DrawableObject {
         // this.walking_sound.play();
     }
     moveLeft() {
-        if (window.gameStart) {
             this.x -= this.speed;
             // this.otherDirection = true;
-        }
+
     }
 
     moveStop() {

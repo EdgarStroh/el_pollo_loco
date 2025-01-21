@@ -38,6 +38,7 @@ class World {
         this.hasDealtDamage = false; // Neues Flag
         // this.bottleThrow_sound.loop = true; // Loop für den Flaschensound aktiviert
         this.playInGameMusic();
+        pausedGame = false;
     }
 
     clearAllIntervals() {
@@ -110,7 +111,7 @@ class World {
             this.gameOver = true;
             this.gamePaused = true;
             mainMenuBtn.classList.remove('hidden');
-        }, 4000);
+        }, 4000); //4000
     }
 
     run() {

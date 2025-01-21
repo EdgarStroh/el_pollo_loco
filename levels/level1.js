@@ -1,13 +1,6 @@
 
 let gameStart = false;
-window.gameStart = gameStart;
-// lobbyMusic_sound = AudioManager.lobbyMusic_sound;
-
-// function playLobbyMusic() {
-//     lobbyMusic_sound.play();
-// }
-// playLobbyMusic();
-
+inGameMusic_sound = AudioManager.inGameMusic_sound;
 function hideStartscreen() {
     const startscreen = document.getElementById('startscreen');
     const buttonsOverlay = document.getElementById('buttonsOverlay');
@@ -25,19 +18,23 @@ function showStartscreen() {
     const startscreen = document.getElementById('startscreen');
     const buttonsOverlay = document.getElementById('buttonsOverlay');
     const soundBtn = document.getElementById('sound-btn');
+    const mainMenuBtn = document.getElementById('mainMenuBtn');
 
     startscreen.style.display = 'block';
     buttonsOverlay.style.display = 'flex';
     soundBtn.style.display = 'none';
-
-    const youWonImage = document.getElementById('youwon');
-    const mainMenuBtn = document.getElementById('mainMenuBtn');
-    youWonImage.classList.add('hidden');
     mainMenuBtn.classList.add('hidden');
+//win Screen
+    const youWonImage = document.getElementById('youwon');
+    youWonImage.classList.add('hidden');
+    //game over screen
+    const gameOverImage = document.getElementById('gameover');
+    gameOverImage.classList.add('hidden');
+
 }
 
 function deleteLevel() {
-        world = null;
+    world = null;
     // Canvas leeren
     if (ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -62,7 +59,13 @@ function closeHowToPlay() {
     document.getElementById('howToPlayOverlay').classList.add('hidden');
 }
 
+function resetInGameMusic() {
+    this.inGameMusic_sound.pause();
+    this.inGameMusic_sound.currentTime = 0;
+}
+
 function startGame() {
+    resetInGameMusic();
     hideStartscreen();
     createLevel(); // Level wird hier erstellt
     init();
@@ -72,11 +75,11 @@ function createLevel() {
     level1 = new Level(
         [
 
-            // new Chicken(),
-            // new Chicken(),
-            // new Chicken(),
-            // new ChickenLittle(),
-            // new ChickenLittle(),
+            new Chicken(),
+            new Chicken(),
+            new Chicken(),
+            new ChickenLittle(),
+            new ChickenLittle(),
             new Endboss()
         ],
         [

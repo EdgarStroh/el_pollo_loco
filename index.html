@@ -40,8 +40,8 @@
             <img class="startscreen" id="startscreen" src="img/9_intro_outro_screens/start/startscreen_1.png"
                 alt="Start Screen">
             <div class="buttonsOverlay" id="buttonsOverlay">
-                <button onclick="startGame()" class="buttonStyle">Start Game</button>
-                <button onclick="openHowToPlay()" class="buttonStyle">How to Play</button>
+                <button onclick="playSelectSound(); startGame();" class="buttonStyle">Start Game</button>
+                <button onclick="playSelectSound(); openHowToPlay();" class="buttonStyle">How to Play</button>
             </div>
             <!-- howToPlayOverlay -->
             <div id="howToPlayOverlay" class="how-to-play-overlay hidden" onclick="closeHowToPlay()">
@@ -68,7 +68,7 @@
             <img class="gameover hidden" id="gameover" src="img/9_intro_outro_screens/game_over/game over.png"
                 alt="Game Over">
             <img class="youwon hidden" id="youwon" src="img/9_intro_outro_screens/win/won_2.png" alt="You Won">
-            <button class="hidden buttonStyle absolute-mmBtn" id="mainMenuBtn" onclick="showStartscreen()">Back to Main Menu</button>
+            <button class="hidden buttonStyle absolute-mmBtn" id="mainMenuBtn" onclick="playSelectSound();showStartscreen()">Back to Main Menu</button>
 
         </div>
         <canvas id="canvas" width="720" height="480"></canvas>

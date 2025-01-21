@@ -14,7 +14,8 @@ class Character extends MovableObject {
     jump_sound = AudioManager.jump_sound;
     pepeDead_sound = AudioManager.pepeDead_sound;
     gameOver_sound = AudioManager.gameOver_sound;
-    
+    inGameMusic_sound = AudioManager.inGameMusic_sound;
+    endbossFight_sound = AudioManager.endbossFight_sound;
     // intervals = [];
     timeoutIds = []; // Array zum Speichern von Timeout-IDs
     savedState = {}; // Speichert den Zustand für Pause/Resume
@@ -166,6 +167,8 @@ class Character extends MovableObject {
                 // Nur abspielen, wenn der Charakter nicht springt und nicht über dem Boden ist
                 if (!this.isAboveGround() && !this.isJumping) {
                     this.walking_sound.play();
+                }else{
+                    this.walking_sound.pause();
                 }
             }
 
@@ -279,8 +282,7 @@ class Character extends MovableObject {
 
     showGameOverScreen() {
         // Stoppe die In-Game-Musik
-        inGameMusic_sound.pause();
-    
+        this.inGameMusic_sound.pause();
         // Spiele den Game Over-Sound nur, wenn er noch nicht abgespielt wurde
         if (!this.gameOverSoundPlayed) {
             this.gameOver_sound.play();
@@ -290,6 +292,17 @@ class Character extends MovableObject {
         // Zeige das Game Over-Bild an
         const gameOverImage = document.getElementById('gameover');
         gameOverImage.classList.remove('hidden');
+
+        setTimeout(() => {
+            this.clearAllIntervals();
+            world.gameOver = true;
+            this.gamePaused = true;
+            mainMenuBtn.classList.remove('hidden');
+        },2000); //4000
+    }
+
+    clearAllIntervals() {
+        for (let i = 1; i < 9999; i++) window.clearInterval(i);
     }
     stopMovement() {
         if (this.movementInterval) {

@@ -4,15 +4,18 @@ let world;
 let keyboard = new Keyboard();
 pausedGame = false;
 
-inGameMusic_sound = AudioManager.inGameMusic_sound;
+// inGameMusic_sound = AudioManager.inGameMusic_sound;
+select_sound = AudioManager.select_sound;
 
-
+function playSelectSound() {
+    select_sound.play();
+}
 function init() {
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
     ctx = canvas.getContext('2d');
     // playInGameMusic();
-    
+
 }
 // window.init = init;
 
@@ -39,28 +42,29 @@ window.addEventListener("keydown", (event) => {
         keyboard.SPACE = true;
     }
     if (event.key == 'Escape') {
-        keyboard.ESC = true;
-        if (!world.gamePaused) {
-            world.gamePaused = true;
-            world.clearAllIntervals();
-            world.pauseBottleSounds();
-        } else {
-            // world.resumeGame();
-        }
+        // keyboard.ESC = true;
+        // if (!world.gamePaused) {
+        //     world.gamePaused = true;
+        //     world.clearAllIntervals();
+        //     // world.pauseBottleSounds();
+        // } else {
+        //     // world.resumeGame();
+        // }
     }
     if (event.key == 'l') {
         keyboard.L = true;
     }
     if (event.key === 'p') {
-        world.gamePaused = !world.gamePaused;
-
-        if (world.gamePaused) {
-            pausedGame = true;
-            AnimationManager.pauseAll(); // Alle Animationen pausieren
-            world.endboss.endbossFight_sound.pause(); // Endboss-Sound pausieren
-        } else {
-            pausedGame = false;
-            AnimationManager.resumeAll(); // Alle Animationen fortsetzen
+        if (!world.gameOver) {
+            world.gamePaused = !world.gamePaused;
+            if (world.gamePaused ) {
+                pausedGame = true;
+                AnimationManager.pauseAll(); // Alle Animationen pausieren
+                world.endboss.endbossFight_sound.pause(); // Endboss-Sound pausieren
+            } else {
+                pausedGame = false;
+                AnimationManager.resumeAll(); // Alle Animationen fortsetzen
+            }
         }
     }
 });
