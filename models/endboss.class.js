@@ -3,13 +3,13 @@ class Endboss extends MovableObject {
     height = 450;
     width = 300;
     y = 10;
-    x = 4300; //4300
+    x = 300; //4300
     offsetX = 20;
     offsetY = 80;
     offsetWidth = 70;
     // enemyHealth = 25;
     offsetHeight = 100;
-    endbossHealth = 100; //100
+    endbossHealth = 20; //100
     isWalking = true;
     isAlert = false;
     isAttack = false;
@@ -70,9 +70,14 @@ class Endboss extends MovableObject {
         this.loadAllImages();
         this.animate();
         AnimationManager.register(this);
-
+        this.isWalking = true;
+        this.isAlert = false;
+        this.isAttack = false;
+        this.isHurt = false;
+        this.isDead = false;
+        this.reallyDead = false;
     }
-    
+
 
     animate() {
         const walkingInterval = setInterval(() => {
@@ -106,7 +111,6 @@ class Endboss extends MovableObject {
         const endbossAnimationInterval = setInterval(() => {
             if (this.isDead) {
                 this.endbossDead(); // Endboss-Tod-Animation
-                this.endbossFight_sound.pause();
                 return;
             } else if (this.isAlert) {
                 this.playAnimation(this.IMAGE_ALERT); // Alarm-Animation
@@ -117,8 +121,8 @@ class Endboss extends MovableObject {
                 this.otherDirection = false; // Nach links
             } else if (this.isHurt) {
                 this.endbossHurt(); // Hurt-Animation
-               // Sound abspielen
-            } 
+                // Sound abspielen
+            }
         }, 200);
         AnimationManager.addInterval(endbossAnimationInterval); // Timer im Manager registrieren
     }
@@ -154,7 +158,7 @@ class Endboss extends MovableObject {
         this.isAlert = false;
         this.isAttack = false;
         this.isHurt = false;
-
+       
         if (!this.hasResetAnimation) {
             this.resetAnimation();
             this.hasResetAnimation = true;
@@ -171,6 +175,7 @@ class Endboss extends MovableObject {
         }, this.IMAGE_DEAD.length * 160);
 
         if (!this.reallyDead) {
+            this.endbossFight_sound.pause();
             this.playAnimation(this.IMAGE_DEAD);
         }
     }

@@ -3,7 +3,7 @@ class MovableObject extends DrawableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
-    myHealth = 1;
+    myHealth = 100;
     enemyHealth = 0;
     lastHit = 0;
     getDamage = false;
@@ -17,27 +17,20 @@ class MovableObject extends DrawableObject {
     // }
 
     applyGravity() {
-        // const gravityInterval = 
         setInterval(() => {
-            // console.log(World.gamePaused);
-
             if (pausedGame) return;
-            // console.log(World.gamePaused);
             if (this.isAboveGround() || this.speedY > 0)
                 this.y -= this.speedY;
             this.speedY -= this.acceleration;
         }, 1000 / 25);
-        //  AnimationManager.addInterval(gravityInterval); // Intervall im Manager registrieren
     }
 
     isAboveGround() {
         if (this instanceof ThrowableObject) {
             return true;
         } else {
-
             return this.y < 130;
         }
-
     }
 
     theGround() {
@@ -77,39 +70,27 @@ class MovableObject extends DrawableObject {
     }
 
     hit() {
-        // this.hurt_sound.volume = 0.05;
         if (!this.getDamage && this.myHealth > 0) {
             this.myHealth -= 20;
             this.getDamage = true;
             this.hurt_sound.play();
             this.lastHit = new Date().getTime();
-
-
         }
         if (this.myHealth <= 0) {
             this.myHealth = 0;
-            // this.hurt_sound.pause();
-            // this.playDeathSound();  // Play the death sound when health reaches 0
         }
     }
-
-    // playDeathSound() {
-    //     this.pepeDead_sound.volume = 0.08;
-    //     this.pepeDead_sound.play(); // Play the death sound
-    // }
 
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit;
         timepassed = timepassed / 1000;
         if (timepassed >= 1.0) {
             this.getDamage = false;
-            // console.log("kein dmg" + this.getDamage);     
         }
         return timepassed < 1.0;
     }
 
     isDead() {
-        // this.showGameOverScreen();
         return this.myHealth == 0;
     }
 
@@ -128,18 +109,12 @@ class MovableObject extends DrawableObject {
 
     moveRight() {
         this.x += this.speed;
-
-        // this.walking_sound.play();
     }
     moveLeft() {
-            this.x -= this.speed;
-            // this.otherDirection = true;
-
+        this.x -= this.speed;
     }
 
     moveStop() {
         this.speed = 0;
     }
-
-
 }

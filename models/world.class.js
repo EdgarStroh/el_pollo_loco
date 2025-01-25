@@ -16,6 +16,7 @@ class World {
     gamePaused = false;
     gameOver = false;
     playInGameMusic_flag = false;
+    gameover_flag = false;
     bottleEmpty_sound = AudioManager.bottleEmpty_sound;
     coin_sound = AudioManager.coin_sound;
     bottlePickUp_sound = AudioManager.bottlePickUp_sound;
@@ -35,10 +36,8 @@ class World {
         this.setWorld();
         this.run();
         this.runCheckCollisions();
-        this.hasDealtDamage = false; // Neues Flag
-        // this.bottleThrow_sound.loop = true; // Loop für den Flaschensound aktiviert
-        this.playInGameMusic();
-        pausedGame = false;
+        this.hasDealtDamage = false; 
+        this.playInGameMusic_flag = false;
     }
 
     clearAllIntervals() {
@@ -83,11 +82,13 @@ class World {
                 enemy.isWalking = false;
                 enemy.isAlert = true;
                 enemy.isHurt = true;
-                // this.playInGameMusic_flag = false;
-                this.inGameMusic_sound.pause();
+
+                // this.inGameMusic_sound.pause();
             }
             if (enemy.isHurt) {
                 enemy.endbossHurt();
+                this.playInGameMusic_flag = true;
+                this.inGameMusic_sound.pause()
             }
             if (enemy.endbossHealth <= 0) {
                 enemy.isDead = true;
@@ -101,11 +102,12 @@ class World {
             }
         }
     }
+
     showYouWonScreen() {
         const youWonImage = document.getElementById('youwon');
         const mainMenuBtn = document.getElementById('mainMenuBtn');
         youWonImage.classList.remove('hidden');
-
+        
         setTimeout(() => {
             this.clearAllIntervals();
             this.gameOver = true;
@@ -117,6 +119,7 @@ class World {
     run() {
         setInterval(() => {
             if (!this.gamePaused) {
+                this.playInGameMusic();
                 this.checkCollisionsBottleOnEnemy();
                 this.checkCoinCollisionsPickUp();
                 this.checkBottleCollisionsPickUp();
@@ -136,27 +139,23 @@ class World {
 
     }
 
-    pauseGame() {
-        console.log("Spiel pausiert.");
-        this.gamePaused = true;
-        clearAllIntervals();
-    }
+    // pauseGame() {
+    //     console.log("Spiel pausiert.");
+    //     this.gamePaused = true;
+    //     clearAllIntervals();
+    // }
 
-    resumeGame() {
-        console.log("Spiel wird fortgesetzt.");
-        this.gamePaused = false;
-    }
+    // resumeGame() {
+    //     console.log("Spiel wird fortgesetzt.");
+    //     this.gamePaused = false;
+    // }
 
     playInGameMusic() {
         if (!this.playInGameMusic_flag) {
             this.inGameMusic_sound.play();
-
-            // Event-Listener, um zu überprüfen, wenn das Audio zu Ende ist
             this.inGameMusic_sound.addEventListener('ended', () => {
                 this.playInGameMusic(); // Audio erneut abspielen im richtigen Kontext
             });
-        } else {
-            this.inGameMusic_sound.pause();
         }
     }
 

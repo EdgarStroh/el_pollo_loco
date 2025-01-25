@@ -33,5 +33,14 @@ window.AnimationManager = {
         this.animations.forEach(animation => {
             if (animation.resume) animation.resume();
         });
+    },
+    reset() {
+        // Entferne alle aktuellen Animationen, Timer und Timeouts
+        this.animations = [];
+        this.intervals.forEach(clearInterval);
+        this.intervals = [];
+        this.timeouts.forEach(clearTimeout);
+        this.timeouts = [];
     }
+    
 };

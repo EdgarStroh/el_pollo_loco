@@ -1,10 +1,7 @@
 let canvas;
 let world;
-// world = null;
 let keyboard = new Keyboard();
 pausedGame = false;
-
-// inGameMusic_sound = AudioManager.inGameMusic_sound;
 select_sound = AudioManager.select_sound;
 
 function playSelectSound() {
@@ -14,12 +11,7 @@ function init() {
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
     ctx = canvas.getContext('2d');
-    // playInGameMusic();
-
 }
-// window.init = init;
-
-
 
 window.addEventListener("keydown", (event) => {
     if (event.keyCode == 39 || event.key == 'd') {
@@ -61,7 +53,9 @@ window.addEventListener("keydown", (event) => {
                 pausedGame = true;
                 AnimationManager.pauseAll(); // Alle Animationen pausieren
                 world.endboss.endbossFight_sound.pause(); // Endboss-Sound pausieren
+                world.inGameMusic_sound.pause(); // InGame-Musik pausieren        
             } else {
+                // world.inGameMusic_sound.play();
                 pausedGame = false;
                 AnimationManager.resumeAll(); // Alle Animationen fortsetzen
             }

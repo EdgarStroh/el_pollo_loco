@@ -1,6 +1,7 @@
 
 let gameStart = false;
 inGameMusic_sound = AudioManager.inGameMusic_sound;
+endbossFight_sound = AudioManager.endbossFight_sound;
 function hideStartscreen() {
     const startscreen = document.getElementById('startscreen');
     const buttonsOverlay = document.getElementById('buttonsOverlay');
@@ -14,7 +15,9 @@ function hideStartscreen() {
 function showStartscreen() {
     deleteLevel(); // Welt löschen
     resetLevel();  // Level zurücksetzen
-
+    AnimationManager.reset();
+    resetBossFightMusic();
+    resetInGameMusic();
     const startscreen = document.getElementById('startscreen');
     const buttonsOverlay = document.getElementById('buttonsOverlay');
     const soundBtn = document.getElementById('sound-btn');
@@ -60,17 +63,23 @@ function closeHowToPlay() {
 }
 
 function resetInGameMusic() {
-    this.inGameMusic_sound.pause();
     this.inGameMusic_sound.currentTime = 0;
+    this.inGameMusic_sound.pause();
+}
+
+function resetBossFightMusic() {
+    this.endbossFight_sound.currentTime = 0;
+    this.endbossFight_sound.pause();
 }
 
 function startGame() {
-    resetInGameMusic();
     hideStartscreen();
     createLevel(); // Level wird hier erstellt
     init();
     this.gameStart = true;
 }
+
+
 function createLevel() {
     level1 = new Level(
         [

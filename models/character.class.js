@@ -5,6 +5,7 @@ class Character extends MovableObject {
     isJumping = false;
     noLife = false;
     gameOverSoundPlayed = false; // Flagge, um sicherzustellen, dass der Sound nur einmal abgespielt wird
+    pepeReallyDead = false;
     offsetX = 10;
     offsetY = 125;
     offsetWidth = 35;
@@ -15,10 +16,8 @@ class Character extends MovableObject {
     pepeDead_sound = AudioManager.pepeDead_sound;
     gameOver_sound = AudioManager.gameOver_sound;
     inGameMusic_sound = AudioManager.inGameMusic_sound;
-    endbossFight_sound = AudioManager.endbossFight_sound;
-    // intervals = [];
-    timeoutIds = []; // Array zum Speichern von Timeout-IDs
-    savedState = {}; // Speichert den Zustand für Pause/Resume
+    // timeoutIds = []; // Array zum Speichern von Timeout-IDs
+    // savedState = {}; // Speichert den Zustand für Pause/Resume
     IMAGE_HURT = [
         'img/2_character_pepe/4_hurt/H-41.png',
         'img/2_character_pepe/4_hurt/H-42.png',
@@ -137,11 +136,21 @@ class Character extends MovableObject {
         // this.timeoutIds = [];
         this.world = world;
         AnimationManager.register(this);
+        this.noLife = false;
+        this.gameOverSoundPlayed = false;
+        this.pepeReallyDead = false;
+        this.myHealth = 100;
+        this.runrun();
     }
-
+runrun(){
+    setInterval(() => {
+        console.log(this.myHealth);
+    }, 50);   
+}
     animate() {
         this.idleDuration = 0;
         this.idleSwitchThreshold = 10000;
+        // console.log(this.myHealth);
 
 
         const moveInterval = setInterval(() => {
@@ -167,7 +176,7 @@ class Character extends MovableObject {
                 // Nur abspielen, wenn der Charakter nicht springt und nicht über dem Boden ist
                 if (!this.isAboveGround() && !this.isJumping) {
                     this.walking_sound.play();
-                }else{
+                } else {
                     this.walking_sound.pause();
                 }
             }
@@ -176,7 +185,7 @@ class Character extends MovableObject {
             if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround() && !this.isHurt() && !this.isJumping && !this.noLife) {
                 this.jump();
                 this.playJumpAnimation();
-                this.jump_sound.play();           
+                this.jump_sound.play();
             }
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
@@ -188,9 +197,12 @@ class Character extends MovableObject {
 
             let newAnimationState;
             if (this.isDead()) {
-                this.showGameOverScreen();
-                newAnimationState = this.playDeadAnimation();
-                this.idleDuration = 0;
+                if (this.myHealth >= 0) {
+                    this.pepeReallyDead = true;
+                    this.pepeDeadFN();
+                    newAnimationState = this.playDeadAnimation();
+                    this.idleDuration = 0;
+                }
                 return;
             }
             if (this.isHurt()) {
@@ -278,17 +290,21 @@ class Character extends MovableObject {
     //     }, delay);
     //     this.timeoutIds.push(timeoutId);
     // }
-    
 
+    pepeDeadFN() {
+        if (this.pepeReallyDead) {
+            this.showGameOverScreen();
+        }
+    }
     showGameOverScreen() {
         // Stoppe die In-Game-Musik
-        this.inGameMusic_sound.pause();
+        // this.inGameMusic_sound.pause();
         // Spiele den Game Over-Sound nur, wenn er noch nicht abgespielt wurde
         if (!this.gameOverSoundPlayed) {
             this.gameOver_sound.play();
             this.gameOverSoundPlayed = true;  // Setze die Flagge, damit der Sound nicht nochmal abgespielt wird
         }
-    
+
         // Zeige das Game Over-Bild an
         const gameOverImage = document.getElementById('gameover');
         gameOverImage.classList.remove('hidden');
@@ -296,9 +312,9 @@ class Character extends MovableObject {
         setTimeout(() => {
             this.clearAllIntervals();
             world.gameOver = true;
-            this.gamePaused = true;
+            // this.gamePaused = true;
             mainMenuBtn.classList.remove('hidden');
-        },2000); //4000
+        }, 2000); //4000
     }
 
     clearAllIntervals() {
