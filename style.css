@@ -3,23 +3,6 @@
     src: url('fonts/zabars.ttf') format('truetype');
 }
 
-
-.startscreen,
-.gameover,
-.youwon {
-    position: absolute;
-    z-index: 1; 
-    /* width: auto ; */
-    height: 100% ;
-    max-width: 100%;
-    position-area: center;
-}
-.gameover{
-    /* display: none; */
-}
-.youwon{
-    /* display: none; */
-}
 body {
     margin: 0;
     display: flex;
@@ -32,56 +15,90 @@ body {
     -o-background-size: cover;
     background-size: cover;
 }
+
+.overlay {
+    display: flex;
+    justify-content: center;
+    /* Zentriert horizontal */
+    align-items: flex-end;
+    /* Zentriert vertikal am unteren Rand */
+    position: relative;
+    /* Bezugspunkt für absolute Elemente */
+    width: 720px;
+    height: 480px;
+}
+
+canvas {
+    width: 720px;
+    height: 480px;
+    background-color: black;
+    /* display: block; */
+    /* position: absolute; */
+    /* top: 50%;
+    left: 50%; */
+    /* transform: translate(-50%, -50%); */
+    z-index: 1;
+}
+
+.startscreen,
+.gameover,
+.youwon {
+    width: 720px;
+    height: 480px;
+    z-index: 2;
+    position: absolute;
+    /* top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); */
+
+}
+
+
+
 h1 {
     font-size: 67px;
     letter-spacing: 3px;
     text-shadow: 5px 1px 2px rgb(102 70 6 / 13%);
-    color: transparent; /* Textfarbe wird transparent gemacht */
-    background-image: linear-gradient(135deg, #ffdd33, #ff9800); /* Farbverlauf */
-    -webkit-background-clip: text; /* Wichtig für WebKit-Browser */
+    color: transparent;
+    background-image: linear-gradient(135deg, #ffdd33, #ff9800);
+    -webkit-background-clip: text;
     background-clip: text;
-    -webkit-text-fill-color: transparent; /* Füllfarbe auf transparent setzen */
+    -webkit-text-fill-color: transparent;
 }
 
-.overlay {
-    background-color: black;
-    display: block;
-}
-.buttonsOverlay{
-    z-index: 2; 
+.buttonsOverlay {
+    z-index: 2;
     position: absolute;
     display: flex;
-    /* flex-flow: column; */
-    /* bottom: 0px; */
-    left: 189px;
+    /* left: 26.3%; */
     top: 10px;
     gap: 10px;
 }
+
 .buttonStyle {
+    place-items: center;
     background: rgba(255, 255, 255, 0.2);
     border: 2px solid #d2a16f;
     border-radius: 25px;
     padding: 12px 30px;
     font-size: 30px;
     font-family: 'zabars';
-    color: transparent; /* Die Farbe des Textes wird transparent gemacht */
+    color: transparent;
     background-clip: text;
-    -webkit-background-clip: text; /* Wichtig für WebKit-Browser */
-    -webkit-text-fill-color: transparent; /* Setzt die Füllfarbe auf transparent */
-    background-image: linear-gradient(135deg, #ffdd33, #ff9800); /* Farbverlauf */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(135deg, #ffdd33, #ff9800);
     cursor: pointer;
     backdrop-filter: blur(10px);
     transition: all 0.3s ease-in-out;
     z-index: 5;
 }
 
-  
-  .buttonStyle:hover {
+.buttonStyle:hover {
     border: 2px solid rgba(251, 173, 78, 0.873);
     transform: scale(1.1);
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-  }
-  
+}
 
 #fullscreen {
     position: relative;
@@ -90,34 +107,40 @@ h1 {
 .button-container {
     position: absolute;
     top: 10px;
+    /* Abstand von oben */
     right: 10px;
-    display: flex;  /* Setzt Flexbox für das Nebeneinander-Layout */
-    gap: 10px;  /* Abstand zwischen den Buttons */
+    /* Abstand von rechts */
+    display: flex;
+    gap: 10px;
     z-index: 10;
 }
 
-.fullscreen-btn, .sound-btn {
+.fullscreen-btn,
+.sound-btn {
     padding: 10px;
     background-color: rgba(202, 200, 200, 0.7);
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    
 }
+
 .sound-btn {
     display: none;
 }
 
-.fullscreen-btn img, .sound-btn img {
+.fullscreen-btn img,
+.sound-btn img {
     display: block;
-    width: 20px;  /* Optional: Bildgröße anpassen */
-    height: 20px;  /* Optional: Bildgröße anpassen */
+    width: 20px;
+    height: 20px;
 }
 
-.fullscreen-btn:hover, .sound-btn:hover {
+.fullscreen-btn:hover,
+.sound-btn:hover {
     background-color: rgba(165, 163, 163, 0.7);
 }
+
 .how-to-play-overlay {
     position: fixed;
     top: 0;
@@ -131,25 +154,30 @@ h1 {
     z-index: 3;
     animation: fadeIn 0.5s ease-in-out;
 }
-.absolute-mmBtn{
-    position: absolute;
+
+.absolute-mmBtn {
+    /* position: absolute;
     bottom: 70px;
-    left: 240px;
+    left: 245.5px; */
+    position: absolute;
+    bottom: 10px;
+    /* right: 30%;
+    left: 30%; */
+    /* display: flex; */
+    /* gap: 10px; */
+    /* z-index: 10; */
 }
 
-
-/* Verstecken */
 .hidden {
     display: none;
 }
 
-/* Overlay-Inhalt */
 .how-to-play-content {
-    background: linear-gradient(135deg, #ffdd33, #ff9800);
+    background: linear-gradient(135deg, #e2a226, #ff9800);
     padding: 20px 90px;
     border: 1px solid #ffdd33;
     border-radius: 15px;
-    text-align: center;
+    /* text-align: center; */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
     color: white;
     font-family: 'zabars', Arial, Helvetica, sans-serif;
@@ -157,21 +185,19 @@ h1 {
     z-index: 4;
 }
 
-/* Überschrift */
 .how-to-play-content h2 {
+    justify-self: center;
     font-size: 36px;
     margin-bottom: 20px;
     text-shadow: 2px 2px 5px #000;
 }
 
-/* Text */
 .how-to-play-content p {
-    font-size: 20px;
+    font-size: 23px;
     line-height: 1.5;
     margin-bottom: 20px;
 }
 
-/* Button im Overlay */
 .how-to-play-content .close-overlay {
     background: red;
     border: none;
@@ -189,11 +215,11 @@ h1 {
     transform: scale(1.1);
 }
 
-/* Animationen */
 @keyframes fadeIn {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -204,6 +230,7 @@ h1 {
         transform: translateY(-50px);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
@@ -215,7 +242,22 @@ h1 {
         width: 100%;
     }
 
-    .startscreen {
+    .buttonStyle,
+    .button-container {
+        zoom: 85%;
+    }
+
+    .overlay {
+        width: 100%;
+    }
+
+    .how-to-play-content {
+        padding: 0px 20px;
+    }
+
+    .startscreen,
+    .gameover,
+    .youwon {
         width: 100%;
     }
 }
@@ -228,6 +270,16 @@ h1 {
 
 @media only screen and (max-height: 480px) {
     canvas {
-        width: 150vh;
+        height: 100vh;
+    }
+
+    .overlay {
+        height: 100vh;
+    }
+
+    .startscreen,
+    .gameover,
+    .youwon {
+        height: 100vh;
     }
 }

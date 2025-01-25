@@ -3,13 +3,13 @@ class Endboss extends MovableObject {
     height = 450;
     width = 300;
     y = 10;
-    x = 300; //4300
+    x = 4300; //4300
     offsetX = 20;
     offsetY = 80;
     offsetWidth = 70;
     // enemyHealth = 25;
     offsetHeight = 100;
-    endbossHealth = 20; //100
+    endbossHealth = 100; //100
     isWalking = true;
     isAlert = false;
     isAttack = false;

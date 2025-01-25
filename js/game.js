@@ -5,6 +5,7 @@ pausedGame = false;
 select_sound = AudioManager.select_sound;
 
 function playSelectSound() {
+    select_sound.currentTime = 0;
     select_sound.play();
 }
 function init() {

@@ -10,28 +10,28 @@ class Character extends MovableObject {
     offsetY = 125;
     offsetWidth = 35;
     offsetHeight = 140;
+    currentAnimationState = null;
+    world;
     pepeSnoring_sound = AudioManager.pepeSnoring_sound;
     walking_sound = AudioManager.walking_sound;
     jump_sound = AudioManager.jump_sound;
     pepeDead_sound = AudioManager.pepeDead_sound;
     gameOver_sound = AudioManager.gameOver_sound;
     inGameMusic_sound = AudioManager.inGameMusic_sound;
-    // timeoutIds = []; // Array zum Speichern von Timeout-IDs
-    // savedState = {}; // Speichert den Zustand für Pause/Resume
     IMAGE_HURT = [
         'img/2_character_pepe/4_hurt/H-41.png',
         'img/2_character_pepe/4_hurt/H-42.png',
         'img/2_character_pepe/4_hurt/H-43.png'
     ];
-    IMAGE_DEAD = [
-        'img/2_character_pepe/5_dead/D-51.png',
-        'img/2_character_pepe/5_dead/D-52.png',
-        'img/2_character_pepe/5_dead/D-53.png',
-        'img/2_character_pepe/5_dead/D-54.png',
-        'img/2_character_pepe/5_dead/D-55.png',
-        'img/2_character_pepe/5_dead/D-56.png',
-        'img/2_character_pepe/5_dead/D-57.png'
-    ];
+    // IMAGE_DEAD = [
+    //     'img/2_character_pepe/5_dead/D-51.png',
+    //     'img/2_character_pepe/5_dead/D-52.png',
+    //     'img/2_character_pepe/5_dead/D-53.png',
+    //     'img/2_character_pepe/5_dead/D-54.png',
+    //     'img/2_character_pepe/5_dead/D-55.png',
+    //     'img/2_character_pepe/5_dead/D-56.png',
+    //     'img/2_character_pepe/5_dead/D-57.png'
+    // ];
     IMAGE_IDLE = [
         'img/2_character_pepe/1_idle/idle/I-1.png',
         'img/2_character_pepe/1_idle/idle/I-2.png',
@@ -64,17 +64,17 @@ class Character extends MovableObject {
         'img/2_character_pepe/2_walk/W-25.png',
         'img/2_character_pepe/2_walk/W-26.png'
     ];
-    IMAGE_JUMPING = [
-        'img/2_character_pepe/3_jump/J-31.png',
-        'img/2_character_pepe/3_jump/J-32.png',
-        'img/2_character_pepe/3_jump/J-33.png',
-        'img/2_character_pepe/3_jump/J-34.png',
-        'img/2_character_pepe/3_jump/J-35.png',
-        'img/2_character_pepe/3_jump/J-36.png',
-        'img/2_character_pepe/3_jump/J-37.png',
-        'img/2_character_pepe/3_jump/J-38.png',
-        'img/2_character_pepe/3_jump/J-39.png'
-    ];
+    // IMAGE_JUMPING = [
+    //     'img/2_character_pepe/3_jump/J-31.png',
+    //     'img/2_character_pepe/3_jump/J-32.png',
+    //     'img/2_character_pepe/3_jump/J-33.png',
+    //     'img/2_character_pepe/3_jump/J-34.png',
+    //     'img/2_character_pepe/3_jump/J-35.png',
+    //     'img/2_character_pepe/3_jump/J-36.png',
+    //     'img/2_character_pepe/3_jump/J-37.png',
+    //     'img/2_character_pepe/3_jump/J-38.png',
+    //     'img/2_character_pepe/3_jump/J-39.png'
+    // ];
     // Neue Sprungphasen-Animationen
     IMAGE_JUMP_START_1 = ['img/2_character_pepe/3_jump/J-31.png'];
     IMAGE_JUMP_START_2 = ['img/2_character_pepe/3_jump/J-32.png'];
@@ -101,7 +101,7 @@ class Character extends MovableObject {
             this.loadImages(this.IMAGE_IDLE);
             this.loadImages(this.IMAGE_IDLE_LONG);
             this.loadImages(this.IMAGE_WALKING);
-            this.loadImages(this.IMAGE_JUMPING);
+            // this.loadImages(this.IMAGE_JUMPING);
             this.loadImages(this.IMAGE_JUMP_START_1);
             this.loadImages(this.IMAGE_JUMP_START_2);
             this.loadImages(this.IMAGE_JUMP_START_3);
@@ -111,7 +111,7 @@ class Character extends MovableObject {
             this.loadImages(this.IMAGE_LANDING_1);
             this.loadImages(this.IMAGE_LANDING_2);
             this.loadImages(this.IMAGE_LANDING_3);
-            this.loadImages(this.IMAGE_DEAD);
+            // this.loadImages(this.IMAGE_DEAD);
             this.loadImages(this.IMAGE_DEAD_1);
             this.loadImages(this.IMAGE_DEAD_2);
             this.loadImages(this.IMAGE_DEAD_3);
@@ -119,13 +119,9 @@ class Character extends MovableObject {
             this.loadImages(this.IMAGE_DEAD_5);
             this.loadImages(this.IMAGE_DEAD_6);
             this.loadImages(this.IMAGE_DEAD_7);
-
             this.loadImages(this.IMAGE_HURT);
         }, 100);
     }
-
-    currentAnimationState = null;
-    world;
 
 
     constructor(world) {
@@ -133,29 +129,19 @@ class Character extends MovableObject {
         this.loadAllImages();
         this.applyGravity();
         this.animate();
-        // this.timeoutIds = [];
         this.world = world;
         AnimationManager.register(this);
         this.noLife = false;
         this.gameOverSoundPlayed = false;
         this.pepeReallyDead = false;
-        this.myHealth = 100;
-        this.runrun();
     }
-runrun(){
-    setInterval(() => {
-        console.log(this.myHealth);
-    }, 50);   
-}
+
     animate() {
         this.idleDuration = 0;
         this.idleSwitchThreshold = 10000;
-        // console.log(this.myHealth);
-
 
         const moveInterval = setInterval(() => {
             this.walking_sound.pause();
-
 
             // Move right
             if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && !this.noLife) {
@@ -191,18 +177,13 @@ runrun(){
         }, 1000 / 60);
         AnimationManager.addInterval(moveInterval); // Timer im Manager registrieren
 
-
-
         const animationInterval = setInterval(() => {
 
             let newAnimationState;
             if (this.isDead()) {
-                if (this.myHealth >= 0) {
-                    this.pepeReallyDead = true;
-                    this.pepeDeadFN();
-                    newAnimationState = this.playDeadAnimation();
-                    this.idleDuration = 0;
-                }
+                this.showGameOverScreen();
+                newAnimationState = this.playDeadAnimation();
+                this.idleDuration = 0;
                 return;
             }
             if (this.isHurt()) {
@@ -281,25 +262,7 @@ runrun(){
         this.animate();
     }
 
-    // setManagedTimeout(callback, delay) {
-    //     if (this.world.gamePaused) return; // Verhindert die Ausführung von Timeouts, wenn das Spiel pausiert ist
-
-    //     const timeoutId = setTimeout(() => {
-    //         callback();
-    //         this.timeoutIds = this.timeoutIds.filter(id => id !== timeoutId);
-    //     }, delay);
-    //     this.timeoutIds.push(timeoutId);
-    // }
-
-    pepeDeadFN() {
-        if (this.pepeReallyDead) {
-            this.showGameOverScreen();
-        }
-    }
     showGameOverScreen() {
-        // Stoppe die In-Game-Musik
-        // this.inGameMusic_sound.pause();
-        // Spiele den Game Over-Sound nur, wenn er noch nicht abgespielt wurde
         if (!this.gameOverSoundPlayed) {
             this.gameOver_sound.play();
             this.gameOverSoundPlayed = true;  // Setze die Flagge, damit der Sound nicht nochmal abgespielt wird
@@ -319,12 +282,6 @@ runrun(){
 
     clearAllIntervals() {
         for (let i = 1; i < 9999; i++) window.clearInterval(i);
-    }
-    stopMovement() {
-        if (this.movementInterval) {
-            clearInterval(this.movementInterval);
-            this.movementInterval = null; // Intervall-Referenz zurücksetzen
-        }
     }
 
     playDeadAnimation() {
@@ -347,36 +304,10 @@ runrun(){
                 this.playAnimation(frame.animation);
             }, frame.delay);
         });
-
-        // Reset state after all dead animations are played
-        setTimeout(() => {
-            // Can add further logic like resetting state or triggering a game over
-        }, 1400);  // Adjust based on last animation delay
     }
 
     jump() {
         this.speedY = 25;
     }
-
-    // pause() {
-    //     this.intervals.forEach(clearInterval);
-    //     this.intervals = [];
-    //     this.timeoutIds.forEach(clearTimeout);
-    //     this.timeoutIds = [];
-    // }
-
-
-
-    // clearAllTimeouts() {
-    //     this.timeoutIds.forEach(clearTimeout);
-    //     this.timeoutIds = [];
-    // }
-
-    // pauseTimeOut() {
-    //     // Alle Timeouts stoppen
-    //     this.timeoutIds.forEach(clearTimeout);
-    //     this.timeoutIds = []; // Array zurücksetzen
-    // }
-
 
 }
