@@ -4,7 +4,8 @@
 }
 
 body {
-    margin: 0;
+    margin: 0 auto;
+    max-width: 1920px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -14,7 +15,18 @@ body {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    min-height: 100vh;
+    /* Damit der Inhalt die volle Höhe einnimmt */
 }
+
+footer {
+    display: flex;
+    gap: 10px;
+    text-align: center;
+    margin-top: auto;
+    /* Damit der Footer am Ende bleibt */
+}
+
 
 .overlay {
     display: flex;
@@ -29,28 +41,30 @@ body {
 }
 
 canvas {
-    width: 720px;
+    max-width: 100%;
     height: 480px;
     background-color: black;
-    /* display: block; */
-    /* position: absolute; */
-    /* top: 50%;
-    left: 50%; */
-    /* transform: translate(-50%, -50%); */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 1;
+    /* display: none; */
+    /* display: block; */
 }
 
 .startscreen,
 .gameover,
 .youwon {
-    width: 720px;
+    max-width: 100%;
     height: 480px;
-    z-index: 2;
     position: absolute;
-    /* top: 50%;
+    top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); */
-
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    /* Zentriert das Bild */
+    /* display: none; */
 }
 
 
@@ -198,6 +212,44 @@ h1 {
     margin-bottom: 20px;
 }
 
+.mobile-overlay {
+    display: none;
+    padding: 5px;
+    /* display: flex; */
+    justify-content: space-between;
+    /* Stellt sicher, dass die Divs an den Rändern sind */
+    width: 100%;
+    /* Damit der Container die gesamte Breite nutzt */
+    z-index: 5;
+}
+
+.mobile-overlay button {
+    /* place-items: center; */
+    /* background: rgba(255, 255, 255, 0.2); */
+    border: 2px solid #d2a16f;
+    border-radius: 25px;
+    padding: 4px 13px;
+    font-size: 20px;
+    /* font-family: 'zabars'; */
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(135deg, #ffdd33, #ff9800);
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease-in-out;
+
+}
+
+#mobile-btn-right {
+    margin-left: 10px;
+}
+
+#mobile-btn-throw {
+    margin-right: 10px;
+}
+
 .how-to-play-content .close-overlay {
     background: red;
     border: none;
@@ -214,6 +266,19 @@ h1 {
     background: darkred;
     transform: scale(1.1);
 }
+
+a:link {
+    color: blue;
+    /* Farbe für normale Links */
+    text-decoration: none;
+}
+
+a:visited {
+    color: blue;
+    /* Gleiche Farbe wie normale Links */
+    text-decoration: none;
+}
+
 
 @keyframes fadeIn {
     from {
@@ -239,7 +304,7 @@ h1 {
 
 @media only screen and (max-width: 720px) {
     canvas {
-        width: 100%;
+        height: auto;
     }
 
     .buttonStyle,
@@ -255,15 +320,38 @@ h1 {
         padding: 0px 20px;
     }
 
+    .how-to-play-content p {
+        font-size: 20px;
+        line-height: 1.0;
+    }
+
     .startscreen,
     .gameover,
     .youwon {
-        width: 100%;
+        height: auto;
+    }
+
+    .mobile-overlay {
+        display: flex;
+    }
+
+    body {
+        display: block;
+        text-align: center;
+    }
+
+    footer {
+        place-self: center;
+
     }
 }
 
 @media only screen and (max-height: 646px) {
-    h1 {
+    header {
+        display: none;
+    }
+
+    footer {
         display: none;
     }
 }
@@ -271,6 +359,7 @@ h1 {
 @media only screen and (max-height: 480px) {
     canvas {
         height: 100vh;
+        width: 100%;
     }
 
     .overlay {

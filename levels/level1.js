@@ -84,12 +84,12 @@ function createLevel() {
     level1 = new Level(
         [
 
-            new Chicken(),
-            new Chicken(),
-            new Chicken(),
-            new ChickenLittle(),
-            new ChickenLittle(),
-            new Endboss()
+            // new Chicken(),
+            // new Chicken(),
+            // new Chicken(),
+            // new ChickenLittle(),
+            // new ChickenLittle(),
+            // new Endboss()
         ],
         [
             new Coin(),

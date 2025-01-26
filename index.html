@@ -34,60 +34,81 @@
 </head>
 
 <body>
-    <h1>El Pollo Loco</h1>
-    <!-- <div id="fullscreen"> -->
-    <div class="overlay" width="720" height="480">
-        <img class="startscreen" id="startscreen" src="img/9_intro_outro_screens/start/startscreen_1.png"
-            alt="Start Screen">
+    <header>
+        <h1>El Pollo Loco</h1>
+    </header>
 
-        <img class="gameover hidden" id="gameover" src="img/9_intro_outro_screens/game_over/game over.png"
-            alt="Game Over">
+    <main>
+        <div class="overlay" width="720" height="480">
+            <img class="startscreen" id="startscreen" src="img/9_intro_outro_screens/start/startscreen_1.png"
+                alt="Start Screen">
 
-        <img class="youwon hidden" id="youwon" src="img/9_intro_outro_screens/win/won_2.png" alt="You Won">
+            <img class="gameover hidden" id="gameover" src="img/9_intro_outro_screens/game_over/game over.png"
+                alt="Game Over">
 
-        <div class="buttonsOverlay" id="buttonsOverlay">
-            <button onclick="playSelectSound(); startGame();" class="buttonStyle">Start Game</button>
-            <button onclick="playSelectSound(); openHowToPlay();" class="buttonStyle">How to Play</button>
-        </div>
-        <!-- howToPlayOverlay -->
-        <div id="howToPlayOverlay" class="how-to-play-overlay hidden" onclick="closeHowToPlay()">
-            <div class="how-to-play-content">
-                <h2>How to Play</h2>
-                <p>
-                    <u>Steuerung:</u><br>
-                    - Spiel Pausieren: <kbd>P</kbd><br>
-                    - Bewegung nach links: <kbd>A</kbd> oder <kbd>←</kbd><br>
-                    - Bewegung nach rechts: <kbd>D</kbd> oder <kbd>→</kbd><br>
-                    - Springen: <kbd>SPACE</kbd><br>
-                    - Flasche werfen: <kbd>Q</kbd> oder <kbd>B</kbd>
+            <img class="youwon hidden" id="youwon" src="img/9_intro_outro_screens/win/won_2.png" alt="You Won">
 
-                </p>
-                <p>
-                    <u>Gegner besiegen:</u><br>
-                    - Wirf Flaschen auf Gegner.<br>
-                    - Spring auf Gegner drauf.
-                </p>
-                <!-- <button class="close-overlay" onclick="closeHowToPlay()">Close</button> -->
+            <div class="buttonsOverlay" id="buttonsOverlay">
+                <button onclick="playSelectSound(); startGame();" class="buttonStyle">Start Game</button>
+                <button onclick="playSelectSound(); openHowToPlay();" class="buttonStyle">How to Play</button>
             </div>
+            <!-- howToPlayOverlay -->
+            <div id="howToPlayOverlay" class="how-to-play-overlay hidden" onclick="closeHowToPlay()">
+                <div class="how-to-play-content">
+                    <h2>How to Play</h2>
+                    <p>
+                        <u>Steuerung:</u><br>
+                        - Spiel Pausieren: <kbd>P</kbd><br>
+                        - Bewegung nach links: <kbd>A</kbd> oder <kbd>←</kbd><br>
+                        - Bewegung nach rechts: <kbd>D</kbd> oder <kbd>→</kbd><br>
+                        - Springen: <kbd>SPACE</kbd><br>
+                        - Flasche werfen: <kbd>Q</kbd> oder <kbd>B</kbd>
+
+                    </p>
+                    <p>
+                        <u>Gegner besiegen:</u><br>
+                        - Wirf Flaschen auf Gegner.<br>
+                        - Spring auf Gegner drauf.
+                    </p>
+                    <!-- <button class="close-overlay" onclick="closeHowToPlay()">Close</button> -->
+                </div>
+            </div>
+
+
+            <button class="hidden buttonStyle absolute-mmBtn" id="mainMenuBtn"
+                onclick="playSelectSound();showStartscreen()">Back to Main Menu</button>
+
+
+            <div class="button-container">
+                <button class="sound-btn" id="sound-btn" onclick="toggleSounds(); playSelectSound()">
+                    <img src="icons/unmute.png" alt="toggle sound">
+                </button>
+
+                <button class="fullscreen-btn" onclick="toggleFullscreen(); playSelectSound()">
+                    <img src="icons/fullscreenOpen.png" alt="fullscreen">
+                </button>
+            </div>
+
+            <div class="mobile-overlay" id="mobile-overlay">
+                <div>
+                    <button id="mobile-btn-left">&#8592;</button>
+                    <button id="mobile-btn-right">&#8594;</button>
+                </div>
+
+                <div>
+                    <button id="mobile-btn-throw">🍾</button>
+                    <button id="mobile-btn-jump">&#8593;</button>
+                </div>
+
+            </div>
+            <canvas id="canvas" width="720" height="480"></canvas>
         </div>
+    </main>
 
-
-        <button class="hidden buttonStyle absolute-mmBtn" id="mainMenuBtn"
-            onclick="playSelectSound();showStartscreen()">Back to Main Menu</button>
-
-
-        <div class="button-container">
-            <button class="sound-btn" id="sound-btn" onclick="toggleSounds(); playSelectSound()">
-                <img src="icons/unmute.png" alt="toggle sound">
-            </button>
-
-            <button class="fullscreen-btn" onclick="toggleFullscreen(); playSelectSound()">
-                <img src="icons/fullscreenOpen.png" alt="fullscreen">
-            </button>
-        </div>
-        <canvas id="canvas" width="720" height="480"></canvas>
-    </div>
-
+    <footer>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+    </footer>
 </body>
 
 </html>
