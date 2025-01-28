@@ -8,9 +8,9 @@ class ChickenLittle extends MovableObject {
     height = 50;
     width = 50;
     y = 370;
-    offsetX = 8;
-    offsetY = -7;
-    offsetWidth = 40;
+    offsetX = 18;
+    offsetY = 20;
+    offsetWidth = 53;
     offsetHeight = 0;
     chickenHealth = 5;
     isDead = false;

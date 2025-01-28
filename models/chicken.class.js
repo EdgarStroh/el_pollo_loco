@@ -6,10 +6,12 @@
  */
 class Chicken extends MovableObject {
     height = 80;
+    x = 120;
     y = 345;
-    offsetX = 0;
-    offsetY = 35;
-    offsetWidth = 0;
+    offsetX = 10;
+    offsetY = 44.5;
+    width = 100;
+    offsetWidth = 50;
     offsetHeight = 0;
     chickenHealth = 5;
     isDead = false;

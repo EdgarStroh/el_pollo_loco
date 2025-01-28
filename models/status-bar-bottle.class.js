@@ -17,7 +17,6 @@ class StatusBarBottle extends DrawableObject {
     /**
      * @type {number}
      * The amount of bottles to be displayed in the status bar.
-     * @default 35
      */
     bottleAmount = 35;
 

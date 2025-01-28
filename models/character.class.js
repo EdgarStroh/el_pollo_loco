@@ -121,6 +121,7 @@ class Character extends MovableObject {
         this.noLife = false;
         this.gameOverSoundPlayed = false;
         this.pepeReallyDead = false;
+        this.isJumping = false;
     }
 
     /**

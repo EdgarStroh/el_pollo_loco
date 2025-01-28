@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
 
 <head>
     <meta charset="UTF-8">
@@ -33,7 +33,7 @@
 
 </head>
 
-<body  onload="checkLandscapeMode();">
+<body onload="checkLandscapeMode();">
     <header>
         <h1>El Pollo Loco</h1>
     </header>
@@ -74,10 +74,13 @@
                 </div>
             </div>
 
+            <div class="mainrestartBtns hidden" id="mainMenuBtn">
+                <button class=" buttonStyle absolute-mmBtn" 
+                    onclick="playSelectSound();restartGame()">Restart</button>
 
-            <button class="hidden buttonStyle absolute-mmBtn" id="mainMenuBtn"
-                onclick="playSelectSound();showStartscreen()">Back to Main Menu</button>
-
+                <button class="buttonStyle absolute-mmBtn" 
+                    onclick="playSelectSound();showStartscreen()">Back to Main Menu</button>
+            </div>
 
             <div class="button-container">
                 <button class="sound-btn" id="sound-btn" onclick="toggleSounds(); playSelectSound()">
@@ -106,7 +109,7 @@
     </main>
     <div id="orientationPopup" class="orientation-popup">
         <p>Turn your Device to play</p>
-      </div>
+    </div>
     <footer>
         <a href="impressum.html">Impressum</a>
         <a href="datenschutz.html">Datenschutz</a>

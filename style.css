@@ -16,7 +16,6 @@ body {
     -o-background-size: cover;
     background-size: cover;
     min-height: 100vh;
-    /* Damit der Inhalt die volle Höhe einnimmt */
 }
 
 footer {
@@ -24,18 +23,14 @@ footer {
     gap: 10px;
     text-align: center;
     margin-top: auto;
-    /* Damit der Footer am Ende bleibt */
 }
 
 
 .overlay {
     display: flex;
     justify-content: center;
-    /* Zentriert horizontal */
     align-items: flex-end;
-    /* Zentriert vertikal am unteren Rand */
     position: relative;
-    /* Bezugspunkt für absolute Elemente */
     width: 720px;
     height: 480px;
 }
@@ -43,14 +38,12 @@ footer {
 canvas {
     max-width: 100%;
     height: 480px;
-    background-color: black;
+    /* background-color: black; */
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1;
-    /* display: none; */
-    /* display: block; */
 }
 
 .startscreen,
@@ -63,8 +56,6 @@ canvas {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
-    /* Zentriert das Bild */
-    /* display: none; */
 }
 
 
@@ -84,7 +75,6 @@ h1 {
     z-index: 2;
     position: absolute;
     display: flex;
-    /* left: 26.3%; */
     top: 10px;
     gap: 10px;
 }
@@ -121,9 +111,7 @@ h1 {
 .button-container {
     position: absolute;
     top: 10px;
-    /* Abstand von oben */
     right: 10px;
-    /* Abstand von rechts */
     display: flex;
     gap: 10px;
     z-index: 10;
@@ -169,7 +157,6 @@ h1 {
     align-items: center;
     z-index: 9999;
     display: none;
-    /* Standardmäßig unsichtbar */
 }
 
 .orientation-popup p {
@@ -191,16 +178,17 @@ h1 {
 }
 
 .absolute-mmBtn {
-    /* position: absolute;
-    bottom: 70px;
-    left: 245.5px; */
+    /* position: absolute; */
+    /* margin-bottom: 5px; */
+    display: flex;
+    /* flex-direction: column; */
+}
+.mainrestartBtns{
     position: absolute;
-    bottom: 10px;
-    /* right: 30%;
-    left: 30%; */
-    /* display: flex; */
-    /* gap: 10px; */
-    /* z-index: 10; */
+    display: flex;
+    z-index: 10;
+    gap: 10px;
+    margin-bottom: 5px;
 }
 
 .hidden {
@@ -212,7 +200,6 @@ h1 {
     padding: 20px 90px;
     border: 1px solid #ffdd33;
     border-radius: 15px;
-    /* text-align: center; */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
     color: white;
     font-family: 'zabars', Arial, Helvetica, sans-serif;
@@ -236,22 +223,16 @@ h1 {
 .mobile-overlay {
     display: none;
     padding: 5px;
-    /* display: flex; */
     justify-content: space-between;
-    /* Stellt sicher, dass die Divs an den Rändern sind */
     width: 100%;
-    /* Damit der Container die gesamte Breite nutzt */
     z-index: 5;
 }
 
 .mobile-overlay button {
-    /* place-items: center; */
-    /* background: rgba(255, 255, 255, 0.2); */
     border: 2px solid #d2a16f;
     border-radius: 25px;
     padding: 4px 13px;
     font-size: 20px;
-    /* font-family: 'zabars'; */
     color: transparent;
     background-clip: text;
     -webkit-background-clip: text;
@@ -289,17 +270,14 @@ h1 {
 }
 
 a:link {
-    color: blue;
-    /* Farbe für normale Links */
+    color: black;
     text-decoration: none;
 }
 
 a:visited {
-    color: blue;
-    /* Gleiche Farbe wie normale Links */
+    color: black;
     text-decoration: none;
 }
-
 
 @keyframes fadeIn {
     from {

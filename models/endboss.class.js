@@ -115,6 +115,8 @@ class Endboss extends MovableObject {
                 this.endbossFight_sound.play();
                 this.randomMovementWhileAttacking();
                 this.playAnimation(this.IMAGE_WALKING);
+            }else{
+                this.endbossFight_sound.pause();
             }
         }, 500);
         AnimationManager.addInterval(walkingInterval);
@@ -226,7 +228,7 @@ class Endboss extends MovableObject {
         }
         this.playDeathSoundOnce();
         if (!this.reallyDead) {
-            this.endbossFight_sound.pause();
+       
             this.playAnimation(this.IMAGE_DEAD);
             setTimeout(() => {
                 this.reallyDead = true;
@@ -264,4 +266,14 @@ class Endboss extends MovableObject {
             this.hasPlayedDeathSound = true;
         }
     }
+     /**
+     * Resumes the Endboss's animation after being paused.
+     * 
+     * @function
+     * @returns {void}
+     */
+     resume() {
+        this.animate();
+    }
+
 }

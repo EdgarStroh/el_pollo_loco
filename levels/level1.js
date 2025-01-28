@@ -24,6 +24,23 @@ function showStartscreen() {
     displayStartscreenElements();
     hideEndGameScreens();
 }
+/**
+ * Restartet das Spiel, indem das Spielfeld zurückgesetzt und das Level neu erstellt wird.
+ * Diese Funktion setzt das Spielumfeld zurück, zeigt die Startbildschirm-Elemente an und versteckt
+ * die Endspiel-Bildschirme. Danach wird das Level erneut erstellt und das Spiel gestartet.
+ * 
+ * @function
+ * @returns {void} Diese Funktion gibt keinen Wert zurück.
+ */
+function restartGame() {
+    resetGameEnvironment();
+    displayStartscreenElements();
+    hideEndGameScreens();
+    hideStartscreen();
+    createLevel(); 
+    init();
+    this.gameStart = true;
+}
 
 /**
  * Starts the game by hiding the start screen, creating the level, and initializing the game environment.

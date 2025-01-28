@@ -188,12 +188,14 @@ class World {
     showYouWonScreen() {
         const youWonImage = document.getElementById('youwon');
         const mainMenuBtn = document.getElementById('mainMenuBtn');
+        // const restartGameBtn = document.getElementById('restartGameBtn');
         youWonImage.classList.remove('hidden');
         setTimeout(() => {
             this.clearAllIntervals();
             this.gameOver = true;
             this.gamePaused = true;
             mainMenuBtn.classList.remove('hidden');
+            // restartGameBtn.classList.remove('hidden');
         }, 4000);
     }
 

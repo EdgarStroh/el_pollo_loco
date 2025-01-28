@@ -67,6 +67,7 @@ class MovableObject extends DrawableObject {
             this.y + this.offsetY <= obj.y + obj.offsetY + obj.height - obj.offsetHeight
         );
     }
+        
 
     /**
      * Reduces the object's health by a certain amount and plays a hurt sound.

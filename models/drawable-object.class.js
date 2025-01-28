@@ -5,79 +5,16 @@
  * @class
  */
 class DrawableObject {
-    /** 
-     * The current image being used by the object.
-     * @type {HTMLImageElement}
-     */
     img;
-
-    /** 
-     * Cache of loaded images.
-     * @type {Object<string, HTMLImageElement>}
-     */
     imageCache = {};
-
-    /** 
-     * The index of the current image in the animation sequence.
-     * @type {number}
-     * @default 0
-     */
     currentImage = 0;
-
-    /** 
-     * The X coordinate of the object.
-     * @type {number}
-     * @default 120
-     */
     x = 120;
-
-    /** 
-     * The Y coordinate of the object.
-     * @type {number}
-     * @default 330
-     */
     y = 330;
-
-    /** 
-     * The height of the object.
-     * @type {number}
-     * @default 100
-     */
     height = 100;
-
-    /** 
-     * The width of the object.
-     * @type {number}
-     * @default 100
-     */
     width = 100;
-
-    /** 
-     * The X offset used when drawing the object.
-     * @type {number}
-     * @default 0
-     */
     offsetX = 0;
-
-    /** 
-     * The Y offset used when drawing the object.
-     * @type {number}
-     * @default 0
-     */
     offsetY = 0;
-
-    /** 
-     * The width offset used when drawing the object.
-     * @type {number}
-     * @default 0
-     */
     offsetWidth = 0;
-
-    /** 
-     * The height offset used when drawing the object.
-     * @type {number}
-     * @default 0
-     */
     offsetHeight = 0;
 
     /**
@@ -109,9 +46,7 @@ class DrawableObject {
      * @returns {void}
      */
     drawFrame(ctx) {
-        // if (this instanceof Character || this instanceof Chicken || this instanceof Bottle || this instanceof Coin || this instanceof ThrowableObject || this instanceof Endboss) 
-        //   if(this instanceof Fireball || this instanceof Chicken  || this instanceof Character)  
-        //     {
+        // if (this instanceof Character || this instanceof Chicken || this instanceof ChickenLittle || this instanceof Bottle || this instanceof Coin || this instanceof ThrowableObject || this instanceof Endboss) {
         //     ctx.beginPath();
         //     ctx.lineWidth = "2";
         //     ctx.strokeStyle = "blue";
