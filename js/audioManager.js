@@ -1,4 +1,7 @@
-// AudioManager als globales Objekt definieren
+/**
+ * @namespace
+ * @description Manages the sounds and music for the game.
+ */
 window.AudioManager = {
     endbossHurt_sound: new Audio('audio/endbossHurt.mp3'),
     endbossDead_sound: new Audio('audio/endbossDead.mp3'),
@@ -20,11 +23,15 @@ window.AudioManager = {
     youWon_sound: new Audio('audio/youWon.mp3'),
     select_sound: new Audio('audio/select.mp3'),
 
+    /**
+     * Initializes the audio settings, such as volume levels, for all sounds.
+     * @returns {void}
+     */
     init() {
         this.endbossHurt_sound.volume = 0.15;
         this.endbossDead_sound.volume = 0.15;
         this.endbossFight_sound.volume = 0.10;
-        this.pepeSnoring_sound.volume = 0.00;      // 0.08
+        this.pepeSnoring_sound.volume = 0.00; //0.08
         this.walking_sound.volume = 0.05;
         this.jump_sound.volume = 0.05;
         this.pepeDead_sound.volume = 0.08;
@@ -38,29 +45,39 @@ window.AudioManager = {
         this.fireball_sound.volume = 0.05;
         this.inGameMusic_sound.volume = 0.00; //0.05
         this.gameOver_sound.volume = 0.05;
-        this.youWon_sound.volume = 0.05;//0.05
+        this.youWon_sound.volume = 0.05;
         this.select_sound.volume = 0.05;
     },
 };
-let isMuted = false; // Zustand, ob die Sounds stummgeschaltet sind oder nicht
 
+/**
+ * Flag indicating whether sounds are muted or not.
+ * @type {boolean}
+ */
+let isMuted = false;
+
+/**
+ * Toggles the sound mute status and updates the button image.
+ * Mutes or unmutes all audio elements managed by the AudioManager.
+ * @returns {void}
+ */
 function toggleSounds() {
-    // Wechsle zwischen gemutet und ungemutet
     isMuted = !isMuted;
-    // Setze den mute-Status für alle Audio-Objekte in AudioManager
     muteOrUnmuteAudio(isMuted);
-    // Ändere das Bild im Button je nach Zustand
     updateButtonImage(isMuted);
 }
 
+/**
+ * Mutes or unmutes all audio elements in the AudioManager based on the mute status.
+ * @param {boolean} muteStatus - The status for muting (true to mute, false to unmute).
+ * @returns {void}
+ */
 function muteOrUnmuteAudio(muteStatus) {
     for (let key in AudioManager) {
         if (AudioManager.hasOwnProperty(key) && AudioManager[key] instanceof Audio) {
             AudioManager[key].muted = muteStatus;
         }
     }
-
-    // Sounds für geworfene Flaschen aktualisieren
     world.bottleToThrow.forEach(bottle => {
         if (bottle.sound) {
             bottle.sound.muted = muteStatus;
@@ -68,10 +85,13 @@ function muteOrUnmuteAudio(muteStatus) {
     });
 }
 
+/**
+ * Updates the image of the sound toggle button based on the mute status.
+ * @param {boolean} muteStatus - The mute status (true for muted, false for unmuted).
+ * @returns {void}
+ */
 function updateButtonImage(muteStatus) {
     const buttonImage = muteStatus ? 'icons/mute.png' : 'icons/unmute.png';
     document.querySelector('.sound-btn img').src = buttonImage;
 }
-
-// Initialisierung direkt nach der Definition ausführen
 AudioManager.init();

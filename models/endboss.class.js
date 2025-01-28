@@ -1,25 +1,29 @@
+/**
+ * Endboss class representing a boss enemy character in the game.
+ * This class extends the MovableObject class and handles all behaviors related to the Endboss, including movement, attack, animations, and interactions with the player.
+ */
 class Endboss extends MovableObject {
     speed = 7;
     height = 450;
     width = 300;
     y = 10;
-    x = 4300; //4300
+    x = 4300;
     offsetX = 20;
     offsetY = 80;
     offsetWidth = 70;
-    // enemyHealth = 25;
     offsetHeight = 100;
-    endbossHealth = 100; //100
+    endbossHealth = 100;
     isWalking = true;
     isAlert = false;
     isAttack = false;
     isHurt = false;
     isDead = false;
     reallyDead = false;
+    hasPlayedDeathSound = false;
+    hasResetAnimation = false;
     endbossHurt_sound = AudioManager.endbossHurt_sound;
     endbossDead_sound = AudioManager.endbossDead_sound;
     endbossFight_sound = AudioManager.endbossFight_sound;
-    fireballs = [];
     IMAGE_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -65,158 +69,199 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGE_DEAD);
     }
 
-    constructor() {
-        super().loadImage(this.IMAGE_ALERT[0]);
-        this.loadAllImages();
-        this.animate();
-        AnimationManager.register(this);
-        this.isWalking = true;
-        this.isAlert = false;
-        this.isAttack = false;
-        this.isHurt = false;
-        this.isDead = false;
-        this.reallyDead = false;
+   /**
+     * Creates an instance of the Endboss class.
+     */
+   constructor() {
+    super().loadImage(this.IMAGE_ALERT[0]);
+    this.loadAllImages();
+    this.animate();
+    AnimationManager.register(this);
+}
+
+       /**
+     * Loads all images for the Endboss in different states.
+     * @returns {void}
+     */
+       loadAllImages() {
+        this.loadImages(this.IMAGE_ALERT);
+        this.loadImages(this.IMAGE_WALKING);
+        this.loadImages(this.IMAGE_ATTACK_STANCE);
+        this.loadImages(this.IMAGE_HURT);
+        this.loadImages(this.IMAGE_DEAD);
     }
 
-
+    /**
+     * Initiates the Endboss's animations, including walking, attacking, and hurt animations.
+     * Sets up intervals for movement and attack behaviors.
+     * @returns {void}
+     */
     animate() {
+        this.setupWalkingInterval();
+        this.setupAttackInterval();
+        this.setupEndbossAnimation();
+    }
+
+    /**
+     * Sets up an interval to handle the Endboss's walking animation and movement.
+     * @returns {void}
+     */
+    setupWalkingInterval() {
         const walkingInterval = setInterval(() => {
             if (this.isWalking) {
-                this.randomMovement(); // Zufällige Richtung bestimmen
+                this.randomMovement();
                 this.playAnimation(this.IMAGE_WALKING);
             } else if (!this.isDead) {
                 this.endbossFight_sound.play();
                 this.randomMovementWhileAttacking();
                 this.playAnimation(this.IMAGE_WALKING);
             }
-
-        }, 500); // Alle 500 ms entscheidet der Endboss, wohin er geht
-        AnimationManager.addInterval(walkingInterval); // Timer im Manager registrieren
-
-        const attackInterval = () => {
-            const delay = Math.random() * (1000 - 2000) + 1000; // Zufällige Zeit zwischen 5 und 8 Sekunden
-            setTimeout(() => {
-                if (this.isAlert && !this.isDead) {
-                    // Zufällige Richtung bestimmen
-                    this.randomAttack();
-                    // this.playAnimation(this.IMAGE_ATTACK);
-                    world.fireFireball();  // Feuerball spucken
-                    world.fireFireball();
-                }
-                attackInterval(); // Funktion erneut starten
-            }, delay);
-        };
-        attackInterval(); // Initial starten
-
-        const endbossAnimationInterval = setInterval(() => {
-            if (this.isDead) {
-                this.endbossDead(); // Endboss-Tod-Animation
-                return;
-            } else if (this.isAlert) {
-                this.playAnimation(this.IMAGE_ALERT); // Alarm-Animation
-                this.otherDirection = false; // Nach links
-            } else if (this.isAttack) {
-                // console.log('attack');
-                this.playAnimation(this.IMAGE_ATTACK_STANCE); // Angriff-Animation
-                this.otherDirection = false; // Nach links
-            } else if (this.isHurt) {
-                this.endbossHurt(); // Hurt-Animation
-                // Sound abspielen
-            }
-        }, 200);
-        AnimationManager.addInterval(endbossAnimationInterval); // Timer im Manager registrieren
+        }, 500);
+        AnimationManager.addInterval(walkingInterval);
     }
 
+    /**
+     * Sets up an interval for handling the Endboss's attack behavior.
+     * The Endboss attacks randomly at intervals.
+     * @returns {void}
+     */
+    setupAttackInterval() {
+        const attackInterval = () => {
+            const delay = Math.random() * (2000 - 1000) + 1000;
+            setTimeout(() => {
+                if (this.isAlert && !this.isDead) {
+                    this.randomAttack();
+                    world.fireFireball();
+                    world.fireFireball();
+                }
+                attackInterval();
+            }, delay);
+        };
+        attackInterval();
+    }
+
+    /**
+     * Sets up an interval to handle the Endboss's various animation states (hurt, attack, alert, and dead).
+     * @returns {void}
+     */
+    setupEndbossAnimation() {
+        const endbossAnimationInterval = setInterval(() => {
+            if (this.isDead) return this.endbossDead();
+            if (this.isHurt) { this.endbossHurt(); }
+            else if (this.isAttack) {
+                this.playAnimation(this.IMAGE_ATTACK_STANCE);
+            } else if (this.isAlert) {
+                this.playAnimation(this.IMAGE_ALERT);
+            }
+        }, 200);
+        AnimationManager.addInterval(endbossAnimationInterval);
+    }
+
+    /**
+     * Handles random movement of the Endboss.
+     * Moves the Endboss left or right based on random direction.
+     * @returns {void}
+     */
+    randomMovement() {
+        const randomDirection = Math.random() < 0.5 ? -1 : 1;
+        this.speed = randomDirection * 2;
+        const newX = this.x + this.speed;
+        if (newX >= 4000 && newX <= 4600) this.x = newX;
+        this.otherDirection = randomDirection === 1;
+    }
+
+    /**
+     * Handles movement of the Endboss while in attack mode.
+     * Moves the Endboss left or right with higher speed during attack.
+     * @returns {void}
+     */
+    randomMovementWhileAttacking() {
+        const randomSpeed = Math.random() < 0.5 ? -1 : 1;
+        this.speed = randomSpeed * 6;
+        const newX = this.x + this.speed;
+        if (newX >= 4100 && newX <= 4500) this.x = newX;
+        this.otherDirection = false;
+    }
+
+    /**
+     * Initiates a random attack behavior for the Endboss.
+     * Sets the Endboss in attack mode for a short period.
+     * @returns {void}
+     */
     randomAttack() {
         this.isAlert = false;
         this.isAttack = true;
-
         setTimeout(() => {
             this.isAttack = false;
             this.isAlert = true;
         }, 5000);
     }
 
+    /**
+     * Plays the Endboss's hurt animation and sound.
+     * The Endboss plays a hurt animation and sound when taking damage.
+     * @returns {void}
+     */
     endbossHurt() {
-        //HIER muss im allgeminen noch das timeout resetet werden falls endboss im hurt animation ist 
         if (!this.isDead) {
-            this.otherDirection = false; // Nach links
             this.isAlert = false;
             this.endbossHurt_sound.play();
-            this.playAnimation(this.IMAGE_HURT); // Spiele die "Hurt"-Animation
+            this.playAnimation(this.IMAGE_HURT);
             setTimeout(() => {
-                this.isHurt = false; // Setze isHurt nach 250ms auf false
+                this.isHurt = false;
                 this.isAlert = true;
-                // console.log(this.isHurt);
             }, 400);
         }
     }
 
+    /**
+     * Handles the Endboss's death animation and behavior.
+     * Plays the death sound and switches to the dead animation.
+     * @returns {void}
+     */
     endbossDead() {
-        this.otherDirection = false;
+        this.resetStates();
+        if (!this.hasResetAnimation) {
+            this.resetAnimationOnce();
+        }
+        this.playDeathSoundOnce();
+        if (!this.reallyDead) {
+            this.endbossFight_sound.pause();
+            this.playAnimation(this.IMAGE_DEAD);
+            setTimeout(() => {
+                this.reallyDead = true;
+            }, this.IMAGE_DEAD.length * 160);
+        }
+    }
+
+    /**
+     * Resets the Endboss's states to their default values (walking, alert, attack, hurt).
+     * @returns {void}
+     */
+    resetStates() {
         this.isWalking = false;
         this.isAlert = false;
         this.isAttack = false;
         this.isHurt = false;
-       
-        if (!this.hasResetAnimation) {
-            this.resetAnimation();
-            this.hasResetAnimation = true;
-        }
+    }
 
+    /**
+     * Resets the Endboss's animation once when it dies.
+     * @returns {void}
+     */
+    resetAnimationOnce() {
+        this.resetAnimation();
+        this.hasResetAnimation = true;
+    }
+
+    /**
+     * Plays the Endboss's death sound once.
+     * @returns {void}
+     */
+    playDeathSoundOnce() {
         if (!this.hasPlayedDeathSound) {
             this.endbossDead_sound.play();
             this.hasPlayedDeathSound = true;
         }
-
-        setTimeout(() => {
-            this.reallyDead = true;
-            this.currentImage = 2;
-        }, this.IMAGE_DEAD.length * 160);
-
-        if (!this.reallyDead) {
-            this.endbossFight_sound.pause();
-            this.playAnimation(this.IMAGE_DEAD);
-        }
-    }
-
-    randomMovement() {
-
-        const randomDirection = Math.random() < 0.5 ? -1 : 1; // Zufällig -1 (links) oder 1 (rechts)
-        this.speed = randomDirection * 2; // Geschwindigkeit auf ±2 setzen
-
-        // Bewegung innerhalb der Grenzen
-        const newX = this.x + this.speed;
-        if (newX >= 4000 && newX <= 4600) {
-            this.x = newX; // Neue Position innerhalb der Grenzen
-        }
-        if (randomDirection === 1) {
-            this.otherDirection = true; // Nach rechts
-        } else {
-            this.otherDirection = false; // Nach links
-        }
-    }
-
-    randomMovementWhileAttacking() {
-        const randomSpeed = Math.random() < 0.5 ? -1 : 1; // Zufällig -1 (links) oder 1 (rechts)
-        this.speed = randomSpeed * 6; // Geschwindigkeit auf ±2 setzen
-
-        // Bewegung innerhalb der Grenzen
-        const newX = this.x + this.speed;
-        if (newX >= 4100 && newX <= 4500) {
-            this.x = newX; // Neue Position innerhalb der Grenzen
-        }
-        this.otherDirection = false; // Nach links
-
-    }
-
-
-    // pause() {
-    //     this.intervals.forEach(clearInterval);
-    //     this.intervals = [];
-    // }
-
-    resume() {
-        this.animate();
     }
 }

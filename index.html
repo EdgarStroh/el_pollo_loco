@@ -33,7 +33,7 @@
 
 </head>
 
-<body>
+<body  onload="checkLandscapeMode();">
     <header>
         <h1>El Pollo Loco</h1>
     </header>
@@ -104,7 +104,9 @@
             <canvas id="canvas" width="720" height="480"></canvas>
         </div>
     </main>
-
+    <div id="orientationPopup" class="orientation-popup">
+        <p>Turn your Device to play</p>
+      </div>
     <footer>
         <a href="impressum.html">Impressum</a>
         <a href="datenschutz.html">Datenschutz</a>

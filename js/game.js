@@ -1,13 +1,23 @@
-let canvas;
-let world;
-let keyboard = new Keyboard();
-pausedGame = false;
-select_sound = AudioManager.select_sound;
+let canvas; // The canvas element for rendering the game.
+let world; // The game world instance.
+let keyboard = new Keyboard(); // An instance of the Keyboard class to track key presses.
+pausedGame = false; // Flag indicating whether the game is paused.
+select_sound = AudioManager.select_sound; // Select sound from the AudioManager.
 
+ /**
+  * Plays the select sound.
+  * Resets the current time of the select sound and plays it from the beginning.
+  * @returns {void}
+  */
 function playSelectSound() {
     select_sound.currentTime = 0;
     select_sound.play();
 }
+
+/**
+ * Initializes the game by setting up the canvas, world, and binding button events.
+ * @returns {void}
+ */
 function init() {
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
@@ -15,14 +25,18 @@ function init() {
     bindBtsPressEvents();
 }
 
+/**
+ * Event listener for keydown events to track key presses and update the keyboard state.
+ * Handles movement, actions like throwing bottles, and pausing the game.
+ * @param {KeyboardEvent} event - The keydown event.
+ * @returns {void}
+ */
 window.addEventListener("keydown", (event) => {
     if (event.keyCode == 39 || event.key == 'd') {
         keyboard.RIGHT = true;
     }
     if (event.keyCode == 37 || event.key == 'a') {
-   
         keyboard.LEFT = true;
-        
     }
     if (event.keyCode == 40 || event.key == 's') {
         keyboard.DOWN = true;
@@ -38,41 +52,40 @@ window.addEventListener("keydown", (event) => {
         keyboard.SPACE = true;
     }
     if (event.key == 'Escape') {
-        
-    }
-    if (event.key == 'l') {
-        keyboard.L = true;
+        // Logic for the Escape key can be added here if necessary.
     }
     if (event.key === 'p') {
         if (!world.gameOver) {
             world.gamePaused = !world.gamePaused;
-            if (world.gamePaused ) {
+            if (world.gamePaused) {
                 pausedGame = true;
-                AnimationManager.pauseAll(); // Alle Animationen pausieren
-                world.endboss.endbossFight_sound.pause(); // Endboss-Sound pausieren
-                world.inGameMusic_sound.pause(); // InGame-Musik pausieren        
+                AnimationManager.pauseAll();
+                world.endboss.endbossFight_sound.pause();
+                world.inGameMusic_sound.pause();
             } else {
-                // world.inGameMusic_sound.play();
                 pausedGame = false;
-                AnimationManager.resumeAll(); // Alle Animationen fortsetzen
+                AnimationManager.resumeAll();
             }
         }
     }
 });
 
+/**
+ * Binds touch events to mobile buttons for controlling the game.
+ * The buttons control movement (left, right), jumping, and throwing bottles.
+ * @returns {void}
+ */
 function bindBtsPressEvents() {
-    // Left button
     document.getElementById('mobile-btn-left').addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.LEFT = true;
-    }, { passive: false }); // passive: false, weil wir e.preventDefault() verwenden
+    }, { passive: false });
 
     document.getElementById('mobile-btn-left').addEventListener('touchend', (e) => {
         e.preventDefault();
         keyboard.LEFT = false;
     }, { passive: false });
 
-    // Right button
     document.getElementById('mobile-btn-right').addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.RIGHT = true;
@@ -83,7 +96,6 @@ function bindBtsPressEvents() {
         keyboard.RIGHT = false;
     }, { passive: false });
 
-    // Throw button
     document.getElementById('mobile-btn-throw').addEventListener('touchstart', (e) => {
         e.preventDefault();
         if (!keyboard.B) {
@@ -109,8 +121,12 @@ function bindBtsPressEvents() {
     }, { passive: false });
 }
 
-
-
+/**
+ * Event listener for keyup events to track key releases and update the keyboard state.
+ * Resets the state for movement keys and other actions when the keys are released.
+ * @param {KeyboardEvent} event - The keyup event.
+ * @returns {void}
+ */
 window.addEventListener("keyup", (event) => {
     if (event.keyCode == 39 || event.key == 'd') {
         keyboard.RIGHT = false;
@@ -131,12 +147,9 @@ window.addEventListener("keyup", (event) => {
         keyboard.SPACE = false;
     }
     if (event.key == 'Escape') {
-        keyboard.ESC = false;
+        // Logic for the Escape key can be added here if necessary.
     }
-    if (event.key == 'l') {
-        keyboard.L = false;
-    }
-    if (event.key == 'p') { // Taste P losgelassen
+    if (event.key == 'p') {
         keyboard.P = false;
     }
 });

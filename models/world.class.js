@@ -1,3 +1,6 @@
+/**
+ * Represents the world in which the game is played, including characters, enemies, and interactions.
+ */
 class World {
     character = new Character();
     endboss = new Endboss();
@@ -12,7 +15,6 @@ class World {
     camera_x = 0;
     bottleToThrow = [];
     fireballs = [];
-    intervalIds = [];
     gamePaused = false;
     gameOver = false;
     playInGameMusic_flag = false;
@@ -26,9 +28,12 @@ class World {
     fireball_sound = AudioManager.fireball_sound;
     inGameMusic_sound = AudioManager.inGameMusic_sound;
     youWon_sound = AudioManager.youWon_sound;
-
+    /**
+    * Creates an instance of the World.
+    * @param {HTMLCanvasElement} canvas - The canvas element where the game is rendered.
+    * @param {Keyboard} keyboard - The keyboard handler for detecting user input.
+    */
     constructor(canvas, keyboard) {
-        this.intervals = []; // Liste der aktiven Intervalle
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
@@ -36,86 +41,13 @@ class World {
         this.setWorld();
         this.run();
         this.runCheckCollisions();
-        this.hasDealtDamage = false; 
+        this.hasDealtDamage = false;
         this.playInGameMusic_flag = false;
     }
-
-    clearAllIntervals() {
-        for (let i = 1; i < 9999; i++) window.clearInterval(i);
-    }
-
-
-    clearAllTimeouts() {
-        for (let i = 1; i < 10000; i++) {
-            clearTimeout(i);
-        }
-    }
-
-    setWorld() {
-        this.character.world = this;
-    }
-    checkCollisionJumpOnEnemy() {
-        // Überprüfe, ob der Charakter in der Luft ist
-        if (!this.character.isJumping) {
-            return; // Wenn der Charakter nicht springt, keine Kollision
-        }
-
-        // Durchlaufe alle Gegner im Level
-        this.level.enemies.forEach((enemy) => {
-            if (!enemy.isDead) {
-                // Überprüfe, ob der Charakter mit dem Gegner kollidiert
-                if (this.character.isColliding(enemy)) {
-                    // Prüfe, ob der Charakter von oben auf den Gegner springt
-                    if (this.character.y + this.character.height <= enemy.y) {
-                        // Der Charakter landet auf dem Gegner, Schaden anrichten
-                        this.applyDamageOnEnemy(enemy);
-                    }
-                }
-            }
-        });
-    }
-
-    applyDamageWithBottle(enemy) {
-        if (enemy instanceof Endboss) {
-            if (!enemy.isDead) {
-                enemy.endbossHealth += this.damage;
-                enemy.isWalking = false;
-                enemy.isAlert = true;
-                enemy.isHurt = true;
-
-                // this.inGameMusic_sound.pause();
-            }
-            if (enemy.isHurt) {
-                enemy.endbossHurt();
-                this.playInGameMusic_flag = true;
-                this.inGameMusic_sound.pause()
-            }
-            if (enemy.endbossHealth <= 0) {
-                enemy.isDead = true;
-                this.youWon_sound.play();
-                this.showYouWonScreen();
-            }
-        } else {
-            enemy.chickenHealth += this.damage;
-            if (enemy.chickenHealth <= 0) {
-                enemy.die();
-            }
-        }
-    }
-
-    showYouWonScreen() {
-        const youWonImage = document.getElementById('youwon');
-        const mainMenuBtn = document.getElementById('mainMenuBtn');
-        youWonImage.classList.remove('hidden');
-        
-        setTimeout(() => {
-            this.clearAllIntervals();
-            this.gameOver = true;
-            this.gamePaused = true;
-            mainMenuBtn.classList.remove('hidden');
-        }, 4000); //4000
-    }
-
+    /**
+     * Starts the game loop, checking for various game conditions and performing actions at intervals.
+     * @returns {void}
+    */
     run() {
         setInterval(() => {
             if (!this.gamePaused) {
@@ -127,69 +59,206 @@ class World {
                 this.fireballs.forEach(fireball => this.checkGroundCollisionFireball(fireball));
             }
         }, 100);
-
     }
+
+    /**
+     * Clears all intervals that were previously set using `setInterval`.
+     * @returns {void}
+     */
+    clearAllIntervals() {
+        for (let i = 1; i < 9999; i++) window.clearInterval(i);
+    }
+
+    /**
+     * Clears all timeouts that were previously set using `setTimeout`.
+     * @returns {void}
+     */
+    clearAllTimeouts() {
+        for (let i = 1; i < 10000; i++) {
+            clearTimeout(i);
+        }
+    }
+
+    /**
+     * Sets the world for the character, initializing the reference to the world.
+     * @returns {void}
+     */
+    setWorld() {
+        this.character.world = this;
+    }
+
+    /**
+     * Checks if the character is colliding with any enemy while jumping.
+     * If a collision is detected, damage is applied to the enemy.
+     * @returns {void}
+     */
+    checkCollisionJumpOnEnemy() {
+        if (!this.character.isJumping) { return; }
+        this.level.enemies.forEach((enemy) => {
+            if (!enemy.isDead) {
+                if (this.character.isColliding(enemy)) {
+                    if (this.character.y + this.character.height <= enemy.y) {
+                        this.applyDamageOnEnemy(enemy);
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Applies damage to an enemy when hit by a bottle.
+     * Determines if the enemy is an Endboss or a Chicken and applies appropriate damage.
+     * @param {Enemy} enemy - The enemy instance to apply damage to.
+     * @returns {void}
+     */
+    applyDamageWithBottle(enemy) {
+        if (enemy instanceof Endboss) {
+            this.applyDamageToEndboss(enemy);
+        } else {
+            this.applyDamageToChicken(enemy);
+        }
+    }
+
+    /**
+     * Applies damage to the Endboss and handles its response.
+     * @param {Endboss} endboss - The Endboss instance to apply damage to.
+     * @returns {void}
+     */
+    applyDamageToEndboss(endboss) {
+        if (endboss.isDead) return;
+        this.updateEndbossHealth(endboss);
+        this.handleEndbossHurt(endboss);
+        this.checkEndbossDeath(endboss);
+    }
+
+    /**
+     * Updates the health of the Endboss when damaged.
+     * @param {Endboss} endboss - The Endboss instance to update health for.
+     * @returns {void}
+     */
+    updateEndbossHealth(endboss) {
+        endboss.endbossHealth += this.damage;
+        endboss.isWalking = false;
+        endboss.isAlert = true;
+        endboss.isHurt = true;
+    }
+
+    /**
+     * Checks if the Endboss is dead, and if so, triggers the end of the game.
+     * @param {Endboss} endboss - The Endboss instance to check for death.
+     * @returns {void}
+     */
+    checkEndbossDeath(endboss) {
+        if (endboss.endbossHealth <= 0) {
+            endboss.isDead = true;
+            this.youWon_sound.play();
+            this.showYouWonScreen();
+        }
+    }
+
+    /**
+     * Handles the Endboss being hurt, plays sound effects and music as needed.
+     * @param {Endboss} endboss - The Endboss instance to handle as hurt.
+     * @returns {void}
+     */
+    handleEndbossHurt(endboss) {
+        if (endboss.isHurt) {
+            endboss.endbossHurt();
+            this.playInGameMusic_flag = true;
+            this.inGameMusic_sound.pause();
+        }
+    }
+
+    /**
+     * Applies damage to a Chicken enemy and handles its death if health drops below 0.
+     * @param {Chicken} chicken - The Chicken instance to apply damage to.
+     * @returns {void}
+     */
+    applyDamageToChicken(chicken) {
+        chicken.chickenHealth += this.damage;
+        if (chicken.chickenHealth <= 0) {
+            chicken.die();
+        }
+    }
+
+    /**
+     * Displays the "You Won" screen and pauses the game.
+     * @returns {void}
+     */
+    showYouWonScreen() {
+        const youWonImage = document.getElementById('youwon');
+        const mainMenuBtn = document.getElementById('mainMenuBtn');
+        youWonImage.classList.remove('hidden');
+        setTimeout(() => {
+            this.clearAllIntervals();
+            this.gameOver = true;
+            this.gamePaused = true;
+            mainMenuBtn.classList.remove('hidden');
+        }, 4000);
+    }
+
+    /**
+     * Starts checking for collisions at a constant interval.
+     * @returns {void}
+     */
     runCheckCollisions() {
         setInterval(() => {
             if (!this.gamePaused) {
-                // this.pauseBottleSounds();
                 this.checkCollisions();
             }
         }, 1000 / 60);
-
     }
 
-    // pauseGame() {
-    //     console.log("Spiel pausiert.");
-    //     this.gamePaused = true;
-    //     clearAllIntervals();
-    // }
-
-    // resumeGame() {
-    //     console.log("Spiel wird fortgesetzt.");
-    //     this.gamePaused = false;
-    // }
-
+    /**
+     * Plays the background in-game music if it isn't already playing.
+     * @returns {void}
+     */
     playInGameMusic() {
         if (!this.playInGameMusic_flag) {
             this.inGameMusic_sound.play();
             this.inGameMusic_sound.addEventListener('ended', () => {
-                this.playInGameMusic(); // Audio erneut abspielen im richtigen Kontext
+                this.playInGameMusic();
             });
         }
     }
 
-    // Refaktorisierte Methode für die Springen- und Gegner-Kollisionslogik
+    /**
+     * Handles collision between the character and an enemy during a jump.
+     * The enemy is damaged if the character is jumping and collides from below.
+     * 
+     * @param {Object} enemy The enemy object that the character might collide with.
+     * @returns {boolean} Returns `true` if the character collided with the enemy, otherwise `false`.
+     */
     handleJumpingCollisionWithEnemy(enemy) {
-        // Wenn der Charakter springt und unter ihm mit einem Gegner kollidiert
         if (this.character.isJumping && this.isCollisionBelowCharacter(enemy)) {
-            // Gegner bekommt Schaden
             this.jumpOnEnemy_sound.play();
             enemy.chickenHealth += this.damage;
             if (enemy.chickenHealth <= 0) {
-                enemy.die();  // Gegner stirbt
+                enemy.die();
             }
-            return true; // Kollisions- und Schadenbehandlung abgeschlossen
+            return true;
         }
-        return false; // Keine Kollision mit dem Gegner
+        return false;
     }
 
-    // Refaktorisierte checkCollisions Methode
+    /**
+     * Checks for collisions between the character and enemies.
+     * If the character collides with an enemy, it either handles the jumping collision or applies damage.
+     */
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (!enemy.isDead && this.character.isColliding(enemy)) {
-                // Springt der Charakter und kollidiert mit einem Gegner?
-                if (this.handleJumpingCollisionWithEnemy(enemy)) {
-                    return; // Kein Schaden am Charakter, wenn der Gegner getroffen wurde
-                }
-
-                // Andernfalls bekommt der Charakter Schaden
+                if (this.handleJumpingCollisionWithEnemy(enemy)) { return; }
                 this.character.hit();
                 this.statusBarHealth.setPercentage(this.character.myHealth);
             }
         });
     }
 
+    /**
+     * Checks for collisions between the character and fireballs.
+     * If the character collides with a fireball, it receives damage.
+     */
     checkCollsionFireballOnCharacter() {
         this.fireballs.forEach((fireball) => {
             if (this.character.isColliding(fireball)) {
@@ -199,183 +268,257 @@ class World {
         });
     }
 
-    // Überprüft, ob die Kollision unter dem Charakter stattfindet (z.B. beim Landen auf einem Gegner)
+    /**
+     * Checks if the character is colliding with the enemy from below.
+     * 
+     * @param {Object} enemy The enemy object to check the collision with.
+     * @returns {boolean} Returns `true` if the collision is below the character, otherwise `false`.
+     */
     isCollisionBelowCharacter(enemy) {
         const characterBottom = this.character.y + this.character.height - this.character.offsetHeight;
         const enemyTop = enemy.y + enemy.offsetY;
-
-        // Wenn die untere Kante des Charakters über der oberen Kante des Gegners ist, bedeutet dies, dass der Charakter auf dem Gegner landet
         return characterBottom <= enemyTop;
     }
 
-
+    /**
+     * Checks for collisions between thrown bottles and enemies or the ground.
+     * If a collision occurs, the bottle is handled accordingly.
+     */
     checkCollisionsBottleOnEnemy() {
         this.bottleToThrow.forEach((bottle) => {
             let hasCollided = false;
-
             this.level.enemies.forEach((enemy) => {
                 if (!hasCollided && bottle.isColliding(enemy)) {
-                    bottle.speedX = 0;
-                    bottle.speedY = 0;
-                    bottle.animateSplash(); // Always start the splash animation
-
-                    if (!bottle.hasPlayedBreakSound) {
-                        let breakSound = AudioManager.bottleBreak_sound.cloneNode();
-                        breakSound.volume = AudioManager.bottleBreak_sound.volume; // Lautstärke übernehmen
-                        breakSound.muted = isMuted; // Mute-Status übernehmen
-                        breakSound.play();
-                        bottle.hasPlayedBreakSound = true;
-                    }
-
-                    if (!bottle.hasDealtDamage) {
-                        this.applyDamageWithBottle(enemy);
-                        bottle.hasDealtDamage = true;
-                        if (bottle.sound) {
-                            bottle.sound.pause();
-                            bottle.sound.currentTime = 0;
-                        }
-                    }
+                    this.handleBottleCollisionWithEnemy(bottle, enemy);
                     hasCollided = true;
-
-                    setTimeout(() => {
-                        // clearInterval(bottle.animationInterval);
-                        bottle.isDestroyed = true;
-                    }, 500);
                 }
             });
-
             if (!hasCollided && bottle.theGround()) {
-                bottle.speedX = 0;
-                bottle.speedY = 0;
-
-                if (bottle.sound) {
-                    bottle.sound.pause();
-                    bottle.sound.currentTime = 0;
-                }
-
-                bottle.animateSplash();
-
-                if (!bottle.hasPlayedBreakSound) {
-                    let breakSound = AudioManager.bottleBreak_sound.cloneNode();
-                    breakSound.volume = AudioManager.bottleBreak_sound.volume; // Lautstärke übernehmen
-                    breakSound.muted = isMuted; // Mute-Status übernehmen
-                    breakSound.play();
-                    bottle.hasPlayedBreakSound = true;
-                }
-
-                setTimeout(() => {
-                    // clearInterval(bottle.animationInterval);
-                    bottle.isDestroyed = true;
-                }, 500);
+                this.handleBottleCollisionWithGround(bottle);
             }
         });
-
         this.bottleToThrow = this.bottleToThrow.filter(bottle => !bottle.isDestroyed);
     }
 
+    /**
+     * Handles the collision between a bottle and an enemy.
+     * Stops the bottle, plays the splash animation, and applies damage to the enemy.
+     * 
+     * @param {Object} bottle The bottle object that collided with the enemy.
+     * @param {Object} enemy The enemy object that the bottle collided with.
+     */
+    handleBottleCollisionWithEnemy(bottle, enemy) {
+        bottle.speedX = 0;
+        bottle.speedY = 0;
+        bottle.animateSplash();
+        if (!bottle.hasPlayedBreakSound) {
+            this.playBreakSound();
+            bottle.hasPlayedBreakSound = true;
+        }
+        if (!bottle.hasDealtDamage) {
+            this.applyDamageWithBottle(enemy);
+            bottle.hasDealtDamage = true;
+            this.stopBottleSound(bottle);
+        }
+        this.destroyBottleAfterDelay(bottle);
+    }
+
+    /**
+     * Handles the collision between a bottle and the ground.
+     * Stops the bottle, plays the splash animation, and destroys the bottle after a delay.
+     * 
+     * @param {Object} bottle The bottle object that collided with the ground.
+     */
+    handleBottleCollisionWithGround(bottle) {
+        bottle.speedX = 0;
+        bottle.speedY = 0;
+        this.stopBottleSound(bottle);
+        bottle.animateSplash();
+        if (!bottle.hasPlayedBreakSound) {
+            this.playBreakSound();
+            bottle.hasPlayedBreakSound = true;
+        }
+        this.destroyBottleAfterDelay(bottle);
+    }
+
+    /**
+     * Plays the break sound for a bottle when it collides.
+     */
+    playBreakSound() {
+        let breakSound = AudioManager.bottleBreak_sound.cloneNode();
+        breakSound.volume = AudioManager.bottleBreak_sound.volume;
+        breakSound.muted = isMuted;
+        breakSound.play();
+    }
+
+    /**
+     * Stops the sound of a bottle after a collision.
+     * 
+     * @param {Object} bottle The bottle object whose sound should be stopped.
+     */
+    stopBottleSound(bottle) {
+        if (bottle.sound) {
+            bottle.sound.pause();
+            bottle.sound.currentTime = 0;
+        }
+    }
+
+    /**
+     * Destroys the bottle after a delay.
+     * 
+     * @param {Object} bottle The bottle object that should be destroyed.
+     */
+    destroyBottleAfterDelay(bottle) {
+        setTimeout(() => {
+            bottle.isDestroyed = true;
+        }, 500);
+    }
+
+    /**
+     * Checks for collisions between the character and coins.
+     * If a collision occurs, the character picks up the coin and the coin is removed.
+     */
     checkCoinCollisionsPickUp() {
-        // this.coin_sound.volume = 0.03;
         this.level.coins = this.level.coins.filter((coin) => {
             if (this.character.isColliding(coin)) {
                 this.coin_sound.pause();
                 this.coin_sound.currentTime = 0;
                 this.coin_sound.play();
                 this.statusBarCoin.coinAmount++;
-                return false; // Entfernt den Coin aus dem Array
+                return false;
             }
-            return true; // Behalte den Coin im Array, wenn keine Kollision
+            return true;
         });
     }
 
+    /**
+     * Checks for collisions between the character and bottles.
+     * If a collision occurs, the character picks up the bottle and the bottle is removed.
+     */
     checkBottleCollisionsPickUp() {
-        // this.bottlePickUp_sound.volume = 0.03;
-
         this.level.bottles = this.level.bottles.filter((bottle) => {
             if (this.character.isColliding(bottle)) {
                 this.playBottlePickUpSound();
                 this.statusBarBottle.bottleAmount++;
-
-                return false; // Entferne die Flasche aus dem Level
+                return false;
             }
-            return true; // Flasche bleibt, wenn keine Kollision
+            return true;
         });
     }
 
+    /**
+     * Throws a bottle if the game is not paused and the character has at least one bottle.
+     * The bottle's start position is calculated and the throw sound is played.
+     */
     throwBottle() {
         if (this.gamePaused || this.character.noLife) {
-            return; // Keine Aktion, wenn das Spiel pausiert ist oder der Charakter tot ist
+            return;
         }
-
         if (this.statusBarBottle.bottleAmount > 0) {
-            let startX = this.character.x + 45;
-            let startY = this.character.y + 125;
-            if (this.character.otherDirection) {
-                startX = this.character.x - 45;
-            }
-
-            let bottle = new ThrowableObject(startX, startY, this.character.otherDirection);
-            this.bottleToThrow.push(bottle);
-
-            // Erstelle eine Kopie des Sounds
-            let bottleThrow_sound = AudioManager.bottleThrow_sound.cloneNode();
-            bottleThrow_sound.volume = AudioManager.bottleThrow_sound.volume; // Lautstärke übernehmen
-            bottleThrow_sound.muted = isMuted; // Mute-Status übernehmen
-            bottleThrow_sound.currentTime = 0;
-            bottle.sound = bottleThrow_sound;
-
-            bottleThrow_sound.play();
+            const { startX, startY } = this.calculateStartPosition();
+            let bottle = this.createThrowableBottle(startX, startY);
+            this.playThrowSound(bottle);
             this.statusBarBottle.bottleAmount--;
         } else {
-            AudioManager.bottleEmpty_sound.play(); // Leere Flasche-Sound
+            this.playEmptyBottleSound();
         }
     }
 
+    /**
+     * Calculates the starting position for throwing a bottle.
+     * 
+     * @returns {Object} The calculated starting X and Y position for the bottle.
+     */
+    calculateStartPosition() {
+        let startX = this.character.x + 45;
+        let startY = this.character.y + 125;
+        if (this.character.otherDirection) {
+            startX = this.character.x - 45;
+        }
+        return { startX, startY };
+    }
 
+    /**
+     * Creates a throwable bottle and adds it to the `bottleToThrow` array.
+     * 
+     * @param {number} startX The starting X position of the bottle.
+     * @param {number} startY The starting Y position of the bottle.
+     * @returns {Object} The created throwable bottle.
+     */
+    createThrowableBottle(startX, startY) {
+        let bottle = new ThrowableObject(startX, startY, this.character.otherDirection);
+        this.bottleToThrow.push(bottle);
+        return bottle;
+    }
 
+    /**
+     * Plays the throw sound when a bottle is thrown.
+     * 
+     * @param {Object} bottle The bottle object that is thrown.
+     */
+    playThrowSound(bottle) {
+        let throwSound = AudioManager.bottleThrow_sound.cloneNode();
+        throwSound.volume = AudioManager.bottleThrow_sound.volume;
+        throwSound.muted = isMuted;
+        throwSound.currentTime = 0;
+        bottle.sound = throwSound;
+        throwSound.play();
+    }
+
+    /**
+     * Plays the empty bottle sound when the character tries to throw a bottle but has none left.
+     */
+    playEmptyBottleSound() {
+        AudioManager.bottleEmpty_sound.play();
+    }
+
+    /**
+     * Fires a fireball from the endboss if the game is not paused.
+     */
     fireFireball() {
         if (this.gamePaused) {
-            return; // Keine Aktion, wenn das Spiel pausiert ist oder der Charakter tot ist
+            return;
         }
         let startX = this.endboss.x - 30;
         let startY = this.endboss.y + 120;
         let fireball = new Fireball(startX, startY);
         this.fireballs.push(fireball);
         this.fireball_sound.play();
-        // Starte die Überprüfung für diesen Fireball
         this.checkGroundCollisionFireball(fireball);
     }
 
-
-
+    /**
+     * Checks for ground collision with a fireball.
+     * Removes the fireball from the game once it hits the ground.
+     * 
+     * @param {Object} fireball The fireball object to check for ground collision.
+     */
     checkGroundCollisionFireball(fireball) {
         let checkGroundInterval = setInterval(() => {
-            if (fireball.y >= 360) { // Bedingung: Boden erreicht
-                // console.log("Fireball hit the ground!");
-
-                // Entferne den Fireball aus dem Array
+            if (fireball.y >= 360) {
                 this.fireballs = this.fireballs.filter(fb => fb !== fireball);
-
-                // Stoppe die Überprüfung
                 clearInterval(checkGroundInterval);
             }
-        }, 1000 / 40); // Überprüfe 60 Mal pro Sekunde
+        }, 1000 / 40);
     }
 
+    /**
+     * Plays the sound when the character picks up a bottle.
+     */
     playBottlePickUpSound() {
-        this.bottlePickUp_sound.pause(); // Sound stoppen
-        this.bottlePickUp_sound.currentTime = 0; // Zurück zum Anfang des Sounds
-        this.bottlePickUp_sound.play(); // Neu abspielen
+        this.bottlePickUp_sound.pause();
+        this.bottlePickUp_sound.currentTime = 0;
+        this.bottlePickUp_sound.play();
     }
-
+    /**
+     * Clears the canvas and draws all game objects on the map. 
+     * Updates the status bars and schedules the next frame for animation.
+     */
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
         this.ctx.translate(this.camera_x, 0);
-
-        // Draw background objects (like clouds) first
         this.addObjectsToMap(this.level.backgroundObjects);
 
-        // Draw the character, coins, enemies, and throwable objects next
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.coins);
@@ -383,17 +526,11 @@ class World {
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.bottleToThrow);
         this.addObjectsToMap(this.fireballs);
+        this.ctx.translate(-this.camera_x, 0);
 
-        // this.addObjectsToMap(this.playAnimationObject);
-        // this.addObjectsToMap(this.splashImages);
-
-        this.ctx.translate(-this.camera_x, 0); // Reset the translation for fixed objects
-
-        // Draw the status bars last to ensure they appear above everything else
         this.addToMap(this.statusBarHealth);
         this.addToMap(this.statusBarBottle);
         this.addToMap(this.statusBarCoin);
-
 
         let self = this;
         requestAnimationFrame(function () {
@@ -401,32 +538,46 @@ class World {
         });
     }
 
+    /**
+     * Adds a collection of objects to the map by iterating through each object and drawing it.
+     * @param {Array} objects - The array of objects to be added to the map.
+     */
     addObjectsToMap(objects) {
         objects.forEach(o => {
             this.addToMap(o)
         });
     }
 
+    /**
+     * Adds a single map object to the map, drawing and flipping it if necessary based on direction.
+     * @param {Object} mo - The map object to be drawn, with properties like `otherDirection`, `x`, `y`, etc.
+     */
     addToMap(mo) {
         if (mo.otherDirection) {
             this.flipImage(mo);
         }
-
         mo.draw(this.ctx);
         mo.drawFrame(this.ctx);
-
-
         if (mo.otherDirection) {
             this.flipImageBack(mo);
         }
     }
 
+    /**
+     * Flips the image horizontally by scaling it and adjusting its x position.
+     * @param {Object} mo - The map object to be flipped.
+     */
     flipImage(mo) {
         this.ctx.save();
         this.ctx.translate(mo.width, 0);
         this.ctx.scale(-1, 1);
         mo.x = mo.x * -1;
     }
+
+    /**
+     * Reverts the image flip by restoring the x position and scaling back to normal.
+     * @param {Object} mo - The map object whose flip is to be reversed.
+     */
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();
