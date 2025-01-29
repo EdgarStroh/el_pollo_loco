@@ -31,10 +31,10 @@ function toggleFullscreen() {
     const buttonImage = document.querySelector('.fullscreen-btn img');
     if (document.fullscreenElement) {
         exitFullscreen();
-        buttonImage.src = 'icons/fullscreenOpen.png';
+        buttonImage.src = '/icons/fullscreenOpen.png';
     } else {
         enterFullscreen(document.documentElement);
-        buttonImage.src = 'icons/fullscreenClose.png';
+        buttonImage.src = '/icons/fullscreenClose.png';
     }
 }
 

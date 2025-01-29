@@ -21,59 +21,59 @@ class Character extends MovableObject {
     gameOver_sound = AudioManager.gameOver_sound;
     inGameMusic_sound = AudioManager.inGameMusic_sound;
     IMAGE_HURT = [
-        'img/2_character_pepe/4_hurt/H-41.png',
-        'img/2_character_pepe/4_hurt/H-42.png',
-        'img/2_character_pepe/4_hurt/H-43.png'
+        '/img/2_character_pepe/4_hurt/H-41.png',
+        '/img/2_character_pepe/4_hurt/H-42.png',
+        '/img/2_character_pepe/4_hurt/H-43.png'
     ];
     IMAGE_IDLE = [
-        'img/2_character_pepe/1_idle/idle/I-1.png',
-        'img/2_character_pepe/1_idle/idle/I-2.png',
-        'img/2_character_pepe/1_idle/idle/I-3.png',
-        'img/2_character_pepe/1_idle/idle/I-4.png',
-        'img/2_character_pepe/1_idle/idle/I-5.png',
-        'img/2_character_pepe/1_idle/idle/I-6.png',
-        'img/2_character_pepe/1_idle/idle/I-7.png',
-        'img/2_character_pepe/1_idle/idle/I-8.png',
-        'img/2_character_pepe/1_idle/idle/I-9.png',
-        'img/2_character_pepe/1_idle/idle/I-10.png'
+        '/img/2_character_pepe/1_idle/idle/I-1.png',
+        '/img/2_character_pepe/1_idle/idle/I-2.png',
+        '/img/2_character_pepe/1_idle/idle/I-3.png',
+        '/img/2_character_pepe/1_idle/idle/I-4.png',
+        '/img/2_character_pepe/1_idle/idle/I-5.png',
+        '/img/2_character_pepe/1_idle/idle/I-6.png',
+        '/img/2_character_pepe/1_idle/idle/I-7.png',
+        '/img/2_character_pepe/1_idle/idle/I-8.png',
+        '/img/2_character_pepe/1_idle/idle/I-9.png',
+        '/img/2_character_pepe/1_idle/idle/I-10.png'
     ];
     IMAGE_IDLE_LONG = [
-        'img/2_character_pepe/1_idle/long_idle/I-11.png',
-        'img/2_character_pepe/1_idle/long_idle/I-12.png',
-        'img/2_character_pepe/1_idle/long_idle/I-13.png',
-        'img/2_character_pepe/1_idle/long_idle/I-14.png',
-        'img/2_character_pepe/1_idle/long_idle/I-15.png',
-        'img/2_character_pepe/1_idle/long_idle/I-16.png',
-        'img/2_character_pepe/1_idle/long_idle/I-17.png',
-        'img/2_character_pepe/1_idle/long_idle/I-18.png',
-        'img/2_character_pepe/1_idle/long_idle/I-19.png',
-        'img/2_character_pepe/1_idle/long_idle/I-20.png',
+        '/img/2_character_pepe/1_idle/long_idle/I-11.png',
+        '/img/2_character_pepe/1_idle/long_idle/I-12.png',
+        '/img/2_character_pepe/1_idle/long_idle/I-13.png',
+        '/img/2_character_pepe/1_idle/long_idle/I-14.png',
+        '/img/2_character_pepe/1_idle/long_idle/I-15.png',
+        '/img/2_character_pepe/1_idle/long_idle/I-16.png',
+        '/img/2_character_pepe/1_idle/long_idle/I-17.png',
+        '/img/2_character_pepe/1_idle/long_idle/I-18.png',
+        '/img/2_character_pepe/1_idle/long_idle/I-19.png',
+        '/img/2_character_pepe/1_idle/long_idle/I-20.png',
     ];
     IMAGE_WALKING = [
-        'img/2_character_pepe/2_walk/W-21.png',
-        'img/2_character_pepe/2_walk/W-22.png',
-        'img/2_character_pepe/2_walk/W-23.png',
-        'img/2_character_pepe/2_walk/W-24.png',
-        'img/2_character_pepe/2_walk/W-25.png',
-        'img/2_character_pepe/2_walk/W-26.png'
+        '/img/2_character_pepe/2_walk/W-21.png',
+        '/img/2_character_pepe/2_walk/W-22.png',
+        '/img/2_character_pepe/2_walk/W-23.png',
+        '/img/2_character_pepe/2_walk/W-24.png',
+        '/img/2_character_pepe/2_walk/W-25.png',
+        '/img/2_character_pepe/2_walk/W-26.png'
     ];
-    IMAGE_JUMP_START_1 = ['img/2_character_pepe/3_jump/J-31.png'];
-    IMAGE_JUMP_START_2 = ['img/2_character_pepe/3_jump/J-32.png'];
-    IMAGE_JUMP_START_3 = ['img/2_character_pepe/3_jump/J-33.png'];
-    IMAGE_JUMP_UP = ['img/2_character_pepe/3_jump/J-34.png'];
-    IMAGE_JUMP_DOWN_1 = ['img/2_character_pepe/3_jump/J-35.png'];
-    IMAGE_JUMP_DOWN_2 = ['img/2_character_pepe/3_jump/J-36.png'];
-    IMAGE_LANDING_1 = ['img/2_character_pepe/3_jump/J-37.png'];
-    IMAGE_LANDING_2 = ['img/2_character_pepe/3_jump/J-38.png'];
-    IMAGE_LANDING_3 = ['img/2_character_pepe/3_jump/J-39.png'];
+    IMAGE_JUMP_START_1 = ['/img/2_character_pepe/3_jump/J-31.png'];
+    IMAGE_JUMP_START_2 = ['/img/2_character_pepe/3_jump/J-32.png'];
+    IMAGE_JUMP_START_3 = ['/img/2_character_pepe/3_jump/J-33.png'];
+    IMAGE_JUMP_UP = ['/img/2_character_pepe/3_jump/J-34.png'];
+    IMAGE_JUMP_DOWN_1 = ['/img/2_character_pepe/3_jump/J-35.png'];
+    IMAGE_JUMP_DOWN_2 = ['/img/2_character_pepe/3_jump/J-36.png'];
+    IMAGE_LANDING_1 = ['/img/2_character_pepe/3_jump/J-37.png'];
+    IMAGE_LANDING_2 = ['/img/2_character_pepe/3_jump/J-38.png'];
+    IMAGE_LANDING_3 = ['/img/2_character_pepe/3_jump/J-39.png'];
 
-    IMAGE_DEAD_1 = ['img/2_character_pepe/5_dead/D-51.png'];
-    IMAGE_DEAD_2 = ['img/2_character_pepe/5_dead/D-52.png'];
-    IMAGE_DEAD_3 = ['img/2_character_pepe/5_dead/D-53.png'];
-    IMAGE_DEAD_4 = ['img/2_character_pepe/5_dead/D-54.png'];
-    IMAGE_DEAD_5 = ['img/2_character_pepe/5_dead/D-55.png'];
-    IMAGE_DEAD_6 = ['img/2_character_pepe/5_dead/D-56.png'];
-    IMAGE_DEAD_7 = ['img/2_character_pepe/5_dead/D-57.png'];
+    IMAGE_DEAD_1 = ['/img/2_character_pepe/5_dead/D-51.png'];
+    IMAGE_DEAD_2 = ['/img/2_character_pepe/5_dead/D-52.png'];
+    IMAGE_DEAD_3 = ['/img/2_character_pepe/5_dead/D-53.png'];
+    IMAGE_DEAD_4 = ['/img/2_character_pepe/5_dead/D-54.png'];
+    IMAGE_DEAD_5 = ['/img/2_character_pepe/5_dead/D-55.png'];
+    IMAGE_DEAD_6 = ['/img/2_character_pepe/5_dead/D-56.png'];
+    IMAGE_DEAD_7 = ['/img/2_character_pepe/5_dead/D-57.png'];
 
     /**
  * Loads all the images used for different character states.
@@ -112,7 +112,7 @@ class Character extends MovableObject {
      * @param {Object} world - The world object that contains the environment and level data.
      */
     constructor(world) {
-        super().loadImage('img/2_character_pepe/1_idle/idle/I-1.png');
+        super().loadImage('/img/2_character_pepe/1_idle/idle/I-1.png');
         this.loadAllImages();
         this.applyGravity();
         this.animate();

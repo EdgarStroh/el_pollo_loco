@@ -11,7 +11,7 @@ class StatusBarBottle extends DrawableObject {
      * @default ['img/6_salsa_bottle/salsa_bottle.png']
      */
     IMAGEBOTTLE = [
-        'img/6_salsa_bottle/salsa_bottle.png'
+        '/img/6_salsa_bottle/salsa_bottle.png'
     ];
 
     /**
