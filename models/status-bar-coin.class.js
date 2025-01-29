@@ -11,7 +11,7 @@ class StatusBarCoin extends DrawableObject {
      * @default ['img/8_coin/coin_1.png']
      */
     IMAGECOIN = [
-        '/img/8_coin/coin_1.png',
+        '../img/8_coin/coin_1.png',
     ];
 
     /**

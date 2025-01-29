@@ -3,25 +3,25 @@
  * @description Manages the sounds and music for the game.
  */
 window.AudioManager = {
-    endbossHurt_sound: new Audio('/audio/endbossHurt.mp3'),
-    endbossDead_sound: new Audio('/audio/endbossDead.mp3'),
-    endbossFight_sound: new Audio('/audio/BossMusic.mp3'),
-    pepeSnoring_sound: new Audio('/audio/snoringPepe.mp3'),
-    walking_sound: new Audio('/audio/walk.mp3'),
-    jump_sound: new Audio('/audio/jump.mp3'),
-    pepeDead_sound: new Audio('/audio/dead.mp3'),
-    hurt_sound: new Audio('/audio/hurt.mp3'),
-    bottleEmpty_sound: new Audio('/audio/error.mp3'),
-    coin_sound: new Audio('/audio/coin.mp3'),
-    bottlePickUp_sound: new Audio('/audio/pickUpBottle.mp3'),
-    bottleThrow_sound: new Audio('/audio/bottleThrow.mp3'),
-    bottleBreak_sound: new Audio('/audio/bottleBreak.mp3'),
-    jumpOnEnemy_sound: new Audio('/audio/jumpOnEnemy.mp3'),
-    fireball_sound: new Audio('/audio/fireball.mp3'),
-    inGameMusic_sound: new Audio('/audio/InGameMusic.mp3'),
-    gameOver_sound: new Audio('/audio/gameOver.mp3'),
-    youWon_sound: new Audio('/audio/youWon.mp3'),
-    select_sound: new Audio('/audio/select.mp3'),
+    endbossHurt_sound: new Audio('../audio/endbossHurt.mp3'),
+    endbossDead_sound: new Audio('../audio/endbossDead.mp3'),
+    endbossFight_sound: new Audio('../audio/BossMusic.mp3'),
+    pepeSnoring_sound: new Audio('../audio/snoringPepe.mp3'),
+    walking_sound: new Audio('../audio/walk.mp3'),
+    jump_sound: new Audio('../audio/jump.mp3'),
+    pepeDead_sound: new Audio('../audio/dead.mp3'),
+    hurt_sound: new Audio('../audio/hurt.mp3'),
+    bottleEmpty_sound: new Audio('../audio/error.mp3'),
+    coin_sound: new Audio('../audio/coin.mp3'),
+    bottlePickUp_sound: new Audio('../audio/pickUpBottle.mp3'),
+    bottleThrow_sound: new Audio('../audio/bottleThrow.mp3'),
+    bottleBreak_sound: new Audio('../audio/bottleBreak.mp3'),
+    jumpOnEnemy_sound: new Audio('../audio/jumpOnEnemy.mp3'),
+    fireball_sound: new Audio('../audio/fireball.mp3'),
+    inGameMusic_sound: new Audio('../audio/InGameMusic.mp3'),
+    gameOver_sound: new Audio('../audio/gameOver.mp3'),
+    youWon_sound: new Audio('../audio/youWon.mp3'),
+    select_sound: new Audio('../audio/select.mp3'),
 
     /**
      * Initializes the audio settings, such as volume levels, for all sounds.
@@ -91,7 +91,7 @@ function muteOrUnmuteAudio(muteStatus) {
  * @returns {void}
  */
 function updateButtonImage(muteStatus) {
-    const buttonImage = muteStatus ? '/icons/mute.png' : '/icons/unmute.png';
+    const buttonImage = muteStatus ? '../icons/mute.png' : '../icons/unmute.png';
     document.querySelector('.sound-btn img').src = buttonImage;
 }
 AudioManager.init();

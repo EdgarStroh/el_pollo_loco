@@ -14,13 +14,13 @@ class Fireball extends MovableObject {
     offsetY = 0;
 
     IMAGE_FIREBALL = [
-        '/img/4_enemie_boss_chicken/endbossAttack/endbossAttack_01.png',
-        '/img/4_enemie_boss_chicken/endbossAttack/endbossAttack_02.png',
-        '/img/4_enemie_boss_chicken/endbossAttack/endbossAttack_03.png',
-        '/img/4_enemie_boss_chicken/endbossAttack/endbossAttack_04.png',
-        '/img/4_enemie_boss_chicken/endbossAttack/endbossAttack_05.png',
-        '/img/4_enemie_boss_chicken/endbossAttack/endbossAttack_06.png',
-        '/img/4_enemie_boss_chicken/endbossAttack/endbossAttack_07.png',
+        '../img/4_enemie_boss_chicken/endbossAttack/endbossAttack_01.png',
+        '../img/4_enemie_boss_chicken/endbossAttack/endbossAttack_02.png',
+        '../img/4_enemie_boss_chicken/endbossAttack/endbossAttack_03.png',
+        '../img/4_enemie_boss_chicken/endbossAttack/endbossAttack_04.png',
+        '../img/4_enemie_boss_chicken/endbossAttack/endbossAttack_05.png',
+        '../img/4_enemie_boss_chicken/endbossAttack/endbossAttack_06.png',
+        '../img/4_enemie_boss_chicken/endbossAttack/endbossAttack_07.png',
     ];
 /**
      * Creates an instance of the Fireball class.
