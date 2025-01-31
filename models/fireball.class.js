@@ -4,8 +4,8 @@
  * @extends MovableObject
  */
 class Fireball extends MovableObject {
-    speedX = Math.random() * (7 - 5) + 4;
-    speedY = Math.random() * (5 - 1) + 2.5;
+    speedX = Math.random() * (9.5 - 2) + 4;
+    speedY = Math.random() * (8 - 1) + 1;
     height = 60;
     width = 60;
     offsetWidth = 50;

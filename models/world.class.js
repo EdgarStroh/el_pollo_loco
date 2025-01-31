@@ -5,6 +5,7 @@ class World {
     character = new Character();
     endboss = new Endboss();
     statusBarHealth = new StatusBarHealth();
+    statusBarHealthEndboss = new StatusBarHealthEndboss();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
     level = level1;
@@ -114,6 +115,7 @@ class World {
     applyDamageWithBottle(enemy) {
         if (enemy instanceof Endboss) {
             this.applyDamageToEndboss(enemy);
+            // ;
         } else {
             this.applyDamageToChicken(enemy);
         }
@@ -141,6 +143,7 @@ class World {
         endboss.isWalking = false;
         endboss.isAlert = true;
         endboss.isHurt = true;
+        this.statusBarHealthEndboss.setPercentage(endboss.endbossHealth);
     }
 
     /**
@@ -188,14 +191,12 @@ class World {
     showYouWonScreen() {
         const youWonImage = document.getElementById('youwon');
         const mainMenuBtn = document.getElementById('mainMenuBtn');
-        // const restartGameBtn = document.getElementById('restartGameBtn');
         youWonImage.classList.remove('hidden');
         setTimeout(() => {
             this.clearAllIntervals();
             this.gameOver = true;
             this.gamePaused = true;
             mainMenuBtn.classList.remove('hidden');
-            // restartGameBtn.classList.remove('hidden');
         }, 4000);
     }
 
@@ -298,8 +299,7 @@ class World {
             if (!hasCollided && bottle.theGround()) {
                 this.handleBottleCollisionWithGround(bottle);
             }
-        });
-        this.bottleToThrow = this.bottleToThrow.filter(bottle => !bottle.isDestroyed);
+        }); this.bottleToThrow = this.bottleToThrow.filter(bottle => !bottle.isDestroyed);
     }
 
     /**
@@ -529,8 +529,8 @@ class World {
         this.addObjectsToMap(this.bottleToThrow);
         this.addObjectsToMap(this.fireballs);
         this.ctx.translate(-this.camera_x, 0);
-
         this.addToMap(this.statusBarHealth);
+        this.addToMap(this.statusBarHealthEndboss);
         this.addToMap(this.statusBarBottle);
         this.addToMap(this.statusBarCoin);
 
@@ -559,7 +559,6 @@ class World {
             this.flipImage(mo);
         }
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
         if (mo.otherDirection) {
             this.flipImageBack(mo);
         }

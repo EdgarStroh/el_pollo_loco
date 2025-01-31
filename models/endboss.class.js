@@ -135,6 +135,7 @@ class Endboss extends MovableObject {
                     this.randomAttack();
                     world.fireFireball();
                     world.fireFireball();
+                    world.fireFireball();
                 }
                 attackInterval();
             }, delay);
@@ -196,7 +197,7 @@ class Endboss extends MovableObject {
         setTimeout(() => {
             this.isAttack = false;
             this.isAlert = true;
-        }, 5000);
+        }, 2200);
     }
 
     /**

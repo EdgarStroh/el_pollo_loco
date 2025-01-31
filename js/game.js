@@ -4,11 +4,11 @@ let keyboard = new Keyboard(); // An instance of the Keyboard class to track key
 pausedGame = false; // Flag indicating whether the game is paused.
 select_sound = AudioManager.select_sound; // Select sound from the AudioManager.
 
- /**
-  * Plays the select sound.
-  * Resets the current time of the select sound and plays it from the beginning.
-  * @returns {void}
-  */
+/**
+ * Plays the select sound.
+ * Resets the current time of the select sound and plays it from the beginning.
+ * @returns {void}
+ */
 function playSelectSound() {
     select_sound.currentTime = 0;
     select_sound.play();
@@ -51,24 +51,35 @@ window.addEventListener("keydown", (event) => {
     if (event.keyCode == 32) {
         keyboard.SPACE = true;
     }
-    if (event.key == 'Escape') {
-        // Logic for the Escape key can be added here if necessary.
-    }
     if (event.key === 'p') {
         if (!world.gameOver) {
             world.gamePaused = !world.gamePaused;
             if (world.gamePaused) {
-                pausedGame = true;
-                AnimationManager.pauseAll();
-                world.endboss.endbossFight_sound.pause();
-                world.inGameMusic_sound.pause();
+                pauseGame();
             } else {
-                pausedGame = false;
-                AnimationManager.resumeAll();
+                resumeGame();
             }
         }
     }
 });
+
+/**
+ * Pauses the game by stopping animations and sounds.
+ */
+function pauseGame() {
+    pausedGame = true;
+    AnimationManager.pauseAll();
+    world.endboss.endbossFight_sound.pause();
+    world.inGameMusic_sound.pause();
+}
+
+/**
+ * Resumes the game by restarting animations.
+ */
+function resumeGame() {
+    pausedGame = false;
+    AnimationManager.resumeAll();
+}
 
 /**
  * Binds touch events to mobile buttons for controlling the game.
@@ -76,26 +87,60 @@ window.addEventListener("keydown", (event) => {
  * @returns {void}
  */
 function bindBtsPressEvents() {
+    mobileBtnLeftStart();
+    mobileBtnLeftEnd();
+    mobileBtnRightStart();
+    mobileBtnRightEnd();
+    mobileBtnThrowStart();
+    mobileBtnThrowEnd();
+    mobileBtnJumpStart();
+    mobileBtnJumpEnd();
+}
+
+/**
+ * Binds the touchstart event for the left movement button.
+ */
+function mobileBtnLeftStart() {
     document.getElementById('mobile-btn-left').addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.LEFT = true;
     }, { passive: false });
+}
 
+/**
+ * Binds the touchend event for the left movement button.
+ */
+function mobileBtnLeftEnd() {
     document.getElementById('mobile-btn-left').addEventListener('touchend', (e) => {
         e.preventDefault();
         keyboard.LEFT = false;
     }, { passive: false });
+}
 
+/**
+ * Binds the touchstart event for the right movement button.
+ */
+function mobileBtnRightStart() {
     document.getElementById('mobile-btn-right').addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.RIGHT = true;
     }, { passive: false });
+}
 
+/**
+ * Binds the touchend event for the right movement button.
+ */
+function mobileBtnRightEnd() {
     document.getElementById('mobile-btn-right').addEventListener('touchend', (e) => {
         e.preventDefault();
         keyboard.RIGHT = false;
     }, { passive: false });
+}
 
+/**
+ * Binds the touchstart event for the throw button.
+ */
+function mobileBtnThrowStart() {
     document.getElementById('mobile-btn-throw').addEventListener('touchstart', (e) => {
         e.preventDefault();
         if (!keyboard.B) {
@@ -103,24 +148,37 @@ function bindBtsPressEvents() {
             world.throwBottle();
         }
     }, { passive: false });
+}
 
+/**
+ * Binds the touchend event for the throw button.
+ */
+function mobileBtnThrowEnd() {
     document.getElementById('mobile-btn-throw').addEventListener('touchend', (e) => {
         e.preventDefault();
         keyboard.B = false;
     }, { passive: false });
+}
 
-    // Jump button
+/**
+ * Binds the touchstart event for the jump button.
+ */
+function mobileBtnJumpStart() {
     document.getElementById('mobile-btn-jump').addEventListener('touchstart', (e) => {
         e.preventDefault();
         keyboard.UP = true;
     }, { passive: false });
+}
 
+/**
+ * Binds the touchend event for the jump button.
+ */
+function mobileBtnJumpEnd() {
     document.getElementById('mobile-btn-jump').addEventListener('touchend', (e) => {
         e.preventDefault();
         keyboard.UP = false;
     }, { passive: false });
 }
-
 /**
  * Event listener for keyup events to track key releases and update the keyboard state.
  * Resets the state for movement keys and other actions when the keys are released.
@@ -145,9 +203,6 @@ window.addEventListener("keyup", (event) => {
     }
     if (event.keyCode == 32) {
         keyboard.SPACE = false;
-    }
-    if (event.key == 'Escape') {
-        // Logic for the Escape key can be added here if necessary.
     }
     if (event.key == 'p') {
         keyboard.P = false;

@@ -23,6 +23,7 @@ function showStartscreen() {
     resetGameEnvironment();
     displayStartscreenElements();
     hideEndGameScreens();
+    hideMobileButtons();
 }
 /**
  * Restartet das Spiel, indem das Spielfeld zurückgesetzt und das Level neu erstellt wird.
@@ -37,10 +38,11 @@ function restartGame() {
     displayStartscreenElements();
     hideEndGameScreens();
     hideStartscreen();
-    createLevel(); 
+    createLevel();
     init();
     this.gameStart = true;
 }
+
 
 /**
  * Starts the game by hiding the start screen, creating the level, and initializing the game environment.
@@ -50,8 +52,41 @@ function startGame() {
     hideStartscreen();
     createLevel(); // Level wird hier erstellt
     init();
+    showMobileButtons();
     this.gameStart = true;
 }
+
+/**
+ * Displays the mobile overlay only if the screen width is 720px or smaller.
+ */
+function showMobileButtons() {
+    if (window.matchMedia("(max-width: 720px)").matches) {
+        let mobileButtons = document.getElementById('mobile-overlay');
+        mobileButtons.style.display = 'flex';
+    }
+}
+
+/**
+ * Hides the mobile overlay only if the screen width is 720px or smaller.
+ */
+function hideMobileButtons() {
+    if (window.matchMedia("(max-width: 720px)").matches) {
+        let mobileButtons = document.getElementById('mobile-overlay');
+        mobileButtons.style.display = 'none';
+    }
+}
+
+/**
+ * Listens for window resize events and hides the mobile overlay 
+ * if the game has not started or the screen width exceeds 720px.
+ * 
+ * @listens window#resize
+ */
+window.addEventListener('resize', () => {
+    if (!this.gameStart || !window.matchMedia("(max-width: 720px)").matches) {
+        document.getElementById('mobile-overlay').style.display = 'none';
+    }
+});
 
 /**
  * Resets the game environment, deleting the current level, resetting the level data,

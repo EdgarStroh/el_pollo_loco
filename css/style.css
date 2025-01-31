@@ -4,6 +4,7 @@
 }
 
 body {
+    letter-spacing: 0.5px;
     margin: 0 auto;
     max-width: 1920px;
     display: flex;
@@ -19,12 +20,17 @@ body {
 }
 
 footer {
+    font-size: 18px;
     display: flex;
     gap: 10px;
     text-align: center;
     margin-top: auto;
 }
-
+ .ds-imp{
+    margin-right: auto;
+    padding-left: 15px;
+    font-size: larger;
+} 
 
 .overlay {
     display: flex;
@@ -58,6 +64,7 @@ canvas {
 }
 
 h1 {
+    text-align: center;
     font-size: 67px;
     letter-spacing: 3px;
     text-shadow: 5px 1px 2px rgb(102 70 6 / 13%);
@@ -325,9 +332,9 @@ a:visited {
         height: auto;
     }
 
-    .mobile-overlay {
+    /* .mobile-overlay {
         display: flex;
-    }
+    } */
 
     body {
         display: block;
