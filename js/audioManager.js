@@ -18,7 +18,7 @@ window.AudioManager = {
     bottleBreak_sound: new Audio('../audio/bottleBreak.mp3'),
     jumpOnEnemy_sound: new Audio('../audio/jumpOnEnemy.mp3'),
     fireball_sound: new Audio('../audio/fireball.mp3'),
-    inGameMusic_sound: new Audio('../audio/InGameMusic.mp3'),
+    inGameMusic_sound: new Audio('../audio/inGameMusic.mp3'),
     gameOver_sound: new Audio('../audio/gameOver.mp3'),
     youWon_sound: new Audio('../audio/youWon.mp3'),
     select_sound: new Audio('../audio/select.mp3'),
